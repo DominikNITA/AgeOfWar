@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/dominik/CLionProjects/AgeOfWar/main.cpp
+iostream
+-
+src/units/Archer.hpp
+/home/dominik/CLionProjects/AgeOfWar/src/units/Archer.hpp
+
+/home/dominik/CLionProjects/AgeOfWar/src/units/Archer.cpp
+Archer.hpp
+/home/dominik/CLionProjects/AgeOfWar/src/units/Archer.hpp
+
+/home/dominik/CLionProjects/AgeOfWar/src/units/Archer.hpp
+IUnit.hpp
+/home/dominik/CLionProjects/AgeOfWar/src/units/IUnit.hpp
+
+/home/dominik/CLionProjects/AgeOfWar/src/units/IUnit.hpp
+vector
+-
+
