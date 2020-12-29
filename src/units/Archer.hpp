@@ -7,10 +7,15 @@
 
 
 #include "IUnit.hpp"
+#include "IPurchasable.h"
 
-class Archer : public IUnit {
+class Archer : public IUnit, public IPurchasable {
 public:
-    Archer();
+    Archer(IPlayer *ownedBy);
+    std::vector<int> GetAttackedPositions(int closestEnemy) override;
+    void Draw() override;
+
+    IAction* GetAction(int actionNumber, std::vector<int> enemyDistances) override;
 };
 
 

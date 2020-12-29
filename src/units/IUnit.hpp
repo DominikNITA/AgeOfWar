@@ -7,24 +7,18 @@
 
 
 #include <vector>
+#include "IAttackable.hpp"
+#include "IAttacking.h"
+#include "../utility/IDrawable.hpp"
+#include "../players/IPlayer.hpp"
+#include "../game/actions/IAction.hpp"
 
-class IUnit {
+class IUnit : public virtual IAttackable, public virtual IAttacking, public virtual IDrawable{
 public:
-    int GetPrice() { return _price; }
-    int GetHp() { return _hp; }
-    int GetAttackPower() { return _attackPower; }
-    bool IsPurchasable() { return _isPurchasable; }
-    const std::vector<std::vector<int>> &GetPossibleRanges() { return _possibleRanges; }
-    void GetDamage(int damage) { _hp -= damage; }
-
+    IUnit(IPlayer *ownedBy) : _ownedBy(ownedBy) { }
+    bool IsOwnedBy(IPlayer *player) { return player == _ownedBy; }
+    virtual IAction* GetAction(int actionNumber, std::vector<int> enemyDistances) = 0;
 protected:
-    int _price;
-    int _hp;
-    int _attackPower;
-    bool _isPurchasable;
-    std::vector<std::vector<int>> _possibleRanges;
-
-private:
-
+    IPlayer* _ownedBy;
 };
 #endif //AGEOFWAR_IUNIT_HPP

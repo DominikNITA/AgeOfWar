@@ -2,11 +2,24 @@
 // Created by dominik on 12/27/20.
 //
 
+#include <iostream>
 #include "SuperSoldier.hpp"
 
-SuperSoldier::SuperSoldier() {
-    _price = -1;
+SuperSoldier::SuperSoldier(IPlayer *ownedBy) : IUnit(ownedBy) {
     _hp = 10;
+    _killReward = 5;
     _attackPower = 4;
-    _possibleRanges = {{1}};
+}
+
+std::vector<int> SuperSoldier::GetAttackedPositions(int closestEnemy) {
+    if(closestEnemy == 1){
+        return std::vector<int> {1};
+    }
+    else {
+        return std::vector<int>();
+    }
+}
+
+void SuperSoldier::Draw() {
+    std::cout << "S";
 }

@@ -7,7 +7,13 @@
 
 
 class IAttackable {
-
+public:
+    int GetHp() { return _hp; }
+    void GetDamage(int damage) { _hp -= damage; }
+    int GetKillReward() {return _killReward; }
+protected:
+    int _hp;
+    int _killReward;
 };
 
 

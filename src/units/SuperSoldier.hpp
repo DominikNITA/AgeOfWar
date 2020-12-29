@@ -9,7 +9,12 @@
 #include "IUnit.hpp"
 
 class SuperSoldier : public IUnit{
-    SuperSoldier();
+    SuperSoldier(IPlayer *ownedBy);
+
+public:
+    std::vector<int> GetAttackedPositions(int closestEnemy) override;
+
+    void Draw() override;
 };
 
 

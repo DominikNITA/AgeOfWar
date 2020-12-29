@@ -7,10 +7,13 @@
 
 
 #include "IUnit.hpp"
+#include "IPurchasable.h"
 
-class Fantassin : public IUnit {
+class Fantassin : public IUnit, public IPurchasable {
 public:
-    Fantassin();
+    Fantassin(IPlayer *ownedBy);
+    std::vector<int> GetAttackedPositions(int closestEnemy) override;
+    void Draw() override;
 };
 
 

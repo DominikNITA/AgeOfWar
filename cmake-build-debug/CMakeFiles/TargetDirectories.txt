@@ -1,3 +1,0 @@
-/home/dominik/CLionProjects/AgeOfWar/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/dominik/CLionProjects/AgeOfWar/cmake-build-debug/CMakeFiles/AgeOfWar.dir
-/home/dominik/CLionProjects/AgeOfWar/cmake-build-debug/CMakeFiles/edit_cache.dir

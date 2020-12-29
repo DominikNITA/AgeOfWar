@@ -7,10 +7,15 @@
 
 
 #include "IUnit.hpp"
+#include "IPurchasable.h"
 
-class Catapult : public IUnit{
+class Catapult : public IUnit, public IPurchasable {
 public:
-    Catapult();
+    Catapult(IPlayer *ownedBy);
+
+    std::vector<int> GetAttackedPositions(int closestEnemy) override;
+
+    void Draw() override;
 };
 
 

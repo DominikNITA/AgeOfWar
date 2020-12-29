@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="AgeOfWar" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="AgeOfWar" TARGET_NAME="AgeOfWar" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="AgeOfWar" RUN_TARGET_NAME="AgeOfWar">
+  <configuration default="false" name="AgeOfWar" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="AgeOfWar" RUN_TARGET_NAME="AgeOfWar" EXPLICIT_BUILD_TARGET_NAME="all">
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
     </method>

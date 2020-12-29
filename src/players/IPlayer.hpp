@@ -7,17 +7,18 @@
 
 
 #include <vector>
-#include "../units/IUnit.hpp"
+#include "Base.hpp"
 
 class IPlayer {
 public:
+    //Getters
     int GetCurrency() {return _currency;}
-    const std::vector<IUnit> &getUnits() const { return _units; }
-    int getBaseHp() const { return _baseHp ;}
+    Base GetBase() {return _base;}
+    //Methods
+    void AddCurrency(int amount) { _currency += amount; }
 
 protected:
     int _currency;
-    std::vector<IUnit> _units;
-    int _baseHp;
+    Base _base;
 };
 #endif //AGEOFWAR_IPLAYER_HPP
