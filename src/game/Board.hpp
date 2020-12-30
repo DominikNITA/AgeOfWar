@@ -7,14 +7,19 @@
 
 
 #include <vector>
+#include <iterator>
 #include "../units/IUnit.hpp"
+
+using std::vector;
 
 class Board {
 public:
-
+    Board(int size = 12);
+    vector<IUnit*> getPlayersUnits(IPlayer* owner, bool isEnemyBaseDirection);
+    void AddUnit(IUnit* unit, IPlayer* player);
 private:
     int _size;
-    IUnit* boardData[];
+    vector<IUnit*> _boardData;
 };
 
 

@@ -10,6 +10,8 @@
 
 class ComputerPlayer : public IPlayer {
 
+public:
+    ComputerPlayer(int i);
 };
 
 

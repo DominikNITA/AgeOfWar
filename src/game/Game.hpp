@@ -27,6 +27,7 @@ private:
     void NextRound();
     void DoActions(int actionNumber, IPlayer* player);
     void PlayTurn(IPlayer* player);
+    void BuyUnit(IPlayer* buyer,const IUnit& unit);
 };
 
 

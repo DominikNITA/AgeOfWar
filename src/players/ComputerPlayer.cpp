@@ -3,3 +3,7 @@
 //
 
 #include "ComputerPlayer.hpp"
+
+ComputerPlayer::ComputerPlayer(int i) : IPlayer(i) {
+
+}

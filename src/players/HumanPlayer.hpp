@@ -10,6 +10,8 @@
 
 class HumanPlayer : public IPlayer{
 
+public:
+    HumanPlayer(int i);
 };
 
 

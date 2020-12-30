@@ -3,3 +3,8 @@
 //
 
 #include "IPlayer.hpp"
+
+IPlayer::IPlayer(int number) {
+    _number = number;
+    _base = Base();
+}

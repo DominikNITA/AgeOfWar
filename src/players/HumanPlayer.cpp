@@ -3,3 +3,7 @@
 //
 
 #include "HumanPlayer.hpp"
+
+HumanPlayer::HumanPlayer(int i) : IPlayer(i) {
+
+}
