@@ -56,7 +56,7 @@ void Game::GameLoop() {
 }
 
 void Game::DoActions(int actionNumber, IPlayer* player) {
-    auto units = _board.getPlayersUnits(player,actionNumber == 1);
+    auto units = _board.getPlayerUnits(player, actionNumber == 1);
     std::cout<< "Unit count for player " << player->GetNumber() << " =>"  << units.size()<<std::endl;
 }
 

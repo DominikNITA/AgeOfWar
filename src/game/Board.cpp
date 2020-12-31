@@ -10,18 +10,23 @@ Board::Board(int size) {
     _boardData.insert(_boardData.begin(), size,nullptr);
 }
 
-vector<IUnit*> Board::getPlayersUnits(IPlayer *owner,  bool isEnemyBaseDirection) {
+vector<IUnit*> Board::getPlayerUnits(IPlayer *owner, bool isEnemyBaseDirection) {
     vector<IUnit*> result = {};
-    if(owner->GetNumber() == 1 && isEnemyBaseDirection){
-        for (auto & i : _boardData) {
-            if(i != nullptr && i->IsOwnedBy(owner)){
+    if((owner->GetNumber() == 1 && isEnemyBaseDirection) || (owner->GetNumber() == 2 && !isEnemyBaseDirection)) {
+        for (auto &i : _boardData) {
+            if (i != nullptr && i->IsOwnedBy(owner)) {
                 result.push_back(i);
             }
         }
     }
-    else{
-        
-    }
+    else if ((owner->GetNumber() == 1 && !isEnemyBaseDirection) || (owner->GetNumber() == 2 && isEnemyBaseDirection)) {
+        for (int i = _boardData.size() - 1; i >= 0 ; i--) {
+            if(_boardData[i] != nullptr && _boardData[i]->IsOwnedBy(owner)){
+                    result.push_back(_boardData[i]);
+                }
+            }
+        }
+
     return result;
 }
 
