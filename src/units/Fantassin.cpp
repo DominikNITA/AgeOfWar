@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Fantassin.hpp"
 
-Fantassin::Fantassin(IPlayer *ownedBy) : IUnit(ownedBy) {
+Fantassin::Fantassin(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
     _price = 10;
     _hp = 10;
     _attackPower = 4;

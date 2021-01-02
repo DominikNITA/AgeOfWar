@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Catapult.hpp"
 
-Catapult::Catapult(IPlayer *ownedBy) : IUnit(ownedBy) {
+Catapult::Catapult(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
     _price = 20;
     _hp = 12;
     _attackPower = 6;

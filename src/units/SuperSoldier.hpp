@@ -6,9 +6,9 @@
 #define AGEOFWAR_SUPERSOLDIER_HPP
 
 
-#include "IUnit.hpp"
+#include "IBaseUnit.hpp"
 
-class SuperSoldier : public IUnit{
+class SuperSoldier : public IBaseUnit{
     SuperSoldier(IPlayer *ownedBy);
 
 public:

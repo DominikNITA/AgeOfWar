@@ -3,3 +3,9 @@
 //
 
 #include "ActionNone.hpp"
+
+std::string ActionNone::GetActionLog() {
+    return "skipped his turn";
+}
+
+ActionNone::ActionNone() {}

@@ -6,8 +6,11 @@
 #define AGEOFWAR_IACTION_HPP
 
 
-class IAction {
+#include <string>
 
+class IAction {
+public:
+    virtual std::string GetActionLog() = 0;
 };
 
 

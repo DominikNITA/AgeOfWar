@@ -3,3 +3,15 @@
 //
 
 #include "ActionMove.hpp"
+
+std::string ActionMove::GetActionLog() {
+    return "blabal";
+}
+
+IBaseUnit *ActionMove::getUnit() const {
+    return _unit;
+}
+
+int ActionMove::getCount() const {
+    return _count;
+}

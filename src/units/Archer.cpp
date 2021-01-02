@@ -8,7 +8,7 @@
 #include "../game/actions/ActionAttack.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-Archer::Archer(IPlayer *ownedBy)  : IUnit(ownedBy){
+Archer::Archer(IPlayer *ownedBy)  : IBaseUnit(ownedBy){
     _price = 12;
     _hp = 8;
     _attackPower = 3;
@@ -20,7 +20,8 @@ void Archer::Draw() {
 }
 
 std::vector<int> Archer::GetAttackedPositions(int closestEnemy) {
-    if( closestEnemy >= 1 && closestEnemy <= 3){
+    if( closestEnemy >= 1 && closestEnemy <= 3)
+    {
         return std::vector<int> {closestEnemy};
     }
     else{
@@ -29,21 +30,30 @@ std::vector<int> Archer::GetAttackedPositions(int closestEnemy) {
 }
 
 IAction* Archer::GetAction(int actionNumber, std::vector<int> enemyDistances) {
+    IAction* pResult = nullptr;
     switch(actionNumber) {
         case 1:
             {
+                if(enemyDistances.empty()) break;
                 auto attackedPositions = GetAttackedPositions(enemyDistances.at(0));
-                if (attackedPositions.empty()) {
-                    return new ActionNone();
-                } else {
-                    return new ActionAttack(this);
+                if (attackedPositions.empty())
+                {
+                    pResult = new ActionNone();
+                }
+                else
+                    {
+                        pResult = new ActionAttack(this);
                 }
             }
+            break;
         case 2:
-            return new ActionMove(this,1);
+            pResult = new ActionMove(this,1);
+            break;
         case 3:
-            return new ActionNone();
+            pResult = new ActionNone();
+            break;
         default:
             std::cout << "Invalid Action Number" << std::endl;
     }
+    return pResult;
 }

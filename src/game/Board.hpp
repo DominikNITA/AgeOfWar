@@ -8,18 +8,22 @@
 
 #include <vector>
 #include <iterator>
-#include "../units/IUnit.hpp"
+#include "../units/IBaseUnit.hpp"
 
 using std::vector;
 
 class Board {
 public:
     Board(int size = 12);
-    vector<IUnit*> getPlayerUnits(IPlayer* owner, bool isEnemyBaseDirection);
-    void AddUnit(IUnit* unit, IPlayer* player);
+    ~Board();
+    vector<IBaseUnit*> getPlayerUnits(IPlayer* owner, bool isEnemyBaseDirection);
+    void AddUnit(IBaseUnit* unit, IPlayer* player);
+    void MoveUnitForward(IBaseUnit* unit, int count);
+    int FindUnitPosition(IBaseUnit* unit);
 private:
     int _size;
-    vector<IUnit*> _boardData;
+    vector<IBaseUnit*> _boardData;
+    int* test = nullptr;
 };
 
 

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "SuperSoldier.hpp"
 
-SuperSoldier::SuperSoldier(IPlayer *ownedBy) : IUnit(ownedBy) {
+SuperSoldier::SuperSoldier(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
     _hp = 10;
     _killReward = 5;
     _attackPower = 4;

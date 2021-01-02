@@ -6,10 +6,10 @@
 #define AGEOFWAR_ARCHER_HPP
 
 
-#include "IUnit.hpp"
+#include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Archer : public IUnit, public IPurchasable {
+class Archer : public IBaseUnit, public IPurchasable {
 public:
     Archer(IPlayer *ownedBy);
     std::vector<int> GetAttackedPositions(int closestEnemy) override;

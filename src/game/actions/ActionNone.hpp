@@ -9,7 +9,9 @@
 #include "IAction.hpp"
 
 class ActionNone : public IAction{
-
+public:
+    ActionNone();
+    std::string GetActionLog() override;
 };
 
 

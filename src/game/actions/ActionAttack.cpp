@@ -3,3 +3,7 @@
 //
 
 #include "ActionAttack.hpp"
+
+std::string ActionAttack::GetActionLog() {
+    return "Hello";
+}

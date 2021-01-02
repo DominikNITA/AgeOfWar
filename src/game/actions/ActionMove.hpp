@@ -7,13 +7,17 @@
 
 
 #include "IAction.hpp"
-#include "../../units/IUnit.hpp"
+#include "../../units/IBaseUnit.hpp"
 
 class ActionMove : public IAction{
 public:
-    ActionMove(IUnit* unit, int count) : _unit(unit), _count(count) {}
+    ActionMove(IBaseUnit* unit, int count) : _unit(unit), _count(count) {}
+    std::string GetActionLog() override;
+    IBaseUnit *getUnit() const;
+    int getCount() const;
+
 private:
-    IUnit* _unit;
+    IBaseUnit* _unit;
     int _count;
 };
 

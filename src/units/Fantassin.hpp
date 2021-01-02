@@ -6,10 +6,10 @@
 #define AGEOFWAR_FANTASSIN_HPP
 
 
-#include "IUnit.hpp"
+#include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Fantassin : public IUnit, public IPurchasable {
+class Fantassin : public IBaseUnit, public IPurchasable {
 public:
     Fantassin(IPlayer *ownedBy);
     std::vector<int> GetAttackedPositions(int closestEnemy) override;

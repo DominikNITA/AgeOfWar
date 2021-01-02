@@ -13,6 +13,9 @@ class ActionAttack : public IAction{
 public:
     ActionAttack(IAttacking* attacker) : _attacker(attacker) {}
     IAttacking* GetAttacker() {return _attacker;}
+
+    std::string GetActionLog() override;
+
 private:
     IAttacking*  _attacker;
 };

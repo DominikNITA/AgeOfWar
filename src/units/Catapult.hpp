@@ -6,10 +6,10 @@
 #define AGEOFWAR_CATAPULT_HPP
 
 
-#include "IUnit.hpp"
+#include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Catapult : public IUnit, public IPurchasable {
+class Catapult : public IBaseUnit, public IPurchasable {
 public:
     Catapult(IPlayer *ownedBy);
 
