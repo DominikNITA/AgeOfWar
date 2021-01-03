@@ -42,7 +42,7 @@ IAction* Archer::GetAction(int actionNumber, std::vector<int> enemyDistances) {
                 }
                 else
                     {
-                        pResult = new ActionAttack(this);
+                        pResult = new ActionAttack(this,attackedPositions);
                 }
             }
             break;

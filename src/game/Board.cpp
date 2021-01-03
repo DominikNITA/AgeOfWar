@@ -52,6 +52,9 @@ void Board::addUnit(IBaseUnit *unit, IPlayer *player) {
     if(player->GetNumber() == 1 && _boardData[0] == nullptr){
         _boardData[0] = unit;
     }
+    if(player->GetNumber() == 2 && _boardData[_size-1] == nullptr){
+        _boardData[_size-1] = unit;
+    }
 }
 
 void Board::moveUnitForward(IBaseUnit *unit, int count) {
@@ -87,6 +90,7 @@ vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
     //For Player One
     if(pUnit->GetPlayer()->GetNumber() == 1){
         for (int i = 0; i < _boardData.size(); ++i) {
+            //Add the base to the vector
             if(i == _boardData.size() - 1){
                 result.push_back(getDistanceValueFromIndexes(_boardData.size() - 1, unitPosition));
             }
@@ -97,6 +101,7 @@ vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
     }
     else{ //Player Two
         for (int i = _boardData.size() - 1; i >= 0; --i) {
+            //Add the base to the vector
             if(i == 0){
                 result.push_back(getDistanceValueFromIndexes(0,unitPosition));
             }
@@ -112,6 +117,18 @@ vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
 
 int Board::getDistanceValueFromIndexes(int index1, int index2) {
     return abs(index1-index2);
+}
+
+void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedPositions) {
+    int unitPosition = findUnitPosition(pUnit);
+    int direction = pUnit->GetPlayer()->GetNumber() == 1 ? 1 : -1;
+    for (int i = 0; i < attackedPositions.size(); ++i) {
+        IBaseUnit* tempUnit = _boardData[unitPosition + direction*attackedPositions[i]];
+        if(tempUnit != nullptr){
+            tempUnit->GetDamage(pUnit->GetAttackPower());
+            std::cout<< "Unit at " << unitPosition << " attacked enemy unit at " << unitPosition + direction*attackedPositions[i] << " HP left:" << tempUnit->GetHp() << std::endl;
+        }
+    }
 }
 
 

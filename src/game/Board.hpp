@@ -18,11 +18,12 @@ public:
     Board(int size = 12);
     ~Board();
     //Methods
-    vector<IBaseUnit*> getPlayerUnits(IPlayer* owner, bool isEnemyBaseDirection);
-    void addUnit(IBaseUnit* unit, IPlayer* player);
-    void moveUnitForward(IBaseUnit* unit, int count);
-    int findUnitPosition(IBaseUnit* unit);
+    vector<IBaseUnit*> getPlayerUnits(IPlayer* pOwner, bool isEnemyBaseDirection);
+    void addUnit(IBaseUnit* pUnit, IPlayer* player);
+    void moveUnitForward(IBaseUnit* pUnit, int count);
+    int findUnitPosition(IBaseUnit* pUnit);
     vector<int> getDistancesToEnemies(IBaseUnit* pUnit);
+    void attackRelativePositions(IBaseUnit* pUnit, std::vector<int> attackedPositions);
 private:
     //Variables
     int _size;

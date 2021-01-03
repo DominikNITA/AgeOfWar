@@ -11,8 +11,9 @@
 
 class ActionAttack : public IAction{
 public:
-    ActionAttack(IAttacking* attacker) : _attacker(attacker) {}
+    ActionAttack(IAttacking* attacker, std::vector<int> attackedPositions) : _attacker(attacker), _attackedPositions(attackedPositions) {}
     IAttacking* GetAttacker() {return _attacker;}
+    std::vector<int> GetAttackedPositions() {return _attackedPositions;}
 
     std::string GetActionLog() override;
 

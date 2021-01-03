@@ -62,7 +62,7 @@ void GameManager::PlayTurn(IPlayer* player) {
 }
 
 void GameManager::GameLoop() {
-    while(_roundCounter < 3){
+    while(_roundCounter < 10){
         std::cout << "Current round " << _roundCounter << std::endl;
         NextRound();
         _roundCounter++;
@@ -88,10 +88,10 @@ void GameManager::DoAction(IAction *pAction) {
         _board.moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
     }
     else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
-        std::cout << "Someone attacked!\n";
+        _board.attackRelativePositions(dynamic_cast<IBaseUnit*>(pAttackAction->GetAttacker()),pAttackAction->GetAttackedPositions());
     }
     else if (auto pNoneAction = dynamic_cast<ActionNone*>(pAction)) {
-        std::cout << "Nothing todo!\n";
+        /*std::cout << "Nothing todo!\n";*/
     }
     else{
         std::cout << "ERROR: unknown action type: " << pAction->GetActionLog() << std::endl;
