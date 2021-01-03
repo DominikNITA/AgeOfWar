@@ -42,8 +42,8 @@ void GameManager::StartGame() {
 
 void GameManager::NextRound() {
     //1.Give currency to both players
-    p_playerOne->AddCurrency(8);
-    p_playerTwo->AddCurrency(8);
+    p_playerOne->addCurrency(8);
+    p_playerTwo->addCurrency(8);
     //2. Player One turn
     PlayTurn(p_playerOne);
     //3. Player Two turn

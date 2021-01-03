@@ -14,10 +14,10 @@ public:
     IPlayer(int number);
     //Getters
     int GetCurrency() { return _currency; }
-    Base GetBase() { return _base; }
+    Base* GetBase() { return &_base; }
     int GetNumber() {return  _number;}
     //Methods
-    void AddCurrency(int amount) { _currency += amount;}
+    void addCurrency(int amount) { _currency += amount;}
 
 
 protected:
