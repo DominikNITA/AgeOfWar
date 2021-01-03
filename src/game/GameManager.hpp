@@ -23,7 +23,7 @@ private:
     IPlayer* p_playerTwo;
     int _roundCounter;
     CombatLogger _combatLogger;
-    Board _board;
+    Board* p_board;
     //Methods
     void GameLoop();
     void NextRound();

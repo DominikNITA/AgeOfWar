@@ -14,13 +14,13 @@
 GameManager::GameManager(int mode) : _mode(mode) {
     _roundCounter = 0;
     p_playerOne = new HumanPlayer(1);
-    if(mode == 0){
+    if(_mode == 0){
         p_playerTwo = new HumanPlayer(2);
     }
     else{
         p_playerTwo = new ComputerPlayer(2);
     }
-    _board = Board();
+    p_board = new Board(p_playerOne, p_playerTwo, 12);
 
     _combatLogger = CombatLogger();
 }
@@ -58,11 +58,11 @@ void GameManager::PlayTurn(IPlayer* player) {
     //Make Action 3
     DoActions(3,player);
     //TODO: Buy unit logic
-    _board.addUnit(new Archer(player), player);
+    p_board->addUnit(new Archer(player), player);
 }
 
 void GameManager::GameLoop() {
-    while(_roundCounter < 10){
+    while(_roundCounter < 15){
         std::cout << "Current round " << _roundCounter << std::endl;
         NextRound();
         _roundCounter++;
@@ -70,10 +70,10 @@ void GameManager::GameLoop() {
 }
 
 void GameManager::DoActions(int actionNumber, IPlayer* player) {
-    auto units = _board.getPlayerUnits(player, actionNumber == 1);
+    auto units = p_board->getPlayerUnits(player, actionNumber == 1);
 
     for (int i = 0; i < units.size(); ++i) {
-        auto action = units[i]->GetAction(actionNumber, _board.getDistancesToEnemies(units[i]));
+        auto action = units[i]->GetAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         DoAction(action);
     }
     std::cout<< "Unit count for player " << player->GetNumber() << " =>"  << units.size()<<std::endl;
@@ -85,10 +85,10 @@ void GameManager::DoAction(IAction *pAction) {
         return;
     }
     if(auto pMoveAction = dynamic_cast<ActionMove*>(pAction)){
-        _board.moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
+        p_board->moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
     }
     else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
-        _board.attackRelativePositions(dynamic_cast<IBaseUnit*>(pAttackAction->GetAttacker()),pAttackAction->GetAttackedPositions());
+        p_board->attackRelativePositions(dynamic_cast<IBaseUnit*>(pAttackAction->GetAttacker()), pAttackAction->GetAttackedPositions());
     }
     else if (auto pNoneAction = dynamic_cast<ActionNone*>(pAction)) {
         /*std::cout << "Nothing todo!\n";*/

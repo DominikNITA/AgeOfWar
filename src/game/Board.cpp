@@ -6,9 +6,11 @@
 #include "Board.hpp"
 #include "../units/Archer.hpp"
 
-Board::Board(int size) {
+Board::Board(IPlayer *pPlayerOne, IPlayer *pPlayerTwo, int size) {
     _size = size;
     _boardData.insert(_boardData.begin(), size, nullptr);
+    p_PlayerOne = pPlayerOne;
+    p_PlayerTwo = pPlayerTwo;
     if (test != nullptr) {
         delete[] test;
         test = nullptr;
@@ -22,7 +24,6 @@ Board::Board(int size) {
         }
     }
 }
-
 Board::~Board() {
     std::vector<IBaseUnit *>().swap(_boardData);
 }
@@ -122,17 +123,29 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
     for (int i = 0; i < attackedPositions.size(); ++i) {
         int tempUnitPosition = unitPosition + direction * attackedPositions[i];
         IBaseUnit *tempUnit = _boardData[tempUnitPosition];
-        if (tempUnit == nullptr) continue;
-        tempUnit->GetDamage(pUnit->GetAttackPower());
-        std::cout << "Unit at " << unitPosition << " attacked enemy unit at "
-                  << tempUnitPosition << " HP left:" << tempUnit->GetHp() << std::endl;
-        if (tempUnit->GetHp() <= 0) {
-            delete tempUnit;
-            _boardData[tempUnitPosition] = nullptr;
-            std::cout << "Unit killed!\n";
+        if (tempUnit != nullptr) {
+            tempUnit->GetDamage(pUnit->GetAttackPower());
+            std::cout << "Unit at " << unitPosition << " attacked enemy unit at "
+                      << tempUnitPosition << " HP left:" << tempUnit->GetHp() << std::endl;
+            if (tempUnit->GetHp() <= 0) {
+                delete tempUnit;
+                _boardData[tempUnitPosition] = nullptr;
+                std::cout << "Unit killed!\n";
+            }
         }
-        //TODO: add base attacking
+        else{
+            if(tempUnitPosition == 0){
+                p_PlayerOne->GetBase()->GetDamage(pUnit->GetAttackPower());
+                std::cout << "Player One Base HP: " << p_PlayerOne->GetBase()->GetHp() << std::endl;
+            }
+            if(tempUnitPosition == _size - 1){
+                p_PlayerTwo->GetBase()->GetDamage(pUnit->GetAttackPower());
+                std::cout << "Player Two Base HP: " << p_PlayerTwo->GetBase()->GetHp() << std::endl;
+            }
+        }
     }
 }
+
+
 
 
