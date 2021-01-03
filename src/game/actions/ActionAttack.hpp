@@ -18,6 +18,7 @@ public:
 
 private:
     IAttacking*  _attacker;
+    std::vector<int> _attackedPositions;
 };
 
 

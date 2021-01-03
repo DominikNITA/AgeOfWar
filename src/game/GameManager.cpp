@@ -58,7 +58,7 @@ void GameManager::PlayTurn(IPlayer* player) {
     //Make Action 3
     DoActions(3,player);
     //TODO: Buy unit logic
-    _board.AddUnit(new Archer(player),player);
+    _board.addUnit(new Archer(player), player);
 }
 
 void GameManager::GameLoop() {
@@ -71,11 +71,9 @@ void GameManager::GameLoop() {
 
 void GameManager::DoActions(int actionNumber, IPlayer* player) {
     auto units = _board.getPlayerUnits(player, actionNumber == 1);
-    //TODO: add real data
-    std::vector<int> fakeData = {1,2,6};
 
     for (int i = 0; i < units.size(); ++i) {
-        auto action = units[i]->GetAction(actionNumber, fakeData);
+        auto action = units[i]->GetAction(actionNumber, _board.getDistancesToEnemies(units[i]));
         DoAction(action);
     }
     std::cout<< "Unit count for player " << player->GetNumber() << " =>"  << units.size()<<std::endl;
@@ -87,7 +85,7 @@ void GameManager::DoAction(IAction *pAction) {
         return;
     }
     if(auto pMoveAction = dynamic_cast<ActionMove*>(pAction)){
-       _board.MoveUnitForward(pMoveAction->getUnit(),pMoveAction->getCount());
+        _board.moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
     }
     else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
         std::cout << "Someone attacked!\n";

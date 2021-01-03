@@ -14,16 +14,22 @@ using std::vector;
 
 class Board {
 public:
+    //General
     Board(int size = 12);
     ~Board();
+    //Methods
     vector<IBaseUnit*> getPlayerUnits(IPlayer* owner, bool isEnemyBaseDirection);
-    void AddUnit(IBaseUnit* unit, IPlayer* player);
-    void MoveUnitForward(IBaseUnit* unit, int count);
-    int FindUnitPosition(IBaseUnit* unit);
+    void addUnit(IBaseUnit* unit, IPlayer* player);
+    void moveUnitForward(IBaseUnit* unit, int count);
+    int findUnitPosition(IBaseUnit* unit);
+    vector<int> getDistancesToEnemies(IBaseUnit* pUnit);
 private:
+    //Variables
     int _size;
     vector<IBaseUnit*> _boardData;
     int* test = nullptr;
+    //Methods
+    int getDistanceValueFromIndexes(int index1, int index2);
 };
 
 

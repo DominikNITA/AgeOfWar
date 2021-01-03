@@ -24,6 +24,10 @@ Board::Board(int size) {
     }
 }
 
+Board::~Board() {
+    std::vector<IBaseUnit*>().swap(_boardData);
+}
+
 vector<IBaseUnit*> Board::getPlayerUnits(IPlayer *owner, bool isEnemyBaseDirection) {
     vector<IBaseUnit*> result = {};
     if((owner->GetNumber() == 1 && isEnemyBaseDirection) || (owner->GetNumber() == 2 && !isEnemyBaseDirection)) {
@@ -44,14 +48,14 @@ vector<IBaseUnit*> Board::getPlayerUnits(IPlayer *owner, bool isEnemyBaseDirecti
     return result;
 }
 
-void Board::AddUnit(IBaseUnit *unit, IPlayer *player) {
+void Board::addUnit(IBaseUnit *unit, IPlayer *player) {
     if(player->GetNumber() == 1 && _boardData[0] == nullptr){
         _boardData[0] = unit;
     }
 }
 
-void Board::MoveUnitForward(IBaseUnit *unit, int count) {
-    int unitPosition = FindUnitPosition(unit);
+void Board::moveUnitForward(IBaseUnit *unit, int count) {
+    int unitPosition = findUnitPosition(unit);
     int direction = unit->GetPlayer()->GetNumber() == 1 ? 1 : -1;
     int newIndex = unitPosition + count*direction;
 
@@ -63,7 +67,7 @@ void Board::MoveUnitForward(IBaseUnit *unit, int count) {
     }
 }
 
-int Board::FindUnitPosition(IBaseUnit *unit) {
+int Board::findUnitPosition(IBaseUnit *unit) {
     if (unit == nullptr) return -1;
     for (int i = 0; i < _boardData.size(); ++i) {
         if(_boardData[i] == unit){
@@ -73,6 +77,41 @@ int Board::FindUnitPosition(IBaseUnit *unit) {
     return -1;
 }
 
-Board::~Board() {
-    std::vector<IBaseUnit*>().swap(_boardData);
+
+
+vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
+    vector<int> result;
+    int unitPosition = findUnitPosition(pUnit);
+    IPlayer* unitOwner = pUnit->GetPlayer();
+
+    //For Player One
+    if(pUnit->GetPlayer()->GetNumber() == 1){
+        for (int i = 0; i < _boardData.size(); ++i) {
+            if(i == _boardData.size() - 1){
+                result.push_back(getDistanceValueFromIndexes(_boardData.size() - 1, unitPosition));
+            }
+            if(_boardData[i] != nullptr && !_boardData[i]->IsOwnedBy(unitOwner)){
+                result.push_back(getDistanceValueFromIndexes(i,unitPosition));
+            }
+        }
+    }
+    else{ //Player Two
+        for (int i = _boardData.size() - 1; i >= 0; --i) {
+            if(i == 0){
+                result.push_back(getDistanceValueFromIndexes(0,unitPosition));
+            }
+            if(_boardData[i] != nullptr && !_boardData[i]->IsOwnedBy(unitOwner)){
+                result.push_back(getDistanceValueFromIndexes(i,unitPosition));
+            }
+        }
+    }
+
+
+    return result;
 }
+
+int Board::getDistanceValueFromIndexes(int index1, int index2) {
+    return abs(index1-index2);
+}
+
+
