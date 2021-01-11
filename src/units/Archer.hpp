@@ -9,7 +9,7 @@
 #include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Archer : public IBaseUnit, public IPurchasable {
+class Archer : public IBaseUnit, public IPurchasable<Archer> {
 public:
     Archer(IPlayer *ownedBy);
     std::vector<int> GetAttackedPositions(int closestEnemy) override;

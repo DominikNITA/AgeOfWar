@@ -9,7 +9,7 @@
 #include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Catapult : public IBaseUnit, public IPurchasable {
+class Catapult : public IBaseUnit, public IPurchasable<Catapult> {
 public:
     Catapult(IPlayer *ownedBy);
 

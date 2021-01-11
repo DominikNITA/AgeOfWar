@@ -34,6 +34,10 @@ GameManager::~GameManager() {
         delete p_playerTwo;
         p_playerTwo = nullptr;
     }
+    if(p_board != nullptr){
+        delete p_board;
+        p_board = nullptr;
+    }
 }
 
 void GameManager::StartGame() {
@@ -96,10 +100,6 @@ void GameManager::DoAction(IAction *pAction) {
     else{
         std::cout << "ERROR: unknown action type: " << pAction->GetActionLog() << std::endl;
     }
-}
-
-void GameManager::BuyUnit(IPlayer *buyer, const IPurchasable &purchasableUnit) {
-
 }
 
 
