@@ -10,6 +10,7 @@ std::vector<std::pair<std::string, int>> BuyingManager::getPurchasableUnits() {
 
 void BuyingManager::addUnit(std::string name, int price, IUnitFactory *unitFactory) {
     //https://stackoverflow.com/questions/4303513/push-back-vs-emplace-back => no temporary object created
+    _minimalPrice = std::min(_minimalPrice,price);
     _purchasableUnits.emplace_back(name,price);
     _unitFactories.push_back(unitFactory);
 }

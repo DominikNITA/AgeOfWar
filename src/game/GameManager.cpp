@@ -67,13 +67,18 @@ void GameManager::playTurn(IPlayer* pPlayer) {
     doActions(3, pPlayer);
     //TODO: Buy unit logic
     if(p_board->canPlayerAddUnit(pPlayer)){
-        int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
-        IBaseUnit* unitToBuy = p_buyingManager->returnUnit(choice);
-        unitToBuy->setOwner(pPlayer);
-        p_board->addUnit(unitToBuy, pPlayer);
+        if(p_buyingManager->getMinimalPrice() <= pPlayer->GetCurrency()){
+            int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
+            IBaseUnit* unitToBuy = p_buyingManager->returnUnit(choice);
+            unitToBuy->setOwner(pPlayer);
+            p_board->addUnit(unitToBuy, pPlayer);
+        }
+        else{
+            std::cout << "Not enough coins to buy unit for player " << pPlayer->GetNumber() << std::endl;
+        }
     }
     else{
-        std::cout << "Couldn't add unit for player " << pPlayer->GetNumber() << std::endl;
+        std::cout << "Base position is occupied for player " << pPlayer->GetNumber() << std::endl;
     }
 }
 
