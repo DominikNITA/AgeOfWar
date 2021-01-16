@@ -10,6 +10,15 @@ ComputerPlayer::ComputerPlayer(int i) : IPlayer(i) {
 }
 
 int ComputerPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) {
-    std::cout << "Computer choosed his unit!" << std::endl;
-    return 0;
+    int maxPrice = 0;
+    int index = 0;
+    for (int i = 0; i < unitsInfo.size(); ++i) {
+        if( unitsInfo[i].second <= _currency && unitsInfo[i].second >= maxPrice){
+            maxPrice = unitsInfo[i].second;
+            index=i;
+        }
+    }
+    std::cout<<"AI money before deduction: " << _currency << std::endl;
+    addCurrency(-unitsInfo[index].second);
+    return index;
 }

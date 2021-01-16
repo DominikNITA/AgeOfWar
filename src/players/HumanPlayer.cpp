@@ -21,7 +21,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
     while (choice < 0) {
 
         for (int i = 0; i < unitsInfo.size(); ++i) {
-            if(unitsInfo[i].second < _currency){
+            if(unitsInfo[i].second <= _currency){
                 ConsoleHelper::setColor(GREEN);
             }
             else{
@@ -49,6 +49,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             ConsoleHelper::setColor(RESET);
             //Sleep from https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            choice = -1;
         }
     }
     addCurrency(-unitsInfo[choice].second);

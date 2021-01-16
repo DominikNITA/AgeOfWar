@@ -68,7 +68,6 @@ void GameManager::playTurn(IPlayer* pPlayer) {
     //TODO: Buy unit logic
     if(p_board->canPlayerAddUnit(pPlayer)){
         int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
-        //TODO: add currency spending
         IBaseUnit* unitToBuy = p_buyingManager->returnUnit(choice);
         unitToBuy->setOwner(pPlayer);
         p_board->addUnit(unitToBuy, pPlayer);
