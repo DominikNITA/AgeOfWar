@@ -16,6 +16,8 @@ public:
     void draw() override;
 
     IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
+
+    ~Fantassin() override;
 };
 
 

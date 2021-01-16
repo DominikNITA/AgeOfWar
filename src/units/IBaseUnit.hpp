@@ -18,6 +18,7 @@ class IBaseUnit : public virtual IAttackable,
                   public virtual IDrawable {
 public:
     explicit IBaseUnit(IPlayer *ownedBy) : p_owner(ownedBy) {}
+    virtual ~IBaseUnit() = default;
 
     bool isOwnedBy(IPlayer *player) { return player == p_owner; }
 
@@ -27,7 +28,8 @@ public:
     virtual IAction *getAction(int actionNumber, std::vector<int> enemyDistances) = 0;
 
 protected:
-    IPlayer *p_owner = nullptr;
+    IPlayer* p_owner = nullptr;
+    IAction* p_lastAction = nullptr;
 };
 
 #endif //AGEOFWAR_IBASEUNIT_HPP

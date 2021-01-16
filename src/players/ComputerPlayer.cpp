@@ -18,7 +18,7 @@ int ComputerPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> uni
             index=i;
         }
     }
-    std::cout<<"AI money before deduction: " << _currency << std::endl;
+    std::cout << "AI money before deduction: " << _currency << std::endl;
     addCurrency(-unitsInfo[index].second);
     return index;
 }

@@ -25,7 +25,12 @@ Board::Board(IPlayer *pPlayerOne, IPlayer *pPlayerTwo, int size) {
     }
 }
 Board::~Board() {
-    std::vector<IBaseUnit *>().swap(_boardData);
+    for (auto p : _boardData)
+    {
+        delete p;
+    }
+    _boardData.clear();
+//    std::vector<IBaseUnit *>().swap(_boardData);
 }
 
 vector<IBaseUnit *> Board::getPlayerUnits(IPlayer *owner, bool isEnemyBaseDirection) {
@@ -162,7 +167,6 @@ void Board::draw() {
         if (_boardData[i] != nullptr) {
             _boardData[i]->draw();
             std::cout << _boardData[i]->getOwner()->GetNumber() << " HP=> " << _boardData[i]->GetHp();
-
         }
         std::cout << std::endl;
     }

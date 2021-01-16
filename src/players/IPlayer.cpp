@@ -6,5 +6,6 @@
 
 IPlayer::IPlayer(int number) {
     _number = number;
-    _base = Base();
+    p_base = new Base();
 }
+

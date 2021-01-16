@@ -5,7 +5,7 @@
 #include "ActionMove.hpp"
 
 std::string ActionMove::GetActionLog() {
-    return "blabal";
+    return "Move action";
 }
 
 IBaseUnit *ActionMove::getUnit() const {

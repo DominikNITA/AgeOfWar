@@ -61,5 +61,12 @@ IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances)
         default:
             std::cout << "Invalid Action Number" << std::endl;
     }
+    delete p_lastAction;
+    p_lastAction = pResult;
     return pResult;
+}
+
+Fantassin::~Fantassin() {
+    delete p_lastAction;
+    p_lastAction = nullptr;
 }

@@ -12,9 +12,14 @@
 class IPlayer {
 public:
     IPlayer(int number);
+
+    virtual ~IPlayer() {
+        delete p_base;
+    }
+
     //Getters
     int GetCurrency() { return _currency; }
-    Base* GetBase() { return &_base; }
+    Base* GetBase() { return p_base; }
     int GetNumber() {return  _number;}
     //Methods
     void addCurrency(int amount) { _currency += amount;}
@@ -22,7 +27,7 @@ public:
 
 protected:
     int _currency = 10;
-    Base _base;
+    Base* p_base;
     int _number;
 };
 #endif //AGEOFWAR_IPLAYER_HPP

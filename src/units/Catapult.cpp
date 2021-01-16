@@ -60,6 +60,12 @@ IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) 
         default:
             std::cout << "Invalid Action Number" << std::endl;
     }
-
+    delete p_lastAction;
+    p_lastAction = pResult;
     return pResult;
+}
+
+Catapult::~Catapult() {
+    delete p_lastAction;
+    p_lastAction = nullptr;
 }

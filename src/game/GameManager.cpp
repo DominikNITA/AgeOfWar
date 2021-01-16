@@ -25,7 +25,7 @@ GameManager::GameManager(int mode) : _mode(mode) {
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
     p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
     p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
-    _combatLogger = CombatLogger();
+//    _combatLogger = CombatLogger();
 }
 
 GameManager::~GameManager() {
@@ -41,6 +41,7 @@ GameManager::~GameManager() {
         delete p_board;
         p_board = nullptr;
     }
+    delete p_buyingManager;
 }
 
 void GameManager::startGame() {

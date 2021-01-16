@@ -10,6 +10,9 @@
 
 class IAction {
 public:
+    //trivial destructor
+    ~IAction() = default;
+
     virtual std::string GetActionLog() = 0;
 };
 
