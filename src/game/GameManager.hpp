@@ -31,11 +31,6 @@ private:
     CombatLogger _combatLogger;
     Board* p_board;
     BuyingManager* p_buyingManager;
-    IUnitFactory* unitFactories[3] = {
-           new UnitFactory<Archer>,
-           new UnitFactory<Catapult>,
-           new UnitFactory<Fantassin>
-    };
     //Methods
     void gameLoop();
     void nextRound();

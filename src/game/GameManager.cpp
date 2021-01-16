@@ -22,7 +22,9 @@ GameManager::GameManager(int mode) : _mode(mode) {
     }
     p_board = new Board(p_playerOne, p_playerTwo, 12);
     p_buyingManager = new BuyingManager();
-
+    p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
+    p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
+    p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
     _combatLogger = CombatLogger();
 }
 
@@ -53,6 +55,7 @@ void GameManager::nextRound() {
     playTurn(p_playerOne);
     //3. Player Two turn
     playTurn(p_playerTwo);
+    p_board->draw();
 }
 
 void GameManager::playTurn(IPlayer* pPlayer) {
@@ -63,14 +66,20 @@ void GameManager::playTurn(IPlayer* pPlayer) {
     //Make Action 3
     doActions(3, pPlayer);
     //TODO: Buy unit logic
-    for (int i = 0; i < 3; ++i) {
-//        auto purchasableUnit = dynamic_cast<IPurchasable*>(unitFactories[i])
+    if(p_board->canPlayerAddUnit(pPlayer)){
+        int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
+        //TODO: add currency spending
+        IBaseUnit* unitToBuy = p_buyingManager->returnUnit(choice);
+        unitToBuy->setOwner(pPlayer);
+        p_board->addUnit(unitToBuy, pPlayer);
     }
-    p_board->addUnit(new Archer(pPlayer), pPlayer);
+    else{
+        std::cout << "Couldn't add unit for player " << pPlayer->GetNumber() << std::endl;
+    }
 }
 
 void GameManager::gameLoop() {
-    while(_roundCounter < 3){
+    while(_roundCounter < 15){
         std::cout << "Current round " << _roundCounter << std::endl;
         nextRound();
         _roundCounter++;
@@ -84,7 +93,7 @@ void GameManager::doActions(int actionNumber, IPlayer* pPlayer) {
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         doAction(action);
     }
-    std::cout << "Unit count for player " << pPlayer->GetNumber() << " =>" << units.size() << std::endl;
+//    std::cout << "Unit count for player " << pPlayer->GetNumber() << " =>" << units.size() << std::endl;
 }
 
 void GameManager::doAction(IAction *pAction) {

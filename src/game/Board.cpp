@@ -146,6 +146,28 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
     }
 }
 
+bool Board::canPlayerAddUnit(IPlayer *player) {
+    if (player->GetNumber() == 1){
+        return _boardData[0] == nullptr;
+    }
+    else{
+        return _boardData[_size - 1] == nullptr;
+    }
+}
+
+void Board::draw() {
+    std::cout << "Board state: " << std::endl;
+    for (int i = 0; i < _boardData.size(); ++i) {
+        std::cout << i << ": ";
+        if (_boardData[i] != nullptr) {
+            _boardData[i]->draw();
+            std::cout << _boardData[i]->getOwner()->GetNumber() << " HP=> " << _boardData[i]->GetHp();
+
+        }
+        std::cout << std::endl;
+    }
+}
+
 
 
 

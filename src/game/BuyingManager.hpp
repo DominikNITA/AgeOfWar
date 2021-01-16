@@ -12,12 +12,12 @@
 class BuyingManager {
 public:
     BuyingManager() {}
-    std::vector<std::pair<char*,int>> getPurchasableUnits();
-    void addUnit(char* name, int price, IUnitFactory* unitFactory);
+    std::vector<std::pair<std::string,int>> getPurchasableUnits();
+    void addUnit(std::string, int price, IUnitFactory* unitFactory);
     IBaseUnit* returnUnit(int index) { return _unitFactories[index]->create(nullptr);}
 
 private:
-    std::vector<std::pair<char*,int>> _purchasableUnits;
+    std::vector<std::pair<std::string,int>> _purchasableUnits;
     std::vector<IUnitFactory*> _unitFactories;
 };
 

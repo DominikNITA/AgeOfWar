@@ -2,8 +2,11 @@
 // Created by Dominik on 12/28/2020.
 //
 
+#include <string>
+
 #ifndef AGEOFWAR_IDRAWABLE_HPP
 #define AGEOFWAR_IDRAWABLE_HPP
+
 
 
 class IDrawable {

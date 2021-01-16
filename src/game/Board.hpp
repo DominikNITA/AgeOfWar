@@ -12,7 +12,7 @@
 
 using std::vector;
 
-class Board {
+class Board : public IDrawable {
 public:
     //General
     Board(IPlayer* pPlayerOne,IPlayer* pPlayerTwo,int size = 12);
@@ -24,6 +24,9 @@ public:
     int findUnitPosition(IBaseUnit* pUnit);
     vector<int> getDistancesToEnemies(IBaseUnit* pUnit);
     void attackRelativePositions(IBaseUnit* pUnit, std::vector<int> attackedPositions);
+    bool canPlayerAddUnit(IPlayer* player);
+    void draw() override;
+
 private:
     //Variables
     int _size;
