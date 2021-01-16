@@ -9,13 +9,15 @@
 #include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Catapult : public IBaseUnit, public IPurchasable {
+class Catapult : public IBaseUnit {
 public:
     Catapult(IPlayer *ownedBy);
 
-    std::vector<int> GetAttackedPositions(int closestEnemy) override;
+    std::vector<int> getAttackedPositions(int closestEnemy) override;
 
-    void Draw() override;
+    void draw() override;
+
+    IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
 };
 
 

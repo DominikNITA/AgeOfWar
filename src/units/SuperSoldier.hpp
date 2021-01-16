@@ -12,9 +12,11 @@ class SuperSoldier : public IBaseUnit{
     SuperSoldier(IPlayer *ownedBy);
 
 public:
-    std::vector<int> GetAttackedPositions(int closestEnemy) override;
+    std::vector<int> getAttackedPositions(int closestEnemy) override;
 
-    void Draw() override;
+    void draw() override;
+
+    IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
 };
 
 

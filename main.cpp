@@ -19,15 +19,15 @@ int main() {
 
     // Game preparation and exectution
     GameManager game(1);
-    game.StartGame();
-//    fant.Draw();
-//    std::cout << fant.GetAttackedPositions(1).at(0) << std::endl;
+    game.startGame();
+//    fant.draw();
+//    std::cout << fant.getAttackedPositions(1).at(0) << std::endl;
 
     // Memory on stop
 
     // End of the program
     auto t_stop = std::chrono::system_clock::now();
     std::time_t time_stop = std::chrono::system_clock::to_time_t(t_stop);
-    std::cout << "Program sopped at: " << std::ctime(&time_stop) << std::endl;
+    std::cout << "Program stopped at: " << std::ctime(&time_stop) << std::endl;
     return 0;
 }

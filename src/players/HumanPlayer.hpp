@@ -12,6 +12,8 @@ class HumanPlayer : public IPlayer{
 
 public:
     HumanPlayer(int i);
+
+    int chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) override;
 };
 
 

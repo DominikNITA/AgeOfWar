@@ -9,17 +9,16 @@
 #include "../game/actions/ActionMove.hpp"
 
 Archer::Archer(IPlayer *ownedBy)  : IBaseUnit(ownedBy){
-    _price = 12;
     _hp = 8;
     _attackPower = 3;
     _killReward = 6;
 }
 
-void Archer::Draw() {
+void Archer::draw() {
     std::cout << "A";
 }
 
-std::vector<int> Archer::GetAttackedPositions(int closestEnemy) {
+std::vector<int> Archer::getAttackedPositions(int closestEnemy) {
     if( closestEnemy >= 1 && closestEnemy <= 3)
     {
         return std::vector<int> {closestEnemy};
@@ -29,13 +28,13 @@ std::vector<int> Archer::GetAttackedPositions(int closestEnemy) {
     }
 }
 
-IAction* Archer::GetAction(int actionNumber, std::vector<int> enemyDistances) {
+IAction* Archer::getAction(int actionNumber, std::vector<int> enemyDistances) {
     IAction* pResult = nullptr;
     switch(actionNumber) {
         case 1:
             {
                 if(enemyDistances.empty()) break;
-                auto attackedPositions = GetAttackedPositions(enemyDistances.at(0));
+                auto attackedPositions = getAttackedPositions(enemyDistances.at(0));
                 if (attackedPositions.empty())
                 {
                     pResult = new ActionNone();

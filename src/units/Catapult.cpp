@@ -4,15 +4,17 @@
 
 #include <iostream>
 #include "Catapult.hpp"
+#include "../game/actions/ActionAttack.hpp"
+#include "../game/actions/ActionNone.hpp"
+#include "../game/actions/ActionMove.hpp"
 
 Catapult::Catapult(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
-    _price = 20;
     _hp = 12;
     _attackPower = 6;
     _killReward = 10;
 }
 
-std::vector<int> Catapult::GetAttackedPositions(int closestEnemy) {
+std::vector<int> Catapult::getAttackedPositions(int closestEnemy) {
     //TODO: use switch statement
     //TODO: deal with closestEnemy = 1
     if(closestEnemy == 2){
@@ -26,6 +28,38 @@ std::vector<int> Catapult::GetAttackedPositions(int closestEnemy) {
     }
 }
 
-void Catapult::Draw() {
+void Catapult::draw() {
     std::cout << "C";
+}
+
+IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) {
+    IAction* pResult = nullptr;
+
+    switch(actionNumber) {
+        case 1:
+        {
+            auto attackedPositions = getAttackedPositions(enemyDistances.front());
+            if(!attackedPositions.empty()){
+                pResult = new ActionAttack(this, attackedPositions);
+            }
+            else{
+                pResult = new ActionNone();
+            }
+            break;
+        }
+        case 2:
+        {
+            pResult = new ActionNone();
+            break;
+        }
+        case 3:{
+
+                pResult = new ActionMove(this,1);
+            break;
+        }
+        default:
+            std::cout << "Invalid Action Number" << std::endl;
+    }
+
+    return pResult;
 }

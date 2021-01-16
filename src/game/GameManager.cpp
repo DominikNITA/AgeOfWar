@@ -21,7 +21,10 @@ GameManager::GameManager(int mode) : _mode(mode) {
         p_playerTwo = new ComputerPlayer(2);
     }
     p_board = new Board(p_playerOne, p_playerTwo, 12);
-
+    p_buyingManager = new BuyingManager();
+    p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
+    p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
+    p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
     _combatLogger = CombatLogger();
 }
 
@@ -34,52 +37,66 @@ GameManager::~GameManager() {
         delete p_playerTwo;
         p_playerTwo = nullptr;
     }
+    if(p_board != nullptr){
+        delete p_board;
+        p_board = nullptr;
+    }
 }
 
-void GameManager::StartGame() {
-    GameLoop();
+void GameManager::startGame() {
+    gameLoop();
 }
 
-void GameManager::NextRound() {
+void GameManager::nextRound() {
     //1.Give currency to both players
     p_playerOne->addCurrency(8);
     p_playerTwo->addCurrency(8);
     //2. Player One turn
-    PlayTurn(p_playerOne);
+    playTurn(p_playerOne);
     //3. Player Two turn
-    PlayTurn(p_playerTwo);
+    playTurn(p_playerTwo);
+    p_board->draw();
 }
 
-void GameManager::PlayTurn(IPlayer* player) {
+void GameManager::playTurn(IPlayer* pPlayer) {
     //Make Action 1
-    DoActions(1,player);
+    doActions(1, pPlayer);
     //Make Action 2
-    DoActions(2,player);
+    doActions(2, pPlayer);
     //Make Action 3
-    DoActions(3,player);
+    doActions(3, pPlayer);
     //TODO: Buy unit logic
-    p_board->addUnit(new Archer(player), player);
+    if(p_board->canPlayerAddUnit(pPlayer)){
+        int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
+        //TODO: add currency spending
+        IBaseUnit* unitToBuy = p_buyingManager->returnUnit(choice);
+        unitToBuy->setOwner(pPlayer);
+        p_board->addUnit(unitToBuy, pPlayer);
+    }
+    else{
+        std::cout << "Couldn't add unit for player " << pPlayer->GetNumber() << std::endl;
+    }
 }
 
-void GameManager::GameLoop() {
+void GameManager::gameLoop() {
     while(_roundCounter < 15){
         std::cout << "Current round " << _roundCounter << std::endl;
-        NextRound();
+        nextRound();
         _roundCounter++;
     }
 }
 
-void GameManager::DoActions(int actionNumber, IPlayer* player) {
-    auto units = p_board->getPlayerUnits(player, actionNumber == 1);
+void GameManager::doActions(int actionNumber, IPlayer* pPlayer) {
+    auto units = p_board->getPlayerUnits(pPlayer, actionNumber == 1);
 
     for (int i = 0; i < units.size(); ++i) {
-        auto action = units[i]->GetAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
-        DoAction(action);
+        auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
+        doAction(action);
     }
-    std::cout<< "Unit count for player " << player->GetNumber() << " =>"  << units.size()<<std::endl;
+//    std::cout << "Unit count for player " << pPlayer->GetNumber() << " =>" << units.size() << std::endl;
 }
 
-void GameManager::DoAction(IAction *pAction) {
+void GameManager::doAction(IAction *pAction) {
     if(pAction == nullptr){
         std::cout << "Null action pointer\n";
         return;
@@ -98,7 +115,8 @@ void GameManager::DoAction(IAction *pAction) {
     }
 }
 
-void GameManager::BuyUnit(IPlayer *buyer, const IPurchasable &purchasableUnit) {
+void GameManager::buyUnit(IBaseUnit * unit) {
+    //TODO: implement
 
 }
 

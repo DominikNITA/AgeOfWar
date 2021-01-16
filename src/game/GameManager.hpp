@@ -10,12 +10,18 @@
 #include "Board.hpp"
 #include "CombatLogger.hpp"
 #include "../units/IPurchasable.h"
+#include "UnitFactory.hpp"
+#include "../units/Archer.hpp"
+#include "../units/Catapult.hpp"
+#include "../units/Fantassin.hpp"
+#include "BuyingManager.hpp"
 
 class GameManager {
 public:
     GameManager(int mode);
     ~GameManager();
-    void StartGame();
+    void startGame();
+    void buyUnit(IBaseUnit* unit);
 private:
     //Variables
     int _mode;
@@ -24,13 +30,13 @@ private:
     int _roundCounter;
     CombatLogger _combatLogger;
     Board* p_board;
+    BuyingManager* p_buyingManager;
     //Methods
-    void GameLoop();
-    void NextRound();
-    void DoActions(int actionNumber, IPlayer* pPlayer);
-    void DoAction(IAction* pAction);
-    void PlayTurn(IPlayer* pPlayer);
-    void BuyUnit(IPlayer* pBuyer,const IPurchasable& purchasableUnit);
+    void gameLoop();
+    void nextRound();
+    void doActions(int actionNumber, IPlayer* pPlayer);
+    void doAction(IAction* pAction);
+    void playTurn(IPlayer* pPlayer);
 };
 
 #endif //AGEOFWAR_GAMEMANAGER_HPP

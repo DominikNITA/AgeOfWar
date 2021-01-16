@@ -18,10 +18,10 @@ public:
     int GetNumber() {return  _number;}
     //Methods
     void addCurrency(int amount) { _currency += amount;}
-
+    virtual int chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) = 0;
 
 protected:
-    int _currency;
+    int _currency = 10;
     Base _base;
     int _number;
 };
