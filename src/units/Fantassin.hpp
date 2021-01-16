@@ -9,11 +9,13 @@
 #include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Fantassin : public IBaseUnit, public IPurchasable<Fantassin> {
+class Fantassin : public IBaseUnit {
 public:
     Fantassin(IPlayer *ownedBy);
-    std::vector<int> GetAttackedPositions(int closestEnemy) override;
-    void Draw() override;
+    std::vector<int> getAttackedPositions(int closestEnemy) override;
+    void draw() override;
+
+    IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
 };
 
 

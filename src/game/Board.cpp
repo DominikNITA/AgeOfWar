@@ -32,14 +32,14 @@ vector<IBaseUnit *> Board::getPlayerUnits(IPlayer *owner, bool isEnemyBaseDirect
     vector<IBaseUnit *> result = {};
     if ((owner->GetNumber() == 1 && isEnemyBaseDirection) || (owner->GetNumber() == 2 && !isEnemyBaseDirection)) {
         for (auto &i : _boardData) {
-            if (i != nullptr && i->IsOwnedBy(owner)) {
+            if (i != nullptr && i->isOwnedBy(owner)) {
                 result.push_back(i);
             }
         }
     } else if ((owner->GetNumber() == 1 && !isEnemyBaseDirection) ||
                (owner->GetNumber() == 2 && isEnemyBaseDirection)) {
         for (int i = _boardData.size() - 1; i >= 0; i--) {
-            if (_boardData[i] != nullptr && _boardData[i]->IsOwnedBy(owner)) {
+            if (_boardData[i] != nullptr && _boardData[i]->isOwnedBy(owner)) {
                 result.push_back(_boardData[i]);
             }
         }
@@ -59,7 +59,7 @@ void Board::addUnit(IBaseUnit *unit, IPlayer *player) {
 
 void Board::moveUnitForward(IBaseUnit *unit, int count) {
     int unitPosition = findUnitPosition(unit);
-    int direction = unit->GetPlayer()->GetNumber() == 1 ? 1 : -1;
+    int direction = unit->getOwner()->GetNumber() == 1 ? 1 : -1;
     int newIndex = unitPosition + count * direction;
 
     if (newIndex <= 0 || newIndex >= _size - 1) return;
@@ -84,16 +84,16 @@ int Board::findUnitPosition(IBaseUnit *unit) {
 vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
     vector<int> result;
     int unitPosition = findUnitPosition(pUnit);
-    IPlayer *unitOwner = pUnit->GetPlayer();
+    IPlayer *unitOwner = pUnit->getOwner();
 
     //For Player One
-    if (pUnit->GetPlayer()->GetNumber() == 1) {
+    if (pUnit->getOwner()->GetNumber() == 1) {
         for (int i = 0; i < _boardData.size(); ++i) {
             //Add the base to the vector
             if (i == _boardData.size() - 1) {
                 result.push_back(getDistanceValueFromIndexes(_boardData.size() - 1, unitPosition));
             }
-            if (_boardData[i] != nullptr && !_boardData[i]->IsOwnedBy(unitOwner)) {
+            if (_boardData[i] != nullptr && !_boardData[i]->isOwnedBy(unitOwner)) {
                 result.push_back(getDistanceValueFromIndexes(i, unitPosition));
             }
         }
@@ -103,7 +103,7 @@ vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
             if (i == 0) {
                 result.push_back(getDistanceValueFromIndexes(0, unitPosition));
             }
-            if (_boardData[i] != nullptr && !_boardData[i]->IsOwnedBy(unitOwner)) {
+            if (_boardData[i] != nullptr && !_boardData[i]->isOwnedBy(unitOwner)) {
                 result.push_back(getDistanceValueFromIndexes(i, unitPosition));
             }
         }
@@ -119,7 +119,7 @@ int Board::getDistanceValueFromIndexes(int index1, int index2) {
 
 void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedPositions) {
     int unitPosition = findUnitPosition(pUnit);
-    int direction = pUnit->GetPlayer()->GetNumber() == 1 ? 1 : -1;
+    int direction = pUnit->getOwner()->GetNumber() == 1 ? 1 : -1;
     for (int i = 0; i < attackedPositions.size(); ++i) {
         int tempUnitPosition = unitPosition + direction * attackedPositions[i];
         IBaseUnit *tempUnit = _boardData[tempUnitPosition];

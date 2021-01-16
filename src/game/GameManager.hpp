@@ -14,12 +14,14 @@
 #include "../units/Archer.hpp"
 #include "../units/Catapult.hpp"
 #include "../units/Fantassin.hpp"
+#include "BuyingManager.hpp"
 
 class GameManager {
 public:
     GameManager(int mode);
     ~GameManager();
-    void StartGame();
+    void startGame();
+    void buyUnit(IBaseUnit* unit);
 private:
     //Variables
     int _mode;
@@ -28,17 +30,18 @@ private:
     int _roundCounter;
     CombatLogger _combatLogger;
     Board* p_board;
-//    IUnitFactory<IBaseUnit>* unitFactories[3] = {
-//            new UnitFactory<Archer>,
-//            new UnitFactory<Catapult>,
-//            new UnitFactory<Fantassin>,
-//    };
+    BuyingManager* p_buyingManager;
+    IUnitFactory* unitFactories[3] = {
+           new UnitFactory<Archer>,
+           new UnitFactory<Catapult>,
+           new UnitFactory<Fantassin>
+    };
     //Methods
-    void GameLoop();
-    void NextRound();
-    void DoActions(int actionNumber, IPlayer* pPlayer);
-    void DoAction(IAction* pAction);
-    void PlayTurn(IPlayer* pPlayer);
+    void gameLoop();
+    void nextRound();
+    void doActions(int actionNumber, IPlayer* pPlayer);
+    void doAction(IAction* pAction);
+    void playTurn(IPlayer* pPlayer);
 };
 
 #endif //AGEOFWAR_GAMEMANAGER_HPP

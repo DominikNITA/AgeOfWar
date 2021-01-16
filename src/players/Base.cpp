@@ -9,6 +9,6 @@ Base::Base() {
     _hp = 100;
 }
 
-void Base::Draw() {
+void Base::draw() {
     std::cout << _hp << std::endl;
 }

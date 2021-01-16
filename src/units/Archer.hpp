@@ -9,13 +9,13 @@
 #include "IBaseUnit.hpp"
 #include "IPurchasable.h"
 
-class Archer : public IBaseUnit, public IPurchasable<Archer> {
+class Archer : public IBaseUnit{
 public:
     Archer(IPlayer *ownedBy);
-    std::vector<int> GetAttackedPositions(int closestEnemy) override;
-    void Draw() override;
+    std::vector<int> getAttackedPositions(int closestEnemy) override;
+    void draw() override;
 
-    IAction* GetAction(int actionNumber, std::vector<int> enemyDistances) override;
+    IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
 };
 
 

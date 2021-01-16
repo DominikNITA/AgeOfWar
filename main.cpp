@@ -19,9 +19,9 @@ int main() {
 
     // Game preparation and exectution
     GameManager game(1);
-    game.StartGame();
-//    fant.Draw();
-//    std::cout << fant.GetAttackedPositions(1).at(0) << std::endl;
+    game.startGame();
+//    fant.draw();
+//    std::cout << fant.getAttackedPositions(1).at(0) << std::endl;
 
     // Memory on stop
 

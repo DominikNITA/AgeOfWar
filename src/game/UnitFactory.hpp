@@ -11,12 +11,13 @@
 
 //https://stackoverflow.com/questions/1883862/c-oop-list-of-classes-class-types-and-creating-instances-of-them
 
-template <typename T> struct IUnitFactory { virtual IPurchasable<T>* create(IPlayer* pOwner) = 0;};
+struct IUnitFactory { virtual IBaseUnit* create(IPlayer* pOwner) = 0;};
 
-template <typename Type> struct UnitFactory : public IUnitFactory<Type> {
-    virtual Type* create(IPlayer* pOwner){
+template <typename Type> struct UnitFactory : public IUnitFactory {
+    virtual IBaseUnit* create(IPlayer* pOwner){
         return new Type(pOwner);
     }
+
 };
 
 

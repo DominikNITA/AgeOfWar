@@ -12,7 +12,7 @@
 class Base : public IAttackable , public IDrawable{
 public:
     Base();
-    virtual void Draw();
+    virtual void draw();
 };
 
 

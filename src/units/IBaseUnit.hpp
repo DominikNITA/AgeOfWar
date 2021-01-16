@@ -17,13 +17,14 @@ class IBaseUnit : public virtual IAttackable,
                   public virtual IAttacking,
                   public virtual IDrawable {
 public:
-    IBaseUnit(IPlayer *ownedBy) : p_owner(ownedBy) {}
+    explicit IBaseUnit(IPlayer *ownedBy) : p_owner(ownedBy) {}
 
-    bool IsOwnedBy(IPlayer *player) { return player == p_owner; }
+    bool isOwnedBy(IPlayer *player) { return player == p_owner; }
 
-    IPlayer *GetPlayer() { return p_owner; }
+    IPlayer *getOwner() { return p_owner; }
+    void setOwner(IPlayer* owner) { p_owner = owner; }
 
-    virtual IAction *GetAction(int actionNumber, std::vector<int> enemyDistances) = 0;
+    virtual IAction *getAction(int actionNumber, std::vector<int> enemyDistances) = 0;
 
 protected:
     IPlayer *p_owner = nullptr;
