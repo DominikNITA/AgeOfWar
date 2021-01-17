@@ -11,7 +11,7 @@
 using std::cout;using std::endl; using std::cin;
 
 HumanPlayer::HumanPlayer(int i) : IPlayer(i) {
-
+    _colorCode = 35;
 }
 
 int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) {

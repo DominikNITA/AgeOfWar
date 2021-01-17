@@ -55,12 +55,20 @@ public:
         std::cout << "\33[2K";
     }
 
+    static void clearScreen(){
+        std::cout << "\033[2j";
+    }
+
     static void moveCursorUp(){
         std::cout << "\033[A";
     }
 
     static void moveToLineStart(){
         std::cout << "\r";
+    }
+
+    static void moveToScreenStart(){
+        std::cout << "\033[1;1H";
     }
 };
 

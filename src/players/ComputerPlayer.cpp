@@ -6,7 +6,7 @@
 #include "ComputerPlayer.hpp"
 
 ComputerPlayer::ComputerPlayer(int i) : IPlayer(i) {
-
+    _colorCode = 36;
 }
 
 int ComputerPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) {

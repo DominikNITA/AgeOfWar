@@ -8,7 +8,7 @@
 
 #include "../players/IPlayer.hpp"
 #include "Board.hpp"
-#include "CombatLogger.hpp"
+#include "GameLogger.hpp"
 #include "../units/IPurchasable.h"
 #include "UnitFactory.hpp"
 #include "../units/Archer.hpp"
@@ -24,11 +24,13 @@ public:
     void buyUnit(IBaseUnit* unit);
 private:
     //Variables
+    int _roundLimit = 15;
+    int _sleepBetweenActions = 200;
     int _mode;
     IPlayer* p_playerOne;
     IPlayer* p_playerTwo;
     int _roundCounter;
-    CombatLogger _combatLogger;
+    GameLogger* p_gameLogger;
     Board* p_board;
     BuyingManager* p_buyingManager;
     //Methods

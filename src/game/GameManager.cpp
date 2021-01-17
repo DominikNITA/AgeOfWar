@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <thread>
 #include "GameManager.hpp"
 #include "../players/HumanPlayer.hpp"
 #include "../players/ComputerPlayer.hpp"
@@ -10,6 +11,7 @@
 #include "actions/ActionAttack.hpp"
 #include "actions/ActionNone.hpp"
 #include "actions/ActionMove.hpp"
+#include "../utility/ConsoleHelper.hpp"
 
 GameManager::GameManager(int mode) : _mode(mode) {
     _roundCounter = 0;
@@ -25,7 +27,7 @@ GameManager::GameManager(int mode) : _mode(mode) {
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
     p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
     p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
-//    _combatLogger = CombatLogger();
+    p_gameLogger = new GameLogger();
 }
 
 GameManager::~GameManager() {
@@ -49,24 +51,38 @@ void GameManager::startGame() {
 }
 
 void GameManager::nextRound() {
+    p_gameLogger->log(ConsoleHelper::getColorString(BLUE) +"Round " + std::to_string(_roundCounter) + ":");
+
     //1.Give currency to both players
     p_playerOne->addCurrency(8);
     p_playerTwo->addCurrency(8);
+    p_gameLogger->log("Both players received "
+    + ConsoleHelper::getColorString(YELLOW) + std::to_string(8) + " coins.");
+
     //2. Player One turn
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(p_playerOne->getColorCode()) + "Player one turn:");
     playTurn(p_playerOne);
+
     //3. Player Two turn
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(p_playerTwo->getColorCode()) + "Player two turn:");
     playTurn(p_playerTwo);
+
     p_board->draw();
 }
 
 void GameManager::playTurn(IPlayer* pPlayer) {
     //Make Action 1
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(BLUE)+"Action 1 Phase");
     doActions(1, pPlayer);
+
     //Make Action 2
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(BLUE)+"Action 2 Phase");
     doActions(2, pPlayer);
+
     //Make Action 3
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(BLUE)+"Action 3 Phase");
     doActions(3, pPlayer);
-    //TODO: Buy unit logic
+
     if(p_board->canPlayerAddUnit(pPlayer)){
         if(p_buyingManager->getMinimalPrice() <= pPlayer->GetCurrency()){
             int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
@@ -84,21 +100,25 @@ void GameManager::playTurn(IPlayer* pPlayer) {
 }
 
 void GameManager::gameLoop() {
-    while(_roundCounter < 15){
-        std::cout << "Current round " << _roundCounter << std::endl;
-        nextRound();
+    while(_roundCounter < _roundLimit){
         _roundCounter++;
+        nextRound();
     }
 }
 
 void GameManager::doActions(int actionNumber, IPlayer* pPlayer) {
     auto units = p_board->getPlayerUnits(pPlayer, actionNumber == 1);
 
+    if(units.empty()){
+        p_gameLogger->logAndDraw("Player has no units!");
+        return;
+    }
+
     for (int i = 0; i < units.size(); ++i) {
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         doAction(action);
+        std::this_thread::sleep_for(std::chrono::milliseconds(_sleepBetweenActions));
     }
-//    std::cout << "Unit count for player " << pPlayer->GetNumber() << " =>" << units.size() << std::endl;
 }
 
 void GameManager::doAction(IAction *pAction) {

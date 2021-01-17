@@ -21,6 +21,7 @@ public:
     int GetCurrency() { return _currency; }
     Base* GetBase() { return p_base; }
     int GetNumber() {return  _number;}
+    int getColorCode() {return _colorCode; }
     //Methods
     void addCurrency(int amount) { _currency += amount;}
     virtual int chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) = 0;
@@ -29,5 +30,6 @@ protected:
     int _currency = 10;
     Base* p_base;
     int _number;
+    int _colorCode;
 };
 #endif //AGEOFWAR_IPLAYER_HPP
