@@ -18,15 +18,20 @@ void GameLogger::logAndDraw(const std::string &message) {
 }
 
 void GameLogger::draw() {
-    ConsoleHelper::clearScreen();
-    //Remove old logs
+//    ConsoleHelper::clearScreen();
+//    ConsoleHelper::moveToScreenStart();
+
+//    //Remove old logs
     for (int i = 0; i < _lastBufferSize; ++i) {
+        ConsoleHelper::moveCursorUp();
         ConsoleHelper::eraseLine();
     }
+//    ConsoleHelper::moveToLineStart();
     //Print new logs
     for (auto & i : _buffer) {
         ConsoleHelper::setColor(RESET);
         std::cout << i << std::endl;
+        ConsoleHelper::setColor(RESET);
     }
     //Update the last size of buffer
     _lastBufferSize = _buffer.size();

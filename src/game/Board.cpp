@@ -5,24 +5,27 @@
 #include <iostream>
 #include "Board.hpp"
 #include "../units/Archer.hpp"
+#include "../utility/ConsoleHelper.hpp"
 
-Board::Board(IPlayer *pPlayerOne, IPlayer *pPlayerTwo, int size) {
+Board::Board(IPlayer *pPlayerOne, IPlayer *pPlayerTwo, GameLogger* pGameLogger, int size) {
     _size = size;
     _boardData.insert(_boardData.begin(), size, nullptr);
     p_PlayerOne = pPlayerOne;
     p_PlayerTwo = pPlayerTwo;
-    if (test != nullptr) {
-        delete[] test;
-        test = nullptr;
-    }
-    if (test == nullptr) {
-        test = new int[size];
-        if (test == nullptr) {
-            std::cout << "ERROR" << std::endl;
-        } else {
-            std::cout << "Array was created succesfully" << std::endl;
-        }
-    }
+    p_gameLogger = pGameLogger;
+//    CREATION TESTS
+//    if (test != nullptr) {
+//        delete[] test;
+//        test = nullptr;
+//    }
+//    if (test == nullptr) {
+//        test = new int[size];
+//        if (test == nullptr) {
+//            std::cout << "ERROR" << std::endl;
+//        } else {
+//            std::cout << "Array was created succesfully" << std::endl;
+//        }
+//    }
 }
 Board::~Board() {
     for (auto p : _boardData)
@@ -85,7 +88,6 @@ int Board::findUnitPosition(IBaseUnit *unit) {
     return -1;
 }
 
-
 vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
     vector<int> result;
     int unitPosition = findUnitPosition(pUnit);
@@ -127,25 +129,29 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
     int direction = pUnit->getOwner()->GetNumber() == 1 ? 1 : -1;
     for (int i = 0; i < attackedPositions.size(); ++i) {
         int tempUnitPosition = unitPosition + direction * attackedPositions[i];
-        IBaseUnit *tempUnit = _boardData[tempUnitPosition];
-        if (tempUnit != nullptr) {
-            tempUnit->GetDamage(pUnit->GetAttackPower());
-            std::cout << "Unit at " << unitPosition << " attacked enemy unit at "
-                      << tempUnitPosition << " HP left:" << tempUnit->GetHp() << std::endl;
-            if (tempUnit->GetHp() <= 0) {
-                delete tempUnit;
+        IBaseUnit *targetUnit = _boardData[tempUnitPosition];
+        if (targetUnit != nullptr) {
+            targetUnit->ReceiveDamage(pUnit->GetAttackPower());
+            p_gameLogger->log("Unit "+ConsoleHelper::getColorString(pUnit->getOwner()->getColorCode()) + pUnit->print()+ ConsoleHelper::getColorString(RESET) + " attacked somebody :)");
+//            std::cout << "Unit at " << unitPosition << " attacked enemy unit at "
+//                      << tempUnitPosition << " HP left:" << targetUnit->GetHp() << std::endl;
+            if (targetUnit->GetHp() <= 0) {
+                delete targetUnit;
                 _boardData[tempUnitPosition] = nullptr;
-                std::cout << "Unit killed!\n";
+                p_gameLogger->log(ConsoleHelper::getColorString(RED) + "Unit got killed!");
             }
+            p_gameLogger->draw();
         }
         else{
             if(tempUnitPosition == 0){
-                p_PlayerOne->GetBase()->GetDamage(pUnit->GetAttackPower());
-                std::cout << "Player One Base HP: " << p_PlayerOne->GetBase()->GetHp() << std::endl;
+                p_PlayerOne->GetBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_gameLogger->logAndDraw("Base got attacked");
+//                std::cout << "Player One Base HP: " << p_PlayerOne->GetBase()->GetHp() << std::endl;
             }
             if(tempUnitPosition == _size - 1){
-                p_PlayerTwo->GetBase()->GetDamage(pUnit->GetAttackPower());
-                std::cout << "Player Two Base HP: " << p_PlayerTwo->GetBase()->GetHp() << std::endl;
+                p_PlayerTwo->GetBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_gameLogger->logAndDraw("Base got attacked");
+//                std::cout << "Player Two Base HP: " << p_PlayerTwo->GetBase()->GetHp() << std::endl;
             }
         }
     }

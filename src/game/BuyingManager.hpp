@@ -16,6 +16,7 @@ public:
     void addUnit(std::string, int price, IUnitFactory* unitFactory);
     IBaseUnit* returnUnit(int index) { return _unitFactories[index]->create(nullptr);}
     int getMinimalPrice() {return _minimalPrice;}
+    std::string getUnitNameByIndex(int index);
 
 private:
     std::vector<std::pair<std::string,int>> _purchasableUnits;

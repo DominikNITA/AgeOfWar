@@ -12,12 +12,16 @@
 class Fantassin : public IBaseUnit {
 public:
     Fantassin(IPlayer *ownedBy);
+    ~Fantassin() override;
+
     std::vector<int> getAttackedPositions(int closestEnemy) override;
     void draw() override;
 
     IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
 
-    ~Fantassin() override;
+    std::string print() override {
+        return std::string();
+    }
 };
 
 

@@ -22,12 +22,13 @@ GameManager::GameManager(int mode) : _mode(mode) {
     else{
         p_playerTwo = new ComputerPlayer(2);
     }
-    p_board = new Board(p_playerOne, p_playerTwo, 12);
+    p_gameLogger = new GameLogger();
+    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,12);
     p_buyingManager = new BuyingManager();
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
     p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
     p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
-    p_gameLogger = new GameLogger();
+
 }
 
 GameManager::~GameManager() {
@@ -62,12 +63,14 @@ void GameManager::nextRound() {
     //2. Player One turn
     p_gameLogger->logAndDraw(ConsoleHelper::getColorString(p_playerOne->getColorCode()) + "Player one turn:");
     playTurn(p_playerOne);
+    p_gameLogger->draw();
 
     //3. Player Two turn
     p_gameLogger->logAndDraw(ConsoleHelper::getColorString(p_playerTwo->getColorCode()) + "Player two turn:");
+    p_gameLogger->draw();
     playTurn(p_playerTwo);
 
-    p_board->draw();
+//    p_board->draw();
 }
 
 void GameManager::playTurn(IPlayer* pPlayer) {
@@ -82,20 +85,22 @@ void GameManager::playTurn(IPlayer* pPlayer) {
     //Make Action 3
     p_gameLogger->logAndDraw(ConsoleHelper::getColorString(BLUE)+"Action 3 Phase");
     doActions(3, pPlayer);
+    p_gameLogger->draw();
 
     if(p_board->canPlayerAddUnit(pPlayer)){
         if(p_buyingManager->getMinimalPrice() <= pPlayer->GetCurrency()){
+
             int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
             IBaseUnit* unitToBuy = p_buyingManager->returnUnit(choice);
             unitToBuy->setOwner(pPlayer);
             p_board->addUnit(unitToBuy, pPlayer);
         }
         else{
-            std::cout << "Not enough coins to buy unit for player " << pPlayer->GetNumber() << std::endl;
+            p_gameLogger->logAndDraw("Not enough coins to buy unit for player " + std::to_string(pPlayer->GetNumber()));
         }
     }
     else{
-        std::cout << "Base position is occupied for player " << pPlayer->GetNumber() << std::endl;
+        p_gameLogger->logAndDraw("Base position is occupied for player " + std::to_string(pPlayer->GetNumber()));
     }
 }
 
@@ -111,14 +116,14 @@ void GameManager::doActions(int actionNumber, IPlayer* pPlayer) {
 
     if(units.empty()){
         p_gameLogger->logAndDraw("Player has no units!");
-        return;
     }
 
     for (int i = 0; i < units.size(); ++i) {
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         doAction(action);
-        std::this_thread::sleep_for(std::chrono::milliseconds(_sleepBetweenActions));
+        Sleep;
     }
+    Sleep;
 }
 
 void GameManager::doAction(IAction *pAction) {

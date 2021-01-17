@@ -26,6 +26,7 @@ public:
     void setOwner(IPlayer* owner) { p_owner = owner; }
 
     virtual IAction *getAction(int actionNumber, std::vector<int> enemyDistances) = 0;
+    virtual std::string print() = 0;
 
 protected:
     IPlayer* p_owner = nullptr;

@@ -14,3 +14,7 @@ void BuyingManager::addUnit(std::string name, int price, IUnitFactory *unitFacto
     _purchasableUnits.emplace_back(name,price);
     _unitFactories.push_back(unitFactory);
 }
+
+std::string BuyingManager::getUnitNameByIndex(int index) {
+    return _purchasableUnits[index].first;
+}

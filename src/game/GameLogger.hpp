@@ -19,7 +19,7 @@ public:
     void draw() override;
 
 private:
-    int _maxBufferSize = 12;
+    int _maxBufferSize = 20;
     int _lastBufferSize = 0;
     std::vector<std::string> _buffer;
 };

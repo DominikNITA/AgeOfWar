@@ -17,6 +17,10 @@ public:
 
     IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
 
+    std::string print() override {
+        return std::string("A");
+    }
+
     ~Archer() override;
 };
 

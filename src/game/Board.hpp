@@ -9,13 +9,14 @@
 #include <vector>
 #include <iterator>
 #include "../units/IBaseUnit.hpp"
+#include "GameLogger.hpp"
 
 using std::vector;
 
 class Board : public IDrawable {
 public:
     //General
-    Board(IPlayer* pPlayerOne,IPlayer* pPlayerTwo,int size = 12);
+    Board(IPlayer* pPlayerOne,IPlayer* pPlayerTwo, GameLogger* pGameLogger,int size = 12);
     ~Board();
     //Methods
     vector<IBaseUnit*> getPlayerUnits(IPlayer* pOwner, bool isEnemyBaseDirection);
@@ -34,6 +35,7 @@ private:
     int* test = nullptr;
     IPlayer* p_PlayerOne;
     IPlayer* p_PlayerTwo;
+    GameLogger* p_gameLogger;
     //Methods
     int getDistanceValueFromIndexes(int index1, int index2);
 };

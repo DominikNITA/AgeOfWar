@@ -32,7 +32,12 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
         }
         ConsoleHelper::setColor(RESET);
         cout << "Choose unit to buy:";
+        //TODO: parse int
         cin >> choice;
+        for (int i = 0; i < unitsInfo.size()+3; ++i) {
+            ConsoleHelper::moveCursorUp();
+            ConsoleHelper::eraseLine();
+        }
         if (choice < 0 || choice > unitsInfo.size() - 1) {
             choice = -1; // reset choice for loop condition
             ConsoleHelper::setColor(RED);
@@ -41,6 +46,8 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             ConsoleHelper::setColor(RESET);
             //Sleep from https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            ConsoleHelper::moveCursorUp();
+            ConsoleHelper::eraseLine();
         }
         else if(unitsInfo[choice].second > _currency){
             ConsoleHelper::setColor(RED);
@@ -49,6 +56,8 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             ConsoleHelper::setColor(RESET);
             //Sleep from https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            ConsoleHelper::moveCursorUp();
+            ConsoleHelper::eraseLine();
             choice = -1;
         }
     }
