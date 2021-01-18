@@ -10,15 +10,16 @@
 
 using std::cout;using std::endl; using std::cin;
 
-HumanPlayer::HumanPlayer(int i) : IPlayer(i) {
+HumanPlayer::HumanPlayer(int i,GameLogger* p) : IPlayer(i,p) {
     _colorCode = 35;
 }
 
 int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) {
-    cout << "Unit Shop:" << endl;
-    cout << "Coins: " << ConsoleHelper::getColorString(YELLOW) << _currency << endl;
+
     int choice = -1;
     while (choice < 0) {
+        cout << "Unit Shop:" << endl;
+        cout << "Coins: " << ConsoleHelper::getColorString(YELLOW) << _currency << endl;
 
         for (int i = 0; i < unitsInfo.size(); ++i) {
             if(unitsInfo[i].second <= _currency){
@@ -30,6 +31,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             cout << i << ". Buy " << unitsInfo[i].first << " for " << unitsInfo[i].second << " coins" << endl;
             ConsoleHelper::setColor(RESET);
         }
+
         ConsoleHelper::setColor(RESET);
         cout << "Choose unit to buy:";
         //TODO: parse int
@@ -41,7 +43,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
         if (choice < 0 || choice > unitsInfo.size() - 1) {
             choice = -1; // reset choice for loop condition
             ConsoleHelper::setColor(RED);
-            ConsoleHelper::setColor(UNDERLINE);
+            ConsoleHelper::setColor(BLINK);
             cout << "Invalid unit number. Try again!" << endl;
             ConsoleHelper::setColor(RESET);
             //Sleep from https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
@@ -51,7 +53,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
         }
         else if(unitsInfo[choice].second > _currency){
             ConsoleHelper::setColor(RED);
-            ConsoleHelper::setColor(UNDERLINE);
+            ConsoleHelper::setColor(BLINK);
             cout << "Not enough coins. Try with other unit!" << endl;
             ConsoleHelper::setColor(RESET);
             //Sleep from https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
@@ -61,6 +63,10 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             choice = -1;
         }
     }
+
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(_colorCode) + "Player " + std::to_string(_number) + ConsoleHelper::getColorString(RESET) + " bought " + unitsInfo[choice].first + " for " + ConsoleHelper::getColorString(YELLOW) + std::to_string(unitsInfo[choice].second) + " coins");
+
     addCurrency(-unitsInfo[choice].second);
+
     return choice;
 }

@@ -15,20 +15,22 @@
 
 GameManager::GameManager(int mode) : _mode(mode) {
     _roundCounter = 0;
-    p_playerOne = new HumanPlayer(1);
+
+    p_gameLogger = new GameLogger();
+    p_playerOne = new HumanPlayer(1,p_gameLogger);
     if(_mode == 0){
-        p_playerTwo = new HumanPlayer(2);
+        p_playerTwo = new HumanPlayer(2,p_gameLogger);
     }
     else{
-        p_playerTwo = new ComputerPlayer(2);
+        p_playerTwo = new ComputerPlayer(2,p_gameLogger);
     }
-    p_gameLogger = new GameLogger();
-    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,12);
+
+    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,2);
+
     p_buyingManager = new BuyingManager();
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
-    p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
-    p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
-
+//    p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
+//    p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
 }
 
 GameManager::~GameManager() {
@@ -48,11 +50,12 @@ GameManager::~GameManager() {
 }
 
 void GameManager::startGame() {
+    p_board->draw();
     gameLoop();
 }
 
 void GameManager::nextRound() {
-    p_gameLogger->log(ConsoleHelper::getColorString(BLUE) +"Round " + std::to_string(_roundCounter) + ":");
+    p_gameLogger->log(ConsoleHelper::getColorString(BLUE) + ConsoleHelper::getColorString(BOLD) +"Round " + std::to_string(_roundCounter) + ":");
 
     //1.Give currency to both players
     p_playerOne->addCurrency(8);
@@ -75,15 +78,15 @@ void GameManager::nextRound() {
 
 void GameManager::playTurn(IPlayer* pPlayer) {
     //Make Action 1
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(BLUE)+"Action 1 Phase");
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(GREEN)+"Action 1 Phase");
     doActions(1, pPlayer);
 
     //Make Action 2
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(BLUE)+"Action 2 Phase");
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(GREEN)+"Action 2 Phase");
     doActions(2, pPlayer);
 
     //Make Action 3
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(BLUE)+"Action 3 Phase");
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(GREEN)+"Action 3 Phase");
     doActions(3, pPlayer);
     p_gameLogger->draw();
 

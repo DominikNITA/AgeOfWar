@@ -5,7 +5,7 @@
 #include <iostream>
 #include "ComputerPlayer.hpp"
 
-ComputerPlayer::ComputerPlayer(int i) : IPlayer(i) {
+ComputerPlayer::ComputerPlayer(int i,GameLogger* gl) : IPlayer(i,gl) {
     _colorCode = 36;
 }
 
@@ -18,7 +18,7 @@ int ComputerPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> uni
             index=i;
         }
     }
-//    std::cout << "AI money before deduction: " << _currency << std::endl;
+    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(_colorCode) + "Player " + std::to_string(_number) + ConsoleHelper::getColorString(RESET) + " bought " + unitsInfo[index].first + " for " + ConsoleHelper::getColorString(YELLOW) + std::to_string(unitsInfo[index].second) + " coins");
     addCurrency(-unitsInfo[index].second);
     return index;
 }

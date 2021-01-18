@@ -13,7 +13,7 @@
 #include "../players/IPlayer.hpp"
 #include "../game/actions/IAction.hpp"
 
-class IBaseUnit : public virtual IAttackable,
+class IBaseUnit : public IAttackable,
                   public virtual IAttacking,
                   public virtual IDrawable {
 public:
@@ -22,15 +22,15 @@ public:
 
     bool isOwnedBy(IPlayer *player) { return player == p_owner; }
 
-    IPlayer *getOwner() { return p_owner; }
+    IPlayer *getOwner() const { return p_owner; }
     void setOwner(IPlayer* owner) { p_owner = owner; }
 
     virtual IAction *getAction(int actionNumber, std::vector<int> enemyDistances) = 0;
     virtual std::string print() = 0;
 
 protected:
-    IPlayer* p_owner = nullptr;
     IAction* p_lastAction = nullptr;
+    IPlayer* p_owner = nullptr;
 };
 
 #endif //AGEOFWAR_IBASEUNIT_HPP

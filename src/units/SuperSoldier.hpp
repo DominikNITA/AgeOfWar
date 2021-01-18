@@ -7,11 +7,11 @@
 
 
 #include "IBaseUnit.hpp"
+#include "Fantassin.hpp"
 
 class SuperSoldier : public IBaseUnit{
-    SuperSoldier(IPlayer *ownedBy);
-
 public:
+    SuperSoldier(const Fantassin& fantassin);
     ~SuperSoldier() override;
 
     std::vector<int> getAttackedPositions(int closestEnemy) override;

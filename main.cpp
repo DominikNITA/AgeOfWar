@@ -4,6 +4,7 @@
 #include "src/units/Fantassin.hpp"
 #include "src/players/HumanPlayer.hpp"
 #include "src/game/GameManager.hpp"
+#include "src/units/SuperSoldier.hpp"
 
 using namespace std;
 

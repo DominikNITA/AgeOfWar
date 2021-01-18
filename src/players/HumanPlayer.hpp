@@ -11,7 +11,7 @@
 class HumanPlayer : public IPlayer{
 
 public:
-    HumanPlayer(int i);
+    HumanPlayer(int i, GameLogger* pGameLogger);
 
     int chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) override;
 };

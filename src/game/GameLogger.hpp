@@ -14,6 +14,7 @@ class GameLogger : public IDrawable {
 public:
     void log(const std::string& message);
     void logAndDraw(const std::string& message);
+    void clear();
     virtual ~GameLogger();
 
     void draw() override;

@@ -19,6 +19,14 @@
 #define MAGENTA 35
 #define CYAN 36
 #define WHITE 37
+#define BRIGHTBLACK 90
+#define BRIGHTRED 91
+#define BRIGHTGREEN 92
+#define BRIGHTYELLOW 93
+#define BRIGHTBLUE 94
+#define BRIGHTMAGENTA 95
+#define BRIGHTCYAN 96
+#define BRIGHTWHITE 97
 
 //Utility
 #define RESET 0
@@ -26,8 +34,8 @@
 #define BOLDOFF 21
 #define UNDERLINE 4
 #define UNDERLINEOFF 24
-//#define BLINK 5
-//#define BLINKOFF 25
+#define BLINK 5
+#define BLINKOFF 25
 
 
 class ConsoleHelper {

@@ -8,10 +8,12 @@
 
 #include <vector>
 #include "Base.hpp"
+#include "../game/GameLogger.hpp"
+#include "../utility/ConsoleHelper.hpp"
 
 class IPlayer {
 public:
-    IPlayer(int number);
+    IPlayer(int number, GameLogger* pGameLogger);
 
     virtual ~IPlayer() {
         delete p_base;
@@ -28,6 +30,7 @@ public:
 
 protected:
     int _currency = 10;
+    GameLogger* p_gameLogger;
     Base* p_base;
     int _number;
     int _colorCode;

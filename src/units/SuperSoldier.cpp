@@ -8,10 +8,10 @@
 #include "../game/actions/ActionNone.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-SuperSoldier::SuperSoldier(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
-    _hp = 10;
-    _killReward = 5;
-    _attackPower = 4;
+SuperSoldier::SuperSoldier(const Fantassin &fantassin) : IBaseUnit(fantassin.getOwner()) {
+    _hp = fantassin.GetHp();
+    _killReward = fantassin.GetKillReward();
+    _attackPower = fantassin.GetAttackPower();
 }
 
 std::vector<int> SuperSoldier::getAttackedPositions(int closestEnemy) {
@@ -48,7 +48,6 @@ IAction *SuperSoldier::getAction(int actionNumber, std::vector<int> enemyDistanc
             break;
         }
         case 3:{
-            //TODO: add logic for missing
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
             if(attackedPositions.size() > 0){
                 pResult = new ActionAttack(this, attackedPositions);
