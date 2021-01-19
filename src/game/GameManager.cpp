@@ -25,7 +25,7 @@ GameManager::GameManager(int mode) : _mode(mode) {
         p_playerTwo = new ComputerPlayer(2,p_gameLogger);
     }
 
-    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,2);
+    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,6);
 
     p_buyingManager = new BuyingManager();
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
