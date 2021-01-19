@@ -26,8 +26,8 @@ public:
 private:
     //Variables
     int _roundLimit = 15;
-    int _sleepBetweenActions = 300;
-    int _boardSize = 12;
+    int _sleepBetweenActions = 750;
+    int _boardSize = 5;
     int _mode;
     IPlayer* p_playerOne;
     IPlayer* p_playerTwo;
@@ -41,6 +41,7 @@ private:
     void doActions(int actionNumber, IPlayer* pPlayer);
     void doAction(IAction* pAction);
     void playTurn(IPlayer* pPlayer);
+    void redrawAll();
 };
 
 #endif //AGEOFWAR_GAMEMANAGER_HPP

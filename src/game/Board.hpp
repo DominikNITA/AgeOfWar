@@ -27,6 +27,7 @@ public:
     void attackRelativePositions(IBaseUnit* pUnit, std::vector<int> attackedPositions);
     bool canPlayerAddUnit(IPlayer* player);
     void draw() override;
+    void clear();
 
 private:
     //Variables

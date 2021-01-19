@@ -163,6 +163,7 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
                 }
                 //Remove enemy unit from the board
                 delete pTargetUnit;
+                pTargetUnit = nullptr;
                 _boardData[targetUnitPosition] = nullptr;
                 p_gameLogger->draw();
             }
@@ -179,7 +180,7 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
     }
 
     if (isUpgradedToSuperSoldier) {
-        SuperSoldier superSoldier = *pThisFantassin;
+        //SuperSoldier superSoldier = *pThisFantassin;
         p_gameLogger->log(
                 "Unit " + ConsoleHelper::getColorString(pUnit->getOwner()->getColorCode()) + pUnit->print() +
                 std::to_string(unitPosition) + ConsoleHelper::getColorString(RESET) + " is upgraded to " +
@@ -213,7 +214,7 @@ void Board::draw() {
     std::cout << std::endl;
     ConsoleHelper::setColor(RESET);
     for (int i = 0; i < _boardData.size(); ++i) {
-        std::cout << "___ ";
+        std::cout << "――― ";
     }
     std::cout << std::endl;
     for (int i = 0; i < _boardData.size(); ++i) {
@@ -223,14 +224,23 @@ void Board::draw() {
             } else {
                 ConsoleHelper::setColor(RESET);
             }
-            std::cout << " ";
-            _boardData[i]->draw();
-            std::cout << "  ";
+            std::cout << " " <<_boardData[i]->GetHp();
+
+            if(_boardData[i]->GetHp() < 10) std::cout<<" ";
+
+            std::cout<<" ";
         } else {
             std::cout << "    ";
         }
     }
     std::cout << std::endl;
+}
+
+void Board::clear() {
+    for (int i = 0; i < 3; ++i) {
+        ConsoleHelper::moveCursorUp();
+        ConsoleHelper::eraseLine();
+    }
 }
 
 

@@ -73,8 +73,6 @@ void GameManager::nextRound() {
     p_gameLogger->logAndDraw(ConsoleHelper::getColorString(p_playerTwo->getColorCode()) + "Player two turn:");
     p_gameLogger->draw();
     playTurn(p_playerTwo);
-
-//    p_board->draw();
 }
 
 void GameManager::playTurn(IPlayer* pPlayer) {
@@ -106,6 +104,7 @@ void GameManager::playTurn(IPlayer* pPlayer) {
     else{
         p_gameLogger->logAndDraw("Base position is occupied for player " + std::to_string(pPlayer->GetNumber()));
     }
+    redrawAll();
 }
 
 void GameManager::gameLoop() {
@@ -123,12 +122,13 @@ void GameManager::doActions(int actionNumber, IPlayer* pPlayer) {
     }
 
     for (int i = 0; i < units.size(); ++i) {
-        //Catapult could kill it's own unit -> Segmentation fault
+        //Catapult could kill it's own unit before it's turn -> Segmentation fault
         if(units[i] == nullptr) continue;
 
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         doAction(action);
         Sleep;
+        redrawAll();
     }
     Sleep;
 }
@@ -150,6 +150,13 @@ void GameManager::doAction(IAction *pAction) {
     else{
         std::cout << "ERROR: unknown action type: " << pAction->GetActionLog() << std::endl;
     }
+}
+
+void GameManager::redrawAll() {
+    p_gameLogger->clear();
+    p_board->clear();
+    p_board->draw();
+    p_gameLogger->draw();
 }
 
 
