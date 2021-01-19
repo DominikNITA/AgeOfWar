@@ -15,10 +15,9 @@ Fantassin::Fantassin(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
 }
 
 std::vector<int> Fantassin::getAttackedPositions(int closestEnemy) {
-    if(closestEnemy == 1){
-        return std::vector<int> {1};
-    }
-    else {
+    if (closestEnemy == 1) {
+        return std::vector<int>{1};
+    } else {
         return std::vector<int>();
     }
 }
@@ -28,32 +27,33 @@ void Fantassin::draw() {
 }
 
 IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances) {
-    IAction* pResult = nullptr;
+    IAction *pResult = nullptr;
 
-    switch(actionNumber) {
-        case 1:
-        {
+    switch (actionNumber) {
+        case 1: {
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
-            if(!attackedPositions.empty()){
+            if (!attackedPositions.empty()) {
                 pResult = new ActionAttack(this, attackedPositions);
-            }
-            else{
+                _hasFirstActionSucceeded = true;
+            } else {
                 pResult = new ActionNone();
+                _hasFirstActionSucceeded = false;
             }
             break;
         }
-        case 2:
-        {
-            pResult = new ActionMove(this,1);
+        case 2: {
+            pResult = new ActionMove(this, 1);
             break;
         }
-        case 3:{
-            //TODO: add logic for missing
-            auto attackedPositions = getAttackedPositions(enemyDistances.front());
-            if(!attackedPositions.empty()){
-                pResult = new ActionAttack(this, attackedPositions);
-            }
-            else{
+        case 3: {
+            if (!_hasFirstActionSucceeded) {
+                auto attackedPositions = getAttackedPositions(enemyDistances.front());
+                if (!attackedPositions.empty()) {
+                    pResult = new ActionAttack(this, attackedPositions);
+                } else {
+                    pResult = new ActionNone();
+                }
+            } else {
                 pResult = new ActionNone();
             }
             break;

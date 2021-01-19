@@ -17,6 +17,7 @@ GameManager::GameManager(int mode) : _mode(mode) {
     _roundCounter = 0;
 
     p_gameLogger = new GameLogger();
+
     p_playerOne = new HumanPlayer(1,p_gameLogger);
     if(_mode == 0){
         p_playerTwo = new HumanPlayer(2,p_gameLogger);
@@ -25,12 +26,12 @@ GameManager::GameManager(int mode) : _mode(mode) {
         p_playerTwo = new ComputerPlayer(2,p_gameLogger);
     }
 
-    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,6);
+    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,_boardSize);
 
     p_buyingManager = new BuyingManager();
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
-//    p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
-//    p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
+    p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
+    p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
 }
 
 GameManager::~GameManager() {
@@ -122,6 +123,9 @@ void GameManager::doActions(int actionNumber, IPlayer* pPlayer) {
     }
 
     for (int i = 0; i < units.size(); ++i) {
+        //Catapult could kill it's own unit -> Segmentation fault
+        if(units[i] == nullptr) continue;
+
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         doAction(action);
         Sleep;
@@ -146,11 +150,6 @@ void GameManager::doAction(IAction *pAction) {
     else{
         std::cout << "ERROR: unknown action type: " << pAction->GetActionLog() << std::endl;
     }
-}
-
-void GameManager::buyUnit(IBaseUnit * unit) {
-    //TODO: implement
-
 }
 
 

@@ -21,7 +21,7 @@ public:
 private:
     std::vector<std::pair<std::string,int>> _purchasableUnits;
     std::vector<IUnitFactory*> _unitFactories;
-    int _minimalPrice;
+    int _minimalPrice = INT8_MAX;
 };
 
 

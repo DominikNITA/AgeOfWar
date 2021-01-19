@@ -77,7 +77,7 @@ void Board::moveUnitForward(IBaseUnit *unit, int count) {
     if (_boardData[newIndex] == nullptr) {
         _boardData[newIndex] = unit;
         _boardData[unitPosition] = nullptr;
-        p_gameLogger->log("Moving unit " + ConsoleHelper::getColorString(unit->getOwner()->getColorCode()) + unit->print() + ConsoleHelper::getColorString(RESET) + " from "+ ConsoleHelper::getColorString(BLUE) +std::to_string(unitPosition) + ConsoleHelper::getColorString(RESET) + " to "+ ConsoleHelper::getColorString(BLUE)+std::to_string(newIndex));
+        p_gameLogger->logAndDraw("Moving unit " + ConsoleHelper::getColorString(unit->getOwner()->getColorCode()) + unit->print() + ConsoleHelper::getColorString(RESET) + " from "+ ConsoleHelper::getColorString(BLUE) +std::to_string(unitPosition) + ConsoleHelper::getColorString(RESET) + " to "+ ConsoleHelper::getColorString(BLUE)+std::to_string(newIndex));
     }
 }
 

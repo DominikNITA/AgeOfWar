@@ -24,6 +24,8 @@ public:
     }
 
     ~Catapult() override;
+private:
+    bool _hasFirstActionSucceeded = false;
 };
 
 

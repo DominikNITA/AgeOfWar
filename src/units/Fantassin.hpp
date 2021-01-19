@@ -22,6 +22,8 @@ public:
     std::string print() override {
         return "F";
     }
+private:
+    bool _hasFirstActionSucceeded = false;
 };
 
 

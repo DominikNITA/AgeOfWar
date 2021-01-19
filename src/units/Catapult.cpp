@@ -16,14 +16,11 @@ Catapult::Catapult(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
 
 std::vector<int> Catapult::getAttackedPositions(int closestEnemy) {
     //TODO: use switch statement
-    //TODO: deal with closestEnemy = 1
-    if(closestEnemy == 2){
-        return std::vector<int> {2,3};
-    }
-    else if( closestEnemy == 3 || closestEnemy == 4){
-        return std::vector<int> {3,4};
-    }
-    else{
+    if (closestEnemy == 2) {
+        return std::vector<int>{2, 3};
+    } else if (closestEnemy == 3 || closestEnemy == 4) {
+        return std::vector<int>{3, 4};
+    } else {
         return std::vector<int>();
     }
 }
@@ -33,28 +30,31 @@ void Catapult::draw() {
 }
 
 IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) {
-    IAction* pResult = nullptr;
+    IAction *pResult = nullptr;
 
-    switch(actionNumber) {
-        case 1:
-        {
+    switch (actionNumber) {
+        case 1: {
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
-            if(!attackedPositions.empty()){
+            if (!attackedPositions.empty()) {
                 pResult = new ActionAttack(this, attackedPositions);
+                _hasFirstActionSucceeded = true;
+            } else {
+                pResult = new ActionNone();
+                _hasFirstActionSucceeded = false;
+            }
+            break;
+        }
+        case 2: {
+            pResult = new ActionNone();
+            break;
+        }
+        case 3: {
+            if(!_hasFirstActionSucceeded){
+                pResult = new ActionMove(this, 1);
             }
             else{
                 pResult = new ActionNone();
             }
-            break;
-        }
-        case 2:
-        {
-            pResult = new ActionNone();
-            break;
-        }
-        case 3:{
-
-                pResult = new ActionMove(this,1);
             break;
         }
         default:

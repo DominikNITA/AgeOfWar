@@ -23,11 +23,11 @@ public:
     GameManager(int mode);
     ~GameManager();
     void startGame();
-    void buyUnit(IBaseUnit* unit);
 private:
     //Variables
     int _roundLimit = 15;
     int _sleepBetweenActions = 300;
+    int _boardSize = 12;
     int _mode;
     IPlayer* p_playerOne;
     IPlayer* p_playerTwo;

@@ -41,6 +41,7 @@ void GameLogger::clear() {
         ConsoleHelper::moveCursorUp();
         ConsoleHelper::eraseLine();
     }
+    _lastBufferSize = 0;
 }
 
 
