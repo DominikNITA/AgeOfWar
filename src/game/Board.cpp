@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Board.hpp"
 #include "../units/Archer.hpp"
-#include "../utility/ConsoleHelper.hpp"
+#include "../utility/Helper.hpp"
 #include "../units/Fantassin.hpp"
 #include "../units/SuperSoldier.hpp"
 
@@ -77,7 +77,10 @@ void Board::moveUnitForward(IBaseUnit *unit, int count) {
     if (_boardData[newIndex] == nullptr) {
         _boardData[newIndex] = unit;
         _boardData[unitPosition] = nullptr;
-        p_gameLogger->logAndDraw("Moving unit " + ConsoleHelper::getColorString(unit->getOwner()->getColorCode()) + unit->print() + ConsoleHelper::getColorString(RESET) + " from "+ ConsoleHelper::getColorString(BLUE) +std::to_string(unitPosition) + ConsoleHelper::getColorString(RESET) + " to "+ ConsoleHelper::getColorString(BLUE)+std::to_string(newIndex));
+        p_gameLogger->logAndDraw(
+                "Moving unit " + Helper::getColorString(unit->getOwner()->getColorCode()) + unit->print() +
+                Helper::getColorString(RESET) + " from " + Helper::getColorString(BLUE) + std::to_string(unitPosition) +
+                Helper::getColorString(RESET) + " to " + Helper::getColorString(BLUE) + std::to_string(newIndex));
     }
 }
 
@@ -140,33 +143,40 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
         if (pTargetUnit != nullptr) {
             pTargetUnit->ReceiveDamage(pUnit->GetAttackPower());
             p_gameLogger->log(
-                    "Unit " + ConsoleHelper::getColorString(pUnit->getOwner()->getColorCode()) + pUnit->print() +
-                    std::to_string(unitPosition) + ConsoleHelper::getColorString(RESET) + " attacked enemy unit " +
-                    ConsoleHelper::getColorString(pTargetUnit->getOwner()->getColorCode()) + pTargetUnit->print() +
-                    std::to_string(targetUnitPosition));
+                    "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " attacked enemy unit " +
+                    getUnitStringWithPosition(pTargetUnit, targetUnitPosition));
             //Enemy unit died
             if (pTargetUnit->GetHp() <= 0) {
-                p_gameLogger->log(ConsoleHelper::getColorString(RED) + "Unit " +
-                                  ConsoleHelper::getColorString(pTargetUnit->getOwner()->getColorCode()) +
-                                  pTargetUnit->print() + std::to_string(targetUnitPosition) +
-                                  ConsoleHelper::getColorString(RED) + " got killed and enemy is rewarded with " +
-                                  ConsoleHelper::getColorString(YELLOW) + std::to_string(pTargetUnit->GetKillReward()) +
-                                  " coins" + ConsoleHelper::getColorString(RESET) + "!");
-                //Add coins for the player
-                pUnit->getOwner()->addCurrency(pTargetUnit->GetKillReward());
+                if (pTargetUnit->getOwner() == pUnit->getOwner()) {
+                    //Heal unit back to 1 hp
+                    pTargetUnit->ReceiveDamage(-(pTargetUnit->GetHp() - 1));
+                    p_gameLogger->log(Helper::getColorString(BRIGHTCYAN) + "Unit " +
+                                      getUnitStringWithPosition(pTargetUnit, targetUnitPosition) +
+                                      Helper::getColorString(BRIGHTCYAN) +
+                                      " got saved from friendly fire by God's Shield.");
+                } else {
+                    p_gameLogger->log(Helper::getColorString(RED) + "Unit " +
+                                      getUnitStringWithPosition(pTargetUnit, targetUnitPosition) +
+                                      Helper::getColorString(RED) + " got killed and enemy is rewarded with " +
+                                      Helper::getColorString(YELLOW) +
+                                      std::to_string(pTargetUnit->GetKillReward()) +
+                                      " coins" + Helper::getColorString(RESET) + "!");
+                    //Add coins for the player
+                    pUnit->getOwner()->addCurrency(pTargetUnit->GetKillReward());
 
-                //Deal with special case for Fantassin
-                if ((pThisFantassin = dynamic_cast<Fantassin *>(pUnit))) {
-                    if (auto pEnemyFantassin = dynamic_cast<Fantassin *>(pTargetUnit)) {
-                        isUpgradedToSuperSoldier = true;
+                    //Deal with special case for Fantassin
+                    if ((pThisFantassin = dynamic_cast<Fantassin *>(pUnit))) {
+                        if (auto pEnemyFantassin = dynamic_cast<Fantassin *>(pTargetUnit)) {
+                            isUpgradedToSuperSoldier = true;
+                        }
                     }
+                    //Remove enemy unit from the board
+                    delete pTargetUnit;
+                    pTargetUnit = nullptr;
+                    _boardData[targetUnitPosition] = nullptr;
                 }
-                //Remove enemy unit from the board
-                delete pTargetUnit;
-                pTargetUnit = nullptr;
-                _boardData[targetUnitPosition] = nullptr;
-                p_gameLogger->draw();
             }
+            p_gameLogger->draw();
         } else {
             if (targetUnitPosition == 0) {
                 p_PlayerOne->GetBase()->ReceiveDamage(pUnit->GetAttackPower());
@@ -182,9 +192,9 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
     if (isUpgradedToSuperSoldier) {
         //SuperSoldier superSoldier = *pThisFantassin;
         p_gameLogger->log(
-                "Unit " + ConsoleHelper::getColorString(pUnit->getOwner()->getColorCode()) + pUnit->print() +
-                std::to_string(unitPosition) + ConsoleHelper::getColorString(RESET) + " is upgraded to " +
-                ConsoleHelper::getColorString(YELLOW) + "SuperSoldier!" + ConsoleHelper::getColorString(RED) + "Not completely implemented :(");
+                "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " is upgraded to " +
+                Helper::getColorString(YELLOW) + "SuperSoldier!" + Helper::getColorString(RED) +
+                "Not completely implemented :(");
 
 //        delete pUnit;
 //        _boardData[unitPosition] = nullptr;
@@ -204,7 +214,7 @@ void Board::draw() {
     for (int i = 0; i < _boardData.size(); ++i) {
         if (_boardData[i] != nullptr) {
             std::cout << " ";
-            ConsoleHelper::setColor(_boardData[i]->getOwner()->getColorCode());
+            Helper::setColor(_boardData[i]->getOwner()->getColorCode());
             _boardData[i]->draw();
             std::cout << "  ";
         } else {
@@ -212,7 +222,7 @@ void Board::draw() {
         }
     }
     std::cout << std::endl;
-    ConsoleHelper::setColor(RESET);
+    Helper::setColor(RESET);
     for (int i = 0; i < _boardData.size(); ++i) {
         std::cout << "――― ";
     }
@@ -220,15 +230,15 @@ void Board::draw() {
     for (int i = 0; i < _boardData.size(); ++i) {
         if (_boardData[i] != nullptr) {
             if (_boardData[i]->GetHp() < 5) {
-                ConsoleHelper::setColor(RED);
+                Helper::setColor(RED);
             } else {
-                ConsoleHelper::setColor(RESET);
+                Helper::setColor(RESET);
             }
-            std::cout << " " <<_boardData[i]->GetHp();
+            std::cout << " " << _boardData[i]->GetHp();
 
-            if(_boardData[i]->GetHp() < 10) std::cout<<" ";
+            if (_boardData[i]->GetHp() < 10) std::cout << " ";
 
-            std::cout<<" ";
+            std::cout << " ";
         } else {
             std::cout << "    ";
         }
@@ -238,9 +248,15 @@ void Board::draw() {
 
 void Board::clear() {
     for (int i = 0; i < 3; ++i) {
-        ConsoleHelper::moveCursorUp();
-        ConsoleHelper::eraseLine();
+        Helper::moveCursorUp();
+        Helper::eraseLine();
     }
+}
+
+std::string Board::getUnitStringWithPosition(IBaseUnit *unit, int position) {
+    return Helper::getColorString(unit->getOwner()->getColorCode()) + unit->print() +
+           std::to_string(position) + Helper::getColorString(RESET);
+
 }
 
 

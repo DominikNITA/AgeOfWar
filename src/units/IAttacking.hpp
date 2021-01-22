@@ -2,8 +2,8 @@
 // Created by Dominik on 12/28/2020.
 //
 
-#ifndef AGEOFWAR_IATTACKING_H
-#define AGEOFWAR_IATTACKING_H
+#ifndef AGEOFWAR_IATTACKING_HPP
+#define AGEOFWAR_IATTACKING_HPP
 
 
 #include <vector>
@@ -17,4 +17,4 @@ protected:
 };
 
 
-#endif //AGEOFWAR_IATTACKING_H
+#endif //AGEOFWAR_IATTACKING_HPP

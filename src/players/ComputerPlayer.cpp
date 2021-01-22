@@ -18,7 +18,7 @@ int ComputerPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> uni
             index=i;
         }
     }
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(_colorCode) + "Player " + std::to_string(_number) + ConsoleHelper::getColorString(RESET) + " bought " + unitsInfo[index].first + " for " + ConsoleHelper::getColorString(YELLOW) + std::to_string(unitsInfo[index].second) + " coins");
+    p_gameLogger->logAndDraw(Helper::getColorString(_colorCode) + "Player " + std::to_string(_number) + Helper::getColorString(RESET) + " bought " + unitsInfo[index].first + " for " + Helper::getColorString(YELLOW) + std::to_string(unitsInfo[index].second) + " coins");
     addCurrency(-unitsInfo[index].second);
     return index;
 }

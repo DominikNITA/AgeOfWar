@@ -16,8 +16,6 @@
 #include "../units/Fantassin.hpp"
 #include "BuyingManager.hpp"
 
-#define Sleep std::this_thread::sleep_for(std::chrono::milliseconds(_sleepBetweenActions))
-
 class GameManager {
 public:
     GameManager(int mode);
@@ -27,7 +25,7 @@ private:
     //Variables
     int _roundLimit = 15;
     int _sleepBetweenActions = 750;
-    int _boardSize = 5;
+    int _boardSize = 12;
     int _mode;
     IPlayer* p_playerOne;
     IPlayer* p_playerTwo;

@@ -690,32 +690,32 @@ src/units/SuperSoldier.cpp.s:
 	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/units/SuperSoldier.cpp.s
 .PHONY : src/units/SuperSoldier.cpp.s
 
-src/utility/ConsoleHelper.o: src/utility/ConsoleHelper.cpp.o
+src/utility/Helper.o: src/utility/Helper.cpp.o
 
-.PHONY : src/utility/ConsoleHelper.o
+.PHONY : src/utility/Helper.o
 
 # target to build an object file
-src/utility/ConsoleHelper.cpp.o:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/utility/ConsoleHelper.cpp.o
-.PHONY : src/utility/ConsoleHelper.cpp.o
+src/utility/Helper.cpp.o:
+	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/utility/Helper.cpp.o
+.PHONY : src/utility/Helper.cpp.o
 
-src/utility/ConsoleHelper.i: src/utility/ConsoleHelper.cpp.i
+src/utility/Helper.i: src/utility/Helper.cpp.i
 
-.PHONY : src/utility/ConsoleHelper.i
+.PHONY : src/utility/Helper.i
 
 # target to preprocess a source file
-src/utility/ConsoleHelper.cpp.i:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/utility/ConsoleHelper.cpp.i
-.PHONY : src/utility/ConsoleHelper.cpp.i
+src/utility/Helper.cpp.i:
+	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/utility/Helper.cpp.i
+.PHONY : src/utility/Helper.cpp.i
 
-src/utility/ConsoleHelper.s: src/utility/ConsoleHelper.cpp.s
+src/utility/Helper.s: src/utility/Helper.cpp.s
 
-.PHONY : src/utility/ConsoleHelper.s
+.PHONY : src/utility/Helper.s
 
 # target to generate assembly for a file
-src/utility/ConsoleHelper.cpp.s:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/utility/ConsoleHelper.cpp.s
-.PHONY : src/utility/ConsoleHelper.cpp.s
+src/utility/Helper.cpp.s:
+	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/utility/Helper.cpp.s
+.PHONY : src/utility/Helper.cpp.s
 
 src/utility/IDrawable.o: src/utility/IDrawable.cpp.o
 
@@ -816,9 +816,9 @@ help:
 	@echo "... src/units/SuperSoldier.o"
 	@echo "... src/units/SuperSoldier.i"
 	@echo "... src/units/SuperSoldier.s"
-	@echo "... src/utility/ConsoleHelper.o"
-	@echo "... src/utility/ConsoleHelper.i"
-	@echo "... src/utility/ConsoleHelper.s"
+	@echo "... src/utility/Helper.o"
+	@echo "... src/utility/Helper.i"
+	@echo "... src/utility/Helper.s"
 	@echo "... src/utility/IDrawable.o"
 	@echo "... src/utility/IDrawable.i"
 	@echo "... src/utility/IDrawable.s"

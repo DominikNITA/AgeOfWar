@@ -39,6 +39,7 @@ private:
     GameLogger* p_gameLogger;
     //Methods
     int getDistanceValueFromIndexes(int index1, int index2);
+    std::string getUnitStringWithPosition(IBaseUnit* unit, int position);
 };
 
 

@@ -3,7 +3,7 @@
 //
 
 #include "GameLogger.hpp"
-#include "../utility/ConsoleHelper.hpp"
+#include "../utility/Helper.hpp"
 
 void GameLogger::log(const std::string &message) {
     if(_buffer.size() >= _maxBufferSize){
@@ -23,9 +23,9 @@ void GameLogger::draw() {
 
     //Print new logs
     for (int i = 0; i < _buffer.size(); ++i) {
-        ConsoleHelper::setColor(RESET);
+        Helper::setColor(RESET);
         std::cout << i << ":" << _buffer[i] << std::endl;
-        ConsoleHelper::setColor(RESET);
+        Helper::setColor(RESET);
     }
 
     //Update the last size of buffer
@@ -38,8 +38,8 @@ GameLogger::~GameLogger() {
 
 void GameLogger::clear() {
     for (int i = 0; i < _lastBufferSize; ++i) {
-        ConsoleHelper::moveCursorUp();
-        ConsoleHelper::eraseLine();
+        Helper::moveCursorUp();
+        Helper::eraseLine();
     }
     _lastBufferSize = 0;
 }

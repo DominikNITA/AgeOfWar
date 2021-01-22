@@ -7,7 +7,7 @@
 
 
 #include "IAction.hpp"
-#include "../../units/IAttacking.h"
+#include "../../units/IAttacking.hpp"
 
 class ActionAttack : public IAction{
 public:

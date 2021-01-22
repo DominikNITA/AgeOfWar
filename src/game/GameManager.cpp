@@ -11,7 +11,7 @@
 #include "actions/ActionAttack.hpp"
 #include "actions/ActionNone.hpp"
 #include "actions/ActionMove.hpp"
-#include "../utility/ConsoleHelper.hpp"
+#include "../utility/Helper.hpp"
 
 GameManager::GameManager(int mode) : _mode(mode) {
     _roundCounter = 0;
@@ -51,44 +51,48 @@ GameManager::~GameManager() {
 }
 
 void GameManager::startGame() {
+    std::cout<< "Age of War - 2020/21 - Polytech Paris-Saclay - Youssef MCHAREK, Dominik NITA" << std::endl << std::endl;
+
     p_board->draw();
+
     gameLoop();
 }
 
 void GameManager::nextRound() {
-    p_gameLogger->log(ConsoleHelper::getColorString(BLUE) + ConsoleHelper::getColorString(BOLD) +"Round " + std::to_string(_roundCounter) + ":");
+    p_gameLogger->log(Helper::getColorString(BLUE) + Helper::getColorString(BOLD) + "Round " + std::to_string(_roundCounter) + ":");
 
     //1.Give currency to both players
     p_playerOne->addCurrency(8);
     p_playerTwo->addCurrency(8);
     p_gameLogger->log("Both players received "
-    + ConsoleHelper::getColorString(YELLOW) + std::to_string(8) + " coins.");
+                      + Helper::getColorString(YELLOW) + std::to_string(8) + " coins.");
 
     //2. Player One turn
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(p_playerOne->getColorCode()) + "Player one turn:");
+    p_gameLogger->logAndDraw(Helper::getColorString(p_playerOne->getColorCode()) + "Player one turn:");
     playTurn(p_playerOne);
     p_gameLogger->draw();
 
     //3. Player Two turn
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(p_playerTwo->getColorCode()) + "Player two turn:");
+    p_gameLogger->logAndDraw(Helper::getColorString(p_playerTwo->getColorCode()) + "Player two turn:");
     p_gameLogger->draw();
     playTurn(p_playerTwo);
 }
 
 void GameManager::playTurn(IPlayer* pPlayer) {
     //Make Action 1
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(GREEN)+"Action 1 Phase");
+    p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 1 Phase");
     doActions(1, pPlayer);
 
     //Make Action 2
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(GREEN)+"Action 2 Phase");
+    p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 2 Phase");
     doActions(2, pPlayer);
 
     //Make Action 3
-    p_gameLogger->logAndDraw(ConsoleHelper::getColorString(GREEN)+"Action 3 Phase");
+    p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 3 Phase");
     doActions(3, pPlayer);
     p_gameLogger->draw();
 
+    p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Buying Phase");
     if(p_board->canPlayerAddUnit(pPlayer)){
         if(p_buyingManager->getMinimalPrice() <= pPlayer->GetCurrency()){
 
@@ -105,6 +109,7 @@ void GameManager::playTurn(IPlayer* pPlayer) {
         p_gameLogger->logAndDraw("Base position is occupied for player " + std::to_string(pPlayer->GetNumber()));
     }
     redrawAll();
+    Helper::Sleep(1500);
 }
 
 void GameManager::gameLoop() {
@@ -127,10 +132,10 @@ void GameManager::doActions(int actionNumber, IPlayer* pPlayer) {
 
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         doAction(action);
-        Sleep;
+        Helper::Sleep(_sleepBetweenActions);
         redrawAll();
     }
-    Sleep;
+    Helper::Sleep(_sleepBetweenActions);
 }
 
 void GameManager::doAction(IAction *pAction) {

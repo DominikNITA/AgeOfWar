@@ -8,7 +8,7 @@
 
 #include <vector>
 #include "IAttackable.hpp"
-#include "IAttacking.h"
+#include "IAttacking.hpp"
 #include "../utility/IDrawable.hpp"
 #include "../players/IPlayer.hpp"
 #include "../game/actions/IAction.hpp"

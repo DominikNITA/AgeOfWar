@@ -9,7 +9,7 @@
 #include <vector>
 #include "Base.hpp"
 #include "../game/GameLogger.hpp"
-#include "../utility/ConsoleHelper.hpp"
+#include "../utility/Helper.hpp"
 
 class IPlayer {
 public:

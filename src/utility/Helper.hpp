@@ -2,11 +2,13 @@
 // Created by Dominik on 1/16/2021.
 //
 
-#ifndef AGEOFWAR_CONSOLEHELPER_HPP
-#define AGEOFWAR_CONSOLEHELPER_HPP
+#ifndef AGEOFWAR_HELPER_HPP
+#define AGEOFWAR_HELPER_HPP
 
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <thread>
 //Codes from https://stackoverflow.com/questions/2616906/how-do-i-output-coloured-text-to-a-linux-terminal
 //        and https://stackoverflow.com/a/35190285/13251554
 
@@ -38,7 +40,7 @@
 #define BLINKOFF 25
 
 
-class ConsoleHelper {
+class Helper {
 public:
     static std::string getColorString(int colorCode) {
         std::string output = "\033[";
@@ -78,7 +80,11 @@ public:
     static void moveToScreenStart(){
         std::cout << "\033[1;1H";
     }
+
+    static void Sleep(int miliseconds){
+        std::this_thread::sleep_for(std::chrono::milliseconds(miliseconds));
+    }
 };
 
 
-#endif //AGEOFWAR_CONSOLEHELPER_HPP
+#endif //AGEOFWAR_HELPER_HPP
