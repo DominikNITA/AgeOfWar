@@ -20,10 +20,14 @@ public:
     IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
 
     std::string print() override {
-        return "F";
+        if(_isSuperSoldier) return "S";
+        else return "F";
     }
+    void upgradeToSuperSoldier() {_isSuperSoldier = true;}
+
 private:
     bool _hasFirstActionSucceeded = false;
+    bool _isSuperSoldier = false;
 };
 
 

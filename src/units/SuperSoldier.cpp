@@ -49,7 +49,7 @@ IAction *SuperSoldier::getAction(int actionNumber, std::vector<int> enemyDistanc
         }
         case 3:{
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
-            if(attackedPositions.size() > 0){
+            if(!attackedPositions.empty()){
                 pResult = new ActionAttack(this, attackedPositions);
             }
             else{

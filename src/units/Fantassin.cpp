@@ -14,6 +14,11 @@ Fantassin::Fantassin(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
     _killReward = 5;
 }
 
+Fantassin::~Fantassin() {
+    delete p_lastAction;
+    p_lastAction = nullptr;
+}
+
 std::vector<int> Fantassin::getAttackedPositions(int closestEnemy) {
     if (closestEnemy == 1) {
         return std::vector<int>{1};
@@ -23,7 +28,8 @@ std::vector<int> Fantassin::getAttackedPositions(int closestEnemy) {
 }
 
 void Fantassin::draw() {
-    std::cout << "F";
+    if(_isSuperSoldier) std::cout << "S";
+    else std::cout << "F";
 }
 
 IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances) {
@@ -46,7 +52,7 @@ IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances)
             break;
         }
         case 3: {
-            if (!_hasFirstActionSucceeded) {
+            if (!_hasFirstActionSucceeded || _isSuperSoldier) {
                 auto attackedPositions = getAttackedPositions(enemyDistances.front());
                 if (!attackedPositions.empty()) {
                     pResult = new ActionAttack(this, attackedPositions);
@@ -64,9 +70,4 @@ IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances)
     delete p_lastAction;
     p_lastAction = pResult;
     return pResult;
-}
-
-Fantassin::~Fantassin() {
-    delete p_lastAction;
-    p_lastAction = nullptr;
 }

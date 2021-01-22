@@ -130,7 +130,6 @@ int Board::getDistanceValueFromIndexes(int index1, int index2) {
 
 void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedPositions) {
     //Variables for upgrading fantassin to super soldier
-    bool isUpgradedToSuperSoldier = false;
     Fantassin *pThisFantassin;
 
     //General variables
@@ -167,7 +166,10 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
                     //Deal with special case for Fantassin
                     if ((pThisFantassin = dynamic_cast<Fantassin *>(pUnit))) {
                         if (auto pEnemyFantassin = dynamic_cast<Fantassin *>(pTargetUnit)) {
-                            isUpgradedToSuperSoldier = true;
+                            p_gameLogger->log(
+                                    "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " is upgraded to " +
+                                    Helper::getColorString(YELLOW) + "SuperSoldier!");
+                            pThisFantassin->upgradeToSuperSoldier();
                         }
                     }
                     //Remove enemy unit from the board
@@ -187,18 +189,6 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
                 p_gameLogger->logAndDraw("Base got attacked");
             }
         }
-    }
-
-    if (isUpgradedToSuperSoldier) {
-        //SuperSoldier superSoldier = *pThisFantassin;
-        p_gameLogger->log(
-                "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " is upgraded to " +
-                Helper::getColorString(YELLOW) + "SuperSoldier!" + Helper::getColorString(RED) +
-                "Not completely implemented :(");
-
-//        delete pUnit;
-//        _boardData[unitPosition] = nullptr;
-//        _boardData[unitPosition] = &superSoldier;
     }
 }
 
