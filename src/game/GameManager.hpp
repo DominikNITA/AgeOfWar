@@ -33,7 +33,7 @@ public:
     template<class Archive> void serialize(Archive & archive){
         archive(CEREAL_NVP(_roundLimit),CEREAL_NVP(_roundCounter),CEREAL_NVP(p_playerOne),CEREAL_NVP(p_playerTwo),CEREAL_NVP(_mode));
     }
-    int getRoundLimit() {return _roundLimit;}
+    int getRoundLimit() {return p_playerOne->getColorCode();}
 
     //
 private:
@@ -42,6 +42,7 @@ private:
     int _sleepBetweenActions = 750;
     int _boardSize = 12;
     int _mode;
+    bool _isFinished = false;
     std::shared_ptr<IPlayer> p_playerOne;
     std::shared_ptr<IPlayer> p_playerTwo;
     int _roundCounter;
@@ -57,6 +58,7 @@ private:
     void redrawAll();
 
 
+    bool isOneBaseDestroyed();
 };
 
 #endif //AGEOFWAR_GAMEMANAGER_HPP

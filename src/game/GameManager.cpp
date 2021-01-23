@@ -84,7 +84,28 @@ void GameManager::startGame() {
     gameLoop();
 }
 
+void GameManager::gameLoop() {
+    while(_roundCounter < _roundLimit && !_isFinished){
+        _roundCounter++;
+        nextRound();
+    }
+    p_gameLogger->logAndDraw(Helper::getColorString(YELLOW) + "Game has finished!");
+    if(_roundCounter == _roundLimit){
+        p_gameLogger->logAndDraw(Helper::getColorString(BLUE) + "It's a draw: maximum amount of rounds passed!");
+        return;
+    }
+    if(p_playerOne->getBase()->GetHp() <= 0){
+        p_gameLogger->logAndDraw( Helper::getColorString(p_playerTwo->getColorCode()) + p_playerTwo->getName() + " won the game!");
+        return;
+    }
+    else{
+        p_gameLogger->logAndDraw( Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName() + " won the game!");
+        return;
+    }
+}
+
 void GameManager::nextRound() {
+    //saveState();
     p_gameLogger->log(Helper::getColorString(BLUE) + Helper::getColorString(BOLD) + "Round " + std::to_string(_roundCounter) + ":");
 
     //1.Give currency to both players
@@ -105,19 +126,23 @@ void GameManager::nextRound() {
 }
 
 void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
+
     //Make Action 1
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 1 Phase");
     doActions(1, pPlayer);
+    if(!_isFinished) return;
 
     //Make Action 2
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 2 Phase");
     doActions(2, pPlayer);
+    if(!_isFinished) return;
 
     //Make Action 3
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 3 Phase");
     doActions(3, pPlayer);
     p_gameLogger->draw();
 
+    if(!_isFinished) return;
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Buying Phase");
     if(p_board->canPlayerAddUnit(pPlayer)){
         if(p_buyingManager->getMinimalPrice() <= pPlayer->getCurrency()){
@@ -138,12 +163,7 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
     Helper::Sleep(1500);
 }
 
-void GameManager::gameLoop() {
-    while(_roundCounter < _roundLimit){
-        _roundCounter++;
-        nextRound();
-    }
-}
+
 
 void GameManager::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) {
     auto units = p_board->getPlayerUnits(pPlayer, actionNumber == 1);
@@ -158,6 +178,9 @@ void GameManager::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) 
 
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
         doAction(action);
+        if(isOneBaseDestroyed()){
+            _isFinished = true;
+        }
         Helper::Sleep(150);
         redrawAll();
     }
@@ -188,5 +211,9 @@ void GameManager::redrawAll() {
     p_board->clear();
     p_board->draw();
     p_gameLogger->draw();
+}
+
+bool GameManager::isOneBaseDestroyed() {
+    return p_playerOne->getBase()->GetHp() <= 0 || p_playerTwo->getBase()->GetHp() <= 0;
 }
 

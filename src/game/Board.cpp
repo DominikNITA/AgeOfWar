@@ -72,6 +72,7 @@ void Board::moveUnitForward(IBaseUnit *unit, int count) {
     int direction = unit->getOwner()->getNumber() == 1 ? 1 : -1;
     int newIndex = unitPosition + count * direction;
 
+    //bloque acces au cases contenant les bases
     if (newIndex <= 0 || newIndex >= _size - 1) return;
 
     if (_boardData[newIndex] == nullptr) {
