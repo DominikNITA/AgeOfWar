@@ -11,7 +11,7 @@
 
 class Catapult : public IBaseUnit {
 public:
-    Catapult(IPlayer *ownedBy);
+    Catapult(std::shared_ptr<IPlayer> ownedBy);
 
     std::vector<int> getAttackedPositions(int closestEnemy) override;
 

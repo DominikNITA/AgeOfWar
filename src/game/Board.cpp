@@ -9,7 +9,7 @@
 #include "../units/Fantassin.hpp"
 #include "../units/SuperSoldier.hpp"
 
-Board::Board(IPlayer *pPlayerOne, IPlayer *pPlayerTwo, GameLogger *pGameLogger, int size) {
+Board::Board(std::shared_ptr<IPlayer> pPlayerOne, std::shared_ptr<IPlayer> pPlayerTwo, GameLogger *pGameLogger, int size) {
     _size = size;
     _boardData.insert(_boardData.begin(), size, nullptr);
     p_PlayerOne = pPlayerOne;
@@ -38,16 +38,16 @@ Board::~Board() {
 //    std::vector<IBaseUnit *>().swap(_boardData);
 }
 
-vector<IBaseUnit *> Board::getPlayerUnits(IPlayer *owner, bool isEnemyBaseDirection) {
+vector<IBaseUnit *> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool isEnemyBaseDirection) {
     vector<IBaseUnit *> result = {};
-    if ((owner->GetNumber() == 1 && isEnemyBaseDirection) || (owner->GetNumber() == 2 && !isEnemyBaseDirection)) {
+    if ((owner->getNumber() == 1 && isEnemyBaseDirection) || (owner->getNumber() == 2 && !isEnemyBaseDirection)) {
         for (auto &i : _boardData) {
             if (i != nullptr && i->isOwnedBy(owner)) {
                 result.push_back(i);
             }
         }
-    } else if ((owner->GetNumber() == 1 && !isEnemyBaseDirection) ||
-               (owner->GetNumber() == 2 && isEnemyBaseDirection)) {
+    } else if ((owner->getNumber() == 1 && !isEnemyBaseDirection) ||
+               (owner->getNumber() == 2 && isEnemyBaseDirection)) {
         for (int i = _boardData.size() - 1; i >= 0; i--) {
             if (_boardData[i] != nullptr && _boardData[i]->isOwnedBy(owner)) {
                 result.push_back(_boardData[i]);
@@ -58,18 +58,18 @@ vector<IBaseUnit *> Board::getPlayerUnits(IPlayer *owner, bool isEnemyBaseDirect
     return result;
 }
 
-void Board::addUnit(IBaseUnit *unit, IPlayer *player) {
-    if (player->GetNumber() == 1 && _boardData[0] == nullptr) {
+void Board::addUnit(IBaseUnit *unit, std::shared_ptr<IPlayer> player) {
+    if (player->getNumber() == 1 && _boardData[0] == nullptr) {
         _boardData[0] = unit;
     }
-    if (player->GetNumber() == 2 && _boardData[_size - 1] == nullptr) {
+    if (player->getNumber() == 2 && _boardData[_size - 1] == nullptr) {
         _boardData[_size - 1] = unit;
     }
 }
 
 void Board::moveUnitForward(IBaseUnit *unit, int count) {
     int unitPosition = findUnitPosition(unit);
-    int direction = unit->getOwner()->GetNumber() == 1 ? 1 : -1;
+    int direction = unit->getOwner()->getNumber() == 1 ? 1 : -1;
     int newIndex = unitPosition + count * direction;
 
     if (newIndex <= 0 || newIndex >= _size - 1) return;
@@ -97,10 +97,10 @@ int Board::findUnitPosition(IBaseUnit *unit) {
 vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
     vector<int> result;
     int unitPosition = findUnitPosition(pUnit);
-    IPlayer *unitOwner = pUnit->getOwner();
+    std::shared_ptr<IPlayer> unitOwner = pUnit->getOwner();
 
     //For Player One
-    if (pUnit->getOwner()->GetNumber() == 1) {
+    if (pUnit->getOwner()->getNumber() == 1) {
         for (int i = 0; i < _boardData.size(); ++i) {
             //Add the base to the vector
             if (i == _boardData.size() - 1) {
@@ -134,7 +134,7 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
 
     //General variables
     int unitPosition = findUnitPosition(pUnit);
-    int direction = pUnit->getOwner()->GetNumber() == 1 ? 1 : -1;
+    int direction = pUnit->getOwner()->getNumber() == 1 ? 1 : -1;
 
     for (int i = 0; i < attackedPositions.size(); ++i) {
         int targetUnitPosition = unitPosition + direction * attackedPositions[i];
@@ -181,19 +181,19 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
             p_gameLogger->draw();
         } else {
             if (targetUnitPosition == 0) {
-                p_PlayerOne->GetBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_PlayerOne->getBase()->ReceiveDamage(pUnit->GetAttackPower());
                 p_gameLogger->logAndDraw("Base got attacked");
             }
             if (targetUnitPosition == _size - 1) {
-                p_PlayerTwo->GetBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_PlayerTwo->getBase()->ReceiveDamage(pUnit->GetAttackPower());
                 p_gameLogger->logAndDraw("Base got attacked");
             }
         }
     }
 }
 
-bool Board::canPlayerAddUnit(IPlayer *player) {
-    if (player->GetNumber() == 1) {
+bool Board::canPlayerAddUnit(std::shared_ptr<IPlayer> player) {
+    if (player->getNumber() == 1) {
         return _boardData[0] == nullptr;
     } else {
         return _boardData[_size - 1] == nullptr;

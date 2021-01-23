@@ -73,6 +73,11 @@ public:
         std::cout << "\033[A";
     }
 
+    static void erasePreviousLine(){
+        moveCursorUp();
+        eraseLine();
+    }
+
     static void moveToLineStart(){
         std::cout << "\r";
     }

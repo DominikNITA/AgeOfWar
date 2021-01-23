@@ -13,26 +13,33 @@
 
 class IPlayer {
 public:
-    IPlayer(int number, GameLogger* pGameLogger);
+    IPlayer(int number, std::string name, GameLogger* pGameLogger);
 
     virtual ~IPlayer() {
-        delete p_base;
+
     }
 
     //Getters
-    int GetCurrency() { return _currency; }
-    Base* GetBase() { return p_base; }
-    int GetNumber() {return  _number;}
-    int getColorCode() {return _colorCode; }
+    int getCurrency() const { return _currency; }
+    std::shared_ptr<Base> getBase() { return p_base; }
+    int getNumber() const {return  _number;}
+    int getColorCode() const {return _colorCode; }
+    std::string getName() const {return _name; }
     //Methods
     void addCurrency(int amount) { _currency += amount;}
     virtual int chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) = 0;
 
 protected:
+    int _number;
+    std::string _name;
+    int _colorCode;
     int _currency = 10;
     GameLogger* p_gameLogger;
-    Base* p_base;
-    int _number;
-    int _colorCode;
+    std::shared_ptr<Base> p_base;
+
+
+//    template<class Archive> void serialize(Archive & archive){
+//        archive(_name);
+//    }
 };
 #endif //AGEOFWAR_IPLAYER_HPP

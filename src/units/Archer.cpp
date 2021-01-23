@@ -8,7 +8,7 @@
 #include "../game/actions/ActionAttack.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-Archer::Archer(IPlayer *ownedBy)  : IBaseUnit(ownedBy){
+Archer::Archer(std::shared_ptr<IPlayer> ownedBy)  : IBaseUnit(ownedBy){
     _hp = 8;
     _attackPower = 3;
     _killReward = 6;

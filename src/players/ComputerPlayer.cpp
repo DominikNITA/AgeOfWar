@@ -5,8 +5,11 @@
 #include <iostream>
 #include "ComputerPlayer.hpp"
 
-ComputerPlayer::ComputerPlayer(int i,GameLogger* gl) : IPlayer(i,gl) {
-    _colorCode = 36;
+ComputerPlayer::ComputerPlayer(int i,GameLogger* gl) : IPlayer(i,"AI Easy",gl) {}
+ComputerPlayer::ComputerPlayer(int number, std::string name, int colorCode, int currency, std::shared_ptr<Base> base) : IPlayer(number,name,nullptr) {
+    _colorCode = colorCode;
+    _currency = currency;
+    p_base = base;
 }
 
 int ComputerPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) {

@@ -12,25 +12,26 @@
 #include "../utility/IDrawable.hpp"
 #include "../players/IPlayer.hpp"
 #include "../game/actions/IAction.hpp"
+#include <memory>
 
 class IBaseUnit : public IAttackable,
                   public virtual IAttacking,
                   public virtual IDrawable {
 public:
-    explicit IBaseUnit(IPlayer *ownedBy) : p_owner(ownedBy) {}
+    explicit IBaseUnit(std::shared_ptr<IPlayer>ownedBy) : p_owner(ownedBy) {}
     virtual ~IBaseUnit() = default;
 
-    bool isOwnedBy(IPlayer *player) { return player == p_owner; }
+    bool isOwnedBy(std::shared_ptr<IPlayer>player) { return player == p_owner; }
 
-    IPlayer *getOwner() const { return p_owner; }
-    void setOwner(IPlayer* owner) { p_owner = owner; }
+    std::shared_ptr<IPlayer> getOwner() const { return p_owner; }
+    void setOwner(std::shared_ptr<IPlayer> owner) { p_owner = owner; }
 
     virtual IAction *getAction(int actionNumber, std::vector<int> enemyDistances) = 0;
     virtual std::string print() = 0;
 
 protected:
     IAction* p_lastAction = nullptr;
-    IPlayer* p_owner = nullptr;
+    std::shared_ptr<IPlayer> p_owner = nullptr;
 };
 
 #endif //AGEOFWAR_IBASEUNIT_HPP

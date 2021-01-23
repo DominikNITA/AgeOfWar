@@ -11,7 +11,7 @@
 
 class Fantassin : public IBaseUnit {
 public:
-    Fantassin(IPlayer *ownedBy);
+    Fantassin(std::shared_ptr<IPlayer> ownedBy);
     ~Fantassin() override;
 
     std::vector<int> getAttackedPositions(int closestEnemy) override;

@@ -9,11 +9,21 @@
 #include "../units/IAttackable.hpp"
 #include "../utility/IDrawable.hpp"
 
+#include <cereal/archives/xml.hpp>
+
 class Base : public IAttackable , public IDrawable{
 public:
     Base();
+    Base(int hp) {
+        _hp = hp;
+    };
     virtual ~Base() = default;
     virtual void draw();
+
+
+    template<class Archive> void serialize(Archive & archive){
+        archive(CEREAL_NVP(_hp));
+    }
 };
 
 

@@ -10,8 +10,12 @@
 
 using std::cout;using std::endl; using std::cin;
 
-HumanPlayer::HumanPlayer(int i,GameLogger* p) : IPlayer(i,p) {
-    _colorCode = 35;
+HumanPlayer::HumanPlayer(int i,std::string n,GameLogger* p) : IPlayer(i,n,p) {}
+
+HumanPlayer::HumanPlayer(int number, std::string name, int colorCode, int currency, std::shared_ptr<Base> base) : IPlayer(number,name,nullptr) {
+    _colorCode = colorCode;
+    _currency = currency;
+    p_base = base;
 }
 
 int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) {
@@ -70,3 +74,5 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
 
     return choice;
 }
+
+

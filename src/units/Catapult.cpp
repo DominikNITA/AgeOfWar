@@ -8,7 +8,7 @@
 #include "../game/actions/ActionNone.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-Catapult::Catapult(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
+Catapult::Catapult(std::shared_ptr<IPlayer>ownedBy) : IBaseUnit(ownedBy) {
     _hp = 12;
     _attackPower = 6;
     _killReward = 10;

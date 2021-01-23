@@ -11,10 +11,10 @@
 
 //https://stackoverflow.com/questions/1883862/c-oop-list-of-classes-class-types-and-creating-instances-of-them
 
-struct IUnitFactory { virtual IBaseUnit* create(IPlayer* pOwner) = 0;};
+struct IUnitFactory { virtual IBaseUnit* create(std::shared_ptr<IPlayer> pOwner) = 0;};
 
 template <typename Type> struct UnitFactory : public IUnitFactory {
-    virtual IBaseUnit* create(IPlayer* pOwner){
+    virtual IBaseUnit* create(std::shared_ptr<IPlayer> pOwner){
         return new Type(pOwner);
     }
 

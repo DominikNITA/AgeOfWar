@@ -10,22 +10,23 @@
 #include <iterator>
 #include "../units/IBaseUnit.hpp"
 #include "GameLogger.hpp"
+#include <memory>
 
 using std::vector;
 
 class Board : public IDrawable {
 public:
     //General
-    Board(IPlayer* pPlayerOne,IPlayer* pPlayerTwo, GameLogger* pGameLogger,int size = 12);
+    Board(std::shared_ptr<IPlayer> pPlayerOne,std::shared_ptr<IPlayer> pPlayerTwo, GameLogger* pGameLogger,int size = 12);
     ~Board();
     //Methods
-    vector<IBaseUnit*> getPlayerUnits(IPlayer* pOwner, bool isEnemyBaseDirection);
-    void addUnit(IBaseUnit* pUnit, IPlayer* player);
+    vector<IBaseUnit*> getPlayerUnits(std::shared_ptr<IPlayer> pOwner, bool isEnemyBaseDirection);
+    void addUnit(IBaseUnit* pUnit, std::shared_ptr<IPlayer> player);
     void moveUnitForward(IBaseUnit* pUnit, int count);
     int findUnitPosition(IBaseUnit* pUnit);
     vector<int> getDistancesToEnemies(IBaseUnit* pUnit);
     void attackRelativePositions(IBaseUnit* pUnit, std::vector<int> attackedPositions);
-    bool canPlayerAddUnit(IPlayer* player);
+    bool canPlayerAddUnit(std::shared_ptr<IPlayer>player);
     void draw() override;
     void clear();
 
@@ -34,8 +35,8 @@ private:
     int _size;
     vector<IBaseUnit*> _boardData;
     int* test = nullptr;
-    IPlayer* p_PlayerOne;
-    IPlayer* p_PlayerTwo;
+    std::shared_ptr<IPlayer> p_PlayerOne;
+    std::shared_ptr<IPlayer> p_PlayerTwo;
     GameLogger* p_gameLogger;
     //Methods
     int getDistanceValueFromIndexes(int index1, int index2);

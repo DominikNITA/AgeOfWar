@@ -8,7 +8,7 @@
 #include "../game/actions/ActionNone.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-Fantassin::Fantassin(IPlayer *ownedBy) : IBaseUnit(ownedBy) {
+Fantassin::Fantassin(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(ownedBy) {
     _hp = 10;
     _attackPower = 4;
     _killReward = 5;

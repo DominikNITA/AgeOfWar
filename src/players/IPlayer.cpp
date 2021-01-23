@@ -4,9 +4,11 @@
 
 #include "IPlayer.hpp"
 
-IPlayer::IPlayer(int number, GameLogger* pGameLogger) {
+IPlayer::IPlayer(int number, std::string name, GameLogger* pGameLogger) {
     _number = number;
-    p_base = new Base();
+    _colorCode = number == 1 ? MAGENTA : CYAN;
+    p_base.reset(new Base());
     p_gameLogger = pGameLogger;
+    _name = name;
 }
 

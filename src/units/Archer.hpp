@@ -11,7 +11,7 @@
 
 class Archer : public IBaseUnit{
 public:
-    Archer(IPlayer *ownedBy);
+    Archer(std::shared_ptr<IPlayer> ownedBy);
     std::vector<int> getAttackedPositions(int closestEnemy) override;
     void draw() override;
 
