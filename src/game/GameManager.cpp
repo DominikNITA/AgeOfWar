@@ -76,7 +76,8 @@ void GameManager::startGame() {
 }
 
 void GameManager::gameLoop() {
-    while(_currentRound < _roundLimit && !_isFinished){
+    //TOCHECK priority of oeprators
+    while((_currentRound < _roundLimit) && !_isFinished){
         _currentRound++;
         nextRound();
     }

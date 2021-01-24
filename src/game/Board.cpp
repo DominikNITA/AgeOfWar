@@ -196,10 +196,11 @@ void Board::draw() {
         }
     }
     std::cout << std::endl;
-    Helper::setColor(RESET);
-    for (int i = 0; i < _boardData.size(); ++i) {
-        std::cout << "――― ";
-    }
+
+//    Helper::setColor(RESET);
+//    for (int i = 0; i < _boardData.size(); ++i) {
+//        std::cout << "――― ";
+//    }
     std::cout << std::endl;
     for (int i = 0; i < _boardData.size(); ++i) {
         if (_boardData[i] != nullptr) {
@@ -221,7 +222,7 @@ void Board::draw() {
 }
 
 void Board::clear() {
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 2; ++i) {
         Helper::moveCursorUp();
         Helper::eraseLine();
     }
