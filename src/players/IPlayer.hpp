@@ -14,6 +14,7 @@
 class IPlayer {
 public:
     IPlayer(int number, std::string name, std::shared_ptr<GameLogger> pGameLogger);
+    IPlayer() = default;
 
     virtual ~IPlayer() {
 

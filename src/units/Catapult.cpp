@@ -15,7 +15,6 @@ Catapult::Catapult(std::shared_ptr<IPlayer>ownedBy) : IBaseUnit(ownedBy) {
 }
 
 std::vector<int> Catapult::getAttackedPositions(int closestEnemy) {
-    //TODO: use switch statement
     if (closestEnemy == 2) {
         return std::vector<int>{2, 3};
     } else if (closestEnemy == 3 || closestEnemy == 4) {
@@ -34,6 +33,7 @@ IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) 
 
     switch (actionNumber) {
         case 1: {
+            //TODO: merde
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
             if (!attackedPositions.empty()) {
                 pResult = new ActionAttack(std::shared_ptr<IAttacking>(this), attackedPositions);

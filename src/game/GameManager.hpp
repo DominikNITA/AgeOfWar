@@ -22,35 +22,30 @@ class GameManager {
 public:
     GameManager(int mode, std::string name);
     GameManager() {
-        p_gameLogger = std::shared_ptr<GameLogger>(new GameLogger());
-        p_buyingManager = std::unique_ptr<BuyingManager>(new BuyingManager());
-        p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
-        p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
-        p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
+        initializeBuyingManager();
     };
-    GameManager(int roundLimit,int roundCounter, int mode,std::shared_ptr<IPlayer> playerOne, std::shared_ptr<IPlayer> playerTwo, std::unique_ptr<Board> pboard) : _roundCounter(roundCounter),_roundLimit(roundLimit),_mode(mode)
-        {
-            p_playerOne = playerOne;
-            p_playerTwo = playerTwo;
-            std::cout << pboard->test() << std::endl;
-        }
+//    GameManager(int roundLimit,int roundCounter, int mode,std::shared_ptr<IPlayer> playerOne, std::shared_ptr<IPlayer> playerTwo, std::unique_ptr<Board> pboard) : _currentRound(roundCounter),_roundLimit(roundLimit),_mode(mode)
+//        {
+//            p_playerOne = playerOne;
+//            p_playerTwo = playerTwo;
+//            std::cout << pboard->test() << std::endl;
+//        }
     ~GameManager();
 
     void startGame();
 
-    template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_roundLimit),CEREAL_NVP(_roundCounter),CEREAL_NVP(_mode),CEREAL_NVP(p_playerOne),CEREAL_NVP(p_playerTwo),CEREAL_NVP(p_board));
-    }
-    int getRoundLimit() {return p_playerOne->getColorCode();}
+    friend class cereal::access;
 
-    //
+    template<class Archive> void serialize(Archive & archive){
+        archive(CEREAL_NVP(_roundLimit), CEREAL_NVP(_currentRound), CEREAL_NVP(_mode), CEREAL_NVP(_name), CEREAL_NVP(p_playerOne), CEREAL_NVP(p_playerTwo), CEREAL_NVP(p_board), CEREAL_NVP(p_gameLogger));
+    }
 private:
     //Variables
     int _roundLimit = 15;
-    int _roundCounter;
+    int _currentRound = 0;
     int _sleepBetweenActions = 750;
     int _boardSize = 12;
-    int _mode;
+    int _mode = -1;
     std::string _name;
     bool _isFinished = false;
     std::shared_ptr<IPlayer> p_playerOne;
@@ -58,6 +53,7 @@ private:
     std::shared_ptr<GameLogger> p_gameLogger;
     std::unique_ptr<Board> p_board;
     std::unique_ptr<BuyingManager> p_buyingManager;
+
     //Methods
     void gameLoop();
     void nextRound();
@@ -65,10 +61,8 @@ private:
     void doAction(IAction* pAction);
     void playTurn(std::shared_ptr<IPlayer> pPlayer);
     void redrawAll();
-
-
+    void initializeBuyingManager();
     bool isOneBaseDestroyed();
-
     void saveState();
 };
 

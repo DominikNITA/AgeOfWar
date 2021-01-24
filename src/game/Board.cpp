@@ -13,19 +13,6 @@ Board::Board(std::shared_ptr<IPlayer> pPlayerOne, std::shared_ptr<IPlayer> pPlay
     p_playerOne = pPlayerOne;
     p_playerTwo = pPlayerTwo;
     p_gameLogger = pGameLogger;
-//    CREATION TESTS
-//    if (test != nullptr) {
-//        delete[] test;
-//        test = nullptr;
-//    }
-//    if (test == nullptr) {
-//        test = new int[size];
-//        if (test == nullptr) {
-//            std::cout << "ERROR" << std::endl;
-//        } else {
-//            std::cout << "Array was created succesfully" << std::endl;
-//        }
-//    }
 }
 
 Board::~Board() {
@@ -94,6 +81,7 @@ int Board::findUnitPosition(std::shared_ptr<IBaseUnit> unit) {
 }
 
 vector<int> Board::getDistancesToEnemies(std::shared_ptr<IBaseUnit> pUnit) {
+    p_gameLogger->logAndDraw("In get distance to enemies");
     vector<int> result;
     int unitPosition = findUnitPosition(pUnit);
     std::shared_ptr<IPlayer> unitOwner = pUnit->getOwner();
@@ -244,7 +232,3 @@ std::string Board::getUnitStringWithPosition(std::shared_ptr<IBaseUnit>unit, int
            std::to_string(position) + Helper::getColorString(RESET);
 
 }
-
-
-
-

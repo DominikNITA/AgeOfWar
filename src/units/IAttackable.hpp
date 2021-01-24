@@ -9,8 +9,9 @@
 class IAttackable {
 public:
     int GetHp() const { return _hp; }
-    void ReceiveDamage(int damage) { _hp -= damage; }
     int GetKillReward() const { return _killReward; }
+
+    void ReceiveDamage(int damage) { _hp -= damage; }
 protected:
     int _hp;
     int _killReward;

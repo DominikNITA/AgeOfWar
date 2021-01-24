@@ -23,11 +23,13 @@ int main(int argc, char * argv[]) {
         switch ( mode )
         {
             case 1:
+                std::cout << "Game mode : Player vs AI Easy" << std::endl;
+                break;
             case 2:
-                std::cout << "Game mode : " << mode << std::endl;
+                std::cout << "Game mode : Player vs Player" << std::endl;
                 break;
             default:
-                std::cerr << "Unknown game mode." << std::endl;
+                std::cerr << "Unknown game mode. Exiting!" << std::endl;
                 return 0;
         }
         std::string name = argv[2];
@@ -41,10 +43,11 @@ int main(int argc, char * argv[]) {
     } else if (argc == 2){
         GameManager game;
         std::string name = argv[1];
+        std::cout << Helper::getColorString(GREEN) << "Loading save " << name << "..." <<std::endl;
         std::ifstream is("saves/" + name + ".xml");
         cereal::XMLInputArchive archive(is);
         archive(game);
-        Helper::Sleep(10000);
+        Helper::Sleep(2000);
         game.startGame();
     } else {
         std::cerr << "Not enough arguments. Aborting..." << std::endl;

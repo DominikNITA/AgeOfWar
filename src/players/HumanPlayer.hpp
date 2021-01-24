@@ -16,23 +16,26 @@ public:
     HumanPlayer(int number, std::string name, std::shared_ptr<GameLogger> pGameLogger);
     HumanPlayer(int number, std::string name,int colorCode, int currency, std::shared_ptr<Base> base);
 
+    HumanPlayer() = default;
+
     int chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) override;
 
-    template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_number),CEREAL_NVP(_name),CEREAL_NVP(_colorCode),CEREAL_NVP(_currency),CEREAL_NVP(p_base));
+    template<class Archive> void serialize(Archive & archive) {
+        archive(CEREAL_NVP(_number), CEREAL_NVP(_name), CEREAL_NVP(_colorCode), CEREAL_NVP(_currency),
+                CEREAL_NVP(p_base), CEREAL_NVP(p_gameLogger));
     }
 
-    template <class Archive>
-    static void load_and_construct( Archive & ar, cereal::construct<HumanPlayer> & construct )
-    {
-        int number;
-        std::string name;
-        int colorCode;
-        int currency = 10;
-        std::shared_ptr<Base> pbase;
-        ar(number,name,colorCode,currency,pbase);
-        construct( number,name,colorCode,currency,pbase);
-    }
+//    template <class Archive>
+//    static void load_and_construct( Archive & ar, cereal::construct<HumanPlayer> & construct )
+//    {
+//        int number;
+//        std::string name;
+//        int colorCode;
+//        int currency = 10;
+//        std::shared_ptr<Base> pbase;
+//        ar(number,name,colorCode,currency,pbase);
+//        construct( number,name,colorCode,currency,pbase);
+//    }
 };
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/memory.hpp>

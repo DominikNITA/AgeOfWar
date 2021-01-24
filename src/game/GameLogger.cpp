@@ -6,10 +6,10 @@
 #include "../utility/Helper.hpp"
 
 void GameLogger::log(const std::string &message) {
-    if(_buffer.size() >= _maxBufferSize){
-        _buffer.erase(_buffer.begin());
+    if(_messages.size() >= _maxBufferSize){
+        _messages.erase(_messages.begin());
     }
-    _buffer.push_back(message);
+    _messages.push_back(message);
 }
 
 void GameLogger::logAndDraw(const std::string &message) {
@@ -22,26 +22,26 @@ void GameLogger::draw() {
     clear();
 
     //Print new logs
-    for (int i = 0; i < _buffer.size(); ++i) {
+    for (int i = 0; i < _messages.size(); ++i) {
         Helper::setColor(RESET);
-        std::cout << i << ":" << _buffer[i] << std::endl;
+        std::cout << i << ":" << _messages[i] << std::endl;
         Helper::setColor(RESET);
     }
 
     //Update the last size of buffer
-    _lastBufferSize = _buffer.size();
+    _lastDisplayedMessagesCount = _messages.size();
 }
 
 GameLogger::~GameLogger() {
-    _buffer.clear();
+    _messages.clear();
 }
 
 void GameLogger::clear() {
-    for (int i = 0; i < _lastBufferSize; ++i) {
+    for (int i = 0; i < _lastDisplayedMessagesCount; ++i) {
         Helper::moveCursorUp();
         Helper::eraseLine();
     }
-    _lastBufferSize = 0;
+    _lastDisplayedMessagesCount = 0;
 }
 
 

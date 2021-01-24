@@ -50,7 +50,7 @@ private:
     friend class cereal::access;
 
     template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_size), CEREAL_NVP(p_playerOne), CEREAL_NVP(p_playerTwo));
+        archive(CEREAL_NVP(_size), CEREAL_NVP(p_playerOne), CEREAL_NVP(p_playerTwo),CEREAL_NVP(p_gameLogger));
     }
 };
 

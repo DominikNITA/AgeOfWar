@@ -4,12 +4,10 @@
 
 #include <iostream>
 #include <memory>
-#include <thread>
 #include <fstream>
 #include "GameManager.hpp"
 #include "../players/HumanPlayer.hpp"
 #include "../players/ComputerPlayer.hpp"
-#include "../units/Archer.hpp"
 #include "actions/ActionAttack.hpp"
 #include "actions/ActionNone.hpp"
 #include "actions/ActionMove.hpp"
@@ -21,8 +19,7 @@
 #include <cereal/types/memory.hpp>
 
 GameManager::GameManager(int mode, std::string name) : _mode(mode), _name(name) {
-    _roundCounter = 0;
-
+    _currentRound = 0;
     p_gameLogger.reset(new GameLogger());
 
     std::string playerName;
@@ -31,7 +28,7 @@ GameManager::GameManager(int mode, std::string name) : _mode(mode), _name(name) 
     std::cin >> playerName;
     Helper::erasePreviousLine();
     p_playerOne.reset(new HumanPlayer(1,playerName,p_gameLogger));
-    if(_mode == 0){
+    if(_mode == 2){
         std::cout << "Second player nick: ";
         std::cin >> playerName;
         Helper::erasePreviousLine();
@@ -43,12 +40,15 @@ GameManager::GameManager(int mode, std::string name) : _mode(mode), _name(name) 
 
     p_board.reset(new Board(p_playerOne, p_playerTwo, p_gameLogger,_boardSize));
 
-    p_buyingManager = std::make_unique<BuyingManager>();
+    initializeBuyingManager();
+}
+
+void GameManager::initializeBuyingManager() {
+    p_buyingManager.reset(new BuyingManager());
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
     p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
     p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
 }
-
 
 
 GameManager::~GameManager() {
@@ -76,12 +76,12 @@ void GameManager::startGame() {
 }
 
 void GameManager::gameLoop() {
-    while(_roundCounter < _roundLimit && !_isFinished){
-        _roundCounter++;
+    while(_currentRound < _roundLimit && !_isFinished){
+        _currentRound++;
         nextRound();
     }
     p_gameLogger->logAndDraw(Helper::getColorString(YELLOW) + "Game has finished!");
-    if(_roundCounter == _roundLimit){
+    if(_currentRound == _roundLimit){
         p_gameLogger->logAndDraw(Helper::getColorString(BLUE) + "It's a draw: maximum amount of rounds passed!");
         return;
     }
@@ -96,8 +96,7 @@ void GameManager::gameLoop() {
 }
 
 void GameManager::nextRound() {
-    saveState();
-    p_gameLogger->log(Helper::getColorString(BLUE) + Helper::getColorString(BOLD) + "Round " + std::to_string(_roundCounter) + ":");
+    p_gameLogger->log(Helper::getColorString(BLUE) + Helper::getColorString(BOLD) + "Round " + std::to_string(_currentRound) + ":");
 
     //1.Give currency to both players
     p_playerOne->addCurrency(8);
@@ -114,6 +113,9 @@ void GameManager::nextRound() {
     p_gameLogger->logAndDraw(Helper::getColorString(p_playerTwo->getColorCode()) + "Player two turn:");
     p_gameLogger->draw();
     playTurn(p_playerTwo);
+
+    //4.Sauvgarder l'etat
+    saveState();
 }
 
 void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
@@ -157,24 +159,30 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
 
 
 void GameManager::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) {
+    if(actionNumber == 3) p_gameLogger->logAndDraw("a");
     auto units = p_board->getPlayerUnits(pPlayer, actionNumber == 1);
-
+    if(actionNumber == 3) p_gameLogger->logAndDraw("b");
     if(units.empty()){
         p_gameLogger->logAndDraw("Player has no units!");
     }
-
+    if(actionNumber == 3) p_gameLogger->logAndDraw("c");
     for (int i = 0; i < units.size(); ++i) {
         //Catapult could kill it's own unit before it's turn -> Segmentation fault
-        if(units[i] == nullptr) continue;
-
+//        if(units[i] == nullptr) continue;
+        if(actionNumber == 3) p_gameLogger->logAndDraw("c1");
+        if(actionNumber == 3) p_gameLogger->logAndDraw(units[i]->GetHp() + "");
         auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
+        if(actionNumber == 3) p_gameLogger->logAndDraw("c2");
         doAction(action);
+        if(actionNumber == 3) p_gameLogger->logAndDraw("c3");
         if(isOneBaseDestroyed()){
             _isFinished = true;
         }
         Helper::Sleep(150);
         redrawAll();
+        if(actionNumber == 3) p_gameLogger->logAndDraw("c4");
     }
+    if(actionNumber == 3) p_gameLogger->logAndDraw("d");
     Helper::Sleep(_sleepBetweenActions);
 }
 
