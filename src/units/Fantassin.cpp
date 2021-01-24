@@ -39,7 +39,7 @@ IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances)
         case 1: {
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
             if (!attackedPositions.empty()) {
-                pResult = new ActionAttack(this, attackedPositions);
+                pResult = new ActionAttack(std::shared_ptr<IAttacking>(this), attackedPositions);
                 _hasFirstActionSucceeded = true;
             } else {
                 pResult = new ActionNone();
@@ -48,14 +48,14 @@ IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances)
             break;
         }
         case 2: {
-            pResult = new ActionMove(this, 1);
+            pResult = new ActionMove(std::shared_ptr<IBaseUnit>(this), 1);
             break;
         }
         case 3: {
             if (!_hasFirstActionSucceeded || _isSuperSoldier) {
                 auto attackedPositions = getAttackedPositions(enemyDistances.front());
                 if (!attackedPositions.empty()) {
-                    pResult = new ActionAttack(this, attackedPositions);
+                    pResult = new ActionAttack(std::shared_ptr<IAttacking>(this), attackedPositions);
                 } else {
                     pResult = new ActionNone();
                 }

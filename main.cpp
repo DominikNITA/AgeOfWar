@@ -17,7 +17,7 @@ int main(int argc, char * argv[]) {
 
     // Memory on start
 
-    if (argc>=2) {
+    if (argc>=3) {
     // convert from *char to int to use switch
         int mode = std::stoi(argv[1]);
         switch ( mode )
@@ -30,22 +30,26 @@ int main(int argc, char * argv[]) {
                 std::cerr << "Unknown game mode." << std::endl;
                 return 0;
         }
+        std::string name = argv[2];
+        std::cout << "Game name : " << name <<". Starting in few seconds" << std::endl;
+        Helper::Sleep(2000);
+        Helper::erasePreviousLine();
+        Helper::erasePreviousLine();
+        // Game preparation and execution
+        GameManager game(mode,name);
+        game.startGame();
+    } else if (argc == 2){
+        GameManager game;
+        std::string name = argv[1];
+        std::ifstream is("saves/" + name + ".xml");
+        cereal::XMLInputArchive archive(is);
+        archive(game);
+        Helper::Sleep(10000);
+        game.startGame();
     } else {
         std::cerr << "Not enough arguments. Aborting..." << std::endl;
         return 0;
     }
-
-
-    // Game preparation and execution
-//    GameManager game(1);
-//    game.startGame();
-
-
-    GameManager game;
-    std::ifstream is("dataCons2.xml");
-    cereal::XMLInputArchive archive(is);
-    archive(game);
-    std::cout <<game.getRoundLimit();
     // Memory on stop
 
     // End of the program

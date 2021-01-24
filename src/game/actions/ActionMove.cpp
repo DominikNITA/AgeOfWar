@@ -8,7 +8,7 @@ std::string ActionMove::GetActionLog() {
     return "Move action";
 }
 
-IBaseUnit *ActionMove::getUnit() const {
+std::shared_ptr<IBaseUnit> ActionMove::getUnit() const {
     return _unit;
 }
 

@@ -36,7 +36,7 @@ IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) 
         case 1: {
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
             if (!attackedPositions.empty()) {
-                pResult = new ActionAttack(this, attackedPositions);
+                pResult = new ActionAttack(std::shared_ptr<IAttacking>(this), attackedPositions);
                 _hasFirstActionSucceeded = true;
             } else {
                 pResult = new ActionNone();
@@ -50,7 +50,7 @@ IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) 
         }
         case 3: {
             if(!_hasFirstActionSucceeded){
-                pResult = new ActionMove(this, 1);
+                pResult = new ActionMove(std::shared_ptr<IBaseUnit>(this), 1);
             }
             else{
                 pResult = new ActionNone();

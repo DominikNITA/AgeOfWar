@@ -5,7 +5,7 @@
 #include <iostream>
 #include "ComputerPlayer.hpp"
 
-ComputerPlayer::ComputerPlayer(int i,GameLogger* gl) : IPlayer(i,"AI Easy",gl) {}
+ComputerPlayer::ComputerPlayer(int i,std::shared_ptr<GameLogger> gl) : IPlayer(i,"AI Easy",gl) {}
 ComputerPlayer::ComputerPlayer(int number, std::string name, int colorCode, int currency, std::shared_ptr<Base> base) : IPlayer(number,name,nullptr) {
     _colorCode = colorCode;
     _currency = currency;

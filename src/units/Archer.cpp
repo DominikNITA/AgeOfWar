@@ -41,12 +41,12 @@ IAction* Archer::getAction(int actionNumber, std::vector<int> enemyDistances) {
                 }
                 else
                     {
-                        pResult = new ActionAttack(this,attackedPositions);
+                        pResult = new ActionAttack(std::shared_ptr<IAttacking>(this),attackedPositions);
                 }
             }
             break;
         case 2:
-            pResult = new ActionMove(this,1);
+            pResult = new ActionMove(std::shared_ptr<IBaseUnit>(this),1);
             break;
         case 3:
             pResult = new ActionNone();

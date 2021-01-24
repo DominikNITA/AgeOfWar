@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <memory>
 #include <thread>
 #include <fstream>
 #include "GameManager.hpp"
@@ -19,10 +20,10 @@
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/memory.hpp>
 
-GameManager::GameManager(int mode) : _mode(mode) {
+GameManager::GameManager(int mode, std::string name) : _mode(mode), _name(name) {
     _roundCounter = 0;
 
-    p_gameLogger = new GameLogger();
+    p_gameLogger.reset(new GameLogger());
 
     std::string playerName;
 
@@ -40,24 +41,14 @@ GameManager::GameManager(int mode) : _mode(mode) {
         p_playerTwo.reset(new ComputerPlayer(2,p_gameLogger));
     }
 
-    p_board = new Board(p_playerOne, p_playerTwo, p_gameLogger,_boardSize);
+    p_board.reset(new Board(p_playerOne, p_playerTwo, p_gameLogger,_boardSize));
 
-    p_buyingManager = new BuyingManager();
+    p_buyingManager = std::make_unique<BuyingManager>();
     p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
     p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
     p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
-
-    std::ofstream os("dataCons2.xml");
-    cereal::XMLOutputArchive archive(os);
-    archive(*this);
 }
 
-GameManager::GameManager(const std::string& fileName) {
-    std::ifstream os("saves/"+fileName+".xml");
-    cereal::XMLInputArchive archive(os);
-
-    archive(_roundLimit,_roundCounter,_boardSize,_mode, p_playerOne);
-}
 
 
 GameManager::~GameManager() {
@@ -69,11 +60,11 @@ GameManager::~GameManager() {
 //        delete p_playerTwo;
 //        p_playerTwo = nullptr;
 //    }
-    if(p_board != nullptr){
-        delete p_board;
-        p_board = nullptr;
-    }
-    delete p_buyingManager;
+//    if(p_board != nullptr){
+//        delete p_board;
+//        p_board = nullptr;
+//    }
+//    delete p_buyingManager;
 }
 
 void GameManager::startGame() {
@@ -105,7 +96,7 @@ void GameManager::gameLoop() {
 }
 
 void GameManager::nextRound() {
-    //saveState();
+    saveState();
     p_gameLogger->log(Helper::getColorString(BLUE) + Helper::getColorString(BOLD) + "Round " + std::to_string(_roundCounter) + ":");
 
     //1.Give currency to both players
@@ -130,25 +121,25 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
     //Make Action 1
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 1 Phase");
     doActions(1, pPlayer);
-    if(!_isFinished) return;
+    if(_isFinished) return;
 
     //Make Action 2
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 2 Phase");
     doActions(2, pPlayer);
-    if(!_isFinished) return;
+    if(_isFinished) return;
 
     //Make Action 3
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 3 Phase");
     doActions(3, pPlayer);
     p_gameLogger->draw();
 
-    if(!_isFinished) return;
+    if(_isFinished) return;
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Buying Phase");
     if(p_board->canPlayerAddUnit(pPlayer)){
         if(p_buyingManager->getMinimalPrice() <= pPlayer->getCurrency()){
 
             int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
-            IBaseUnit* unitToBuy = p_buyingManager->returnUnit(choice);
+            auto unitToBuy = p_buyingManager->returnUnit(choice);
             unitToBuy->setOwner(pPlayer);
             p_board->addUnit(unitToBuy, pPlayer);
         }
@@ -196,7 +187,7 @@ void GameManager::doAction(IAction *pAction) {
         p_board->moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
     }
     else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
-        p_board->attackRelativePositions(dynamic_cast<IBaseUnit*>(pAttackAction->GetAttacker()), pAttackAction->GetAttackedPositions());
+        p_board->attackRelativePositions(std::dynamic_pointer_cast<IBaseUnit>(pAttackAction->GetAttacker()), pAttackAction->GetAttackedPositions());
     }
     else if (auto pNoneAction = dynamic_cast<ActionNone*>(pAction)) {
         /*std::cout << "Nothing todo!\n";*/
@@ -215,5 +206,11 @@ void GameManager::redrawAll() {
 
 bool GameManager::isOneBaseDestroyed() {
     return p_playerOne->getBase()->GetHp() <= 0 || p_playerTwo->getBase()->GetHp() <= 0;
+}
+
+void GameManager::saveState() {
+    std::ofstream os("saves/"+_name+".xml");
+    cereal::XMLOutputArchive archive(os);
+    archive(*this);
 }
 

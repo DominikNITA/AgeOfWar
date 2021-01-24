@@ -13,7 +13,7 @@
 
 class IPlayer {
 public:
-    IPlayer(int number, std::string name, GameLogger* pGameLogger);
+    IPlayer(int number, std::string name, std::shared_ptr<GameLogger> pGameLogger);
 
     virtual ~IPlayer() {
 
@@ -34,7 +34,7 @@ protected:
     std::string _name;
     int _colorCode;
     int _currency = 10;
-    GameLogger* p_gameLogger;
+    std::shared_ptr<GameLogger> p_gameLogger;
     std::shared_ptr<Base> p_base;
 
 

@@ -20,18 +20,26 @@
 
 class GameManager {
 public:
-    GameManager(int mode);
-    GameManager(const std::string& fileName);
-    GameManager() {}
-    GameManager(int roundLimit,int roundCounter,std::shared_ptr<IPlayer> playerOne, std::shared_ptr<IPlayer> playerTwo, int mode) : _roundCounter(roundCounter),_roundLimit(roundLimit),_mode(mode)
+    GameManager(int mode, std::string name);
+    GameManager() {
+        p_gameLogger = std::shared_ptr<GameLogger>(new GameLogger());
+        p_buyingManager = std::unique_ptr<BuyingManager>(new BuyingManager());
+        p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
+        p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
+        p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
+    };
+    GameManager(int roundLimit,int roundCounter, int mode,std::shared_ptr<IPlayer> playerOne, std::shared_ptr<IPlayer> playerTwo, std::unique_ptr<Board> pboard) : _roundCounter(roundCounter),_roundLimit(roundLimit),_mode(mode)
         {
             p_playerOne = playerOne;
             p_playerTwo = playerTwo;
+            std::cout << pboard->test() << std::endl;
         }
     ~GameManager();
+
     void startGame();
+
     template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_roundLimit),CEREAL_NVP(_roundCounter),CEREAL_NVP(p_playerOne),CEREAL_NVP(p_playerTwo),CEREAL_NVP(_mode));
+        archive(CEREAL_NVP(_roundLimit),CEREAL_NVP(_roundCounter),CEREAL_NVP(_mode),CEREAL_NVP(p_playerOne),CEREAL_NVP(p_playerTwo),CEREAL_NVP(p_board));
     }
     int getRoundLimit() {return p_playerOne->getColorCode();}
 
@@ -39,16 +47,17 @@ public:
 private:
     //Variables
     int _roundLimit = 15;
+    int _roundCounter;
     int _sleepBetweenActions = 750;
     int _boardSize = 12;
     int _mode;
+    std::string _name;
     bool _isFinished = false;
     std::shared_ptr<IPlayer> p_playerOne;
     std::shared_ptr<IPlayer> p_playerTwo;
-    int _roundCounter;
-    GameLogger* p_gameLogger;
-    Board* p_board;
-    BuyingManager* p_buyingManager;
+    std::shared_ptr<GameLogger> p_gameLogger;
+    std::unique_ptr<Board> p_board;
+    std::unique_ptr<BuyingManager> p_buyingManager;
     //Methods
     void gameLoop();
     void nextRound();
@@ -59,6 +68,8 @@ private:
 
 
     bool isOneBaseDestroyed();
+
+    void saveState();
 };
 
 #endif //AGEOFWAR_GAMEMANAGER_HPP

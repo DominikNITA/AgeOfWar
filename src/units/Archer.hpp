@@ -7,7 +7,6 @@
 
 
 #include "IBaseUnit.hpp"
-#include "IPurchasable.h"
 
 class Archer : public IBaseUnit{
 public:

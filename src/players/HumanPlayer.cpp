@@ -10,7 +10,7 @@
 
 using std::cout;using std::endl; using std::cin;
 
-HumanPlayer::HumanPlayer(int i,std::string n,GameLogger* p) : IPlayer(i,n,p) {}
+HumanPlayer::HumanPlayer(int i,std::string n,std::shared_ptr<GameLogger> p) : IPlayer(i,n,p) {}
 
 HumanPlayer::HumanPlayer(int number, std::string name, int colorCode, int currency, std::shared_ptr<Base> base) : IPlayer(number,name,nullptr) {
     _colorCode = colorCode;

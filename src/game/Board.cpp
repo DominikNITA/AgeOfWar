@@ -4,16 +4,14 @@
 
 #include <iostream>
 #include "Board.hpp"
-#include "../units/Archer.hpp"
 #include "../utility/Helper.hpp"
 #include "../units/Fantassin.hpp"
-#include "../units/SuperSoldier.hpp"
 
-Board::Board(std::shared_ptr<IPlayer> pPlayerOne, std::shared_ptr<IPlayer> pPlayerTwo, GameLogger *pGameLogger, int size) {
+Board::Board(std::shared_ptr<IPlayer> pPlayerOne, std::shared_ptr<IPlayer> pPlayerTwo, std::shared_ptr<GameLogger> pGameLogger, int size) {
     _size = size;
     _boardData.insert(_boardData.begin(), size, nullptr);
-    p_PlayerOne = pPlayerOne;
-    p_PlayerTwo = pPlayerTwo;
+    p_playerOne = pPlayerOne;
+    p_playerTwo = pPlayerTwo;
     p_gameLogger = pGameLogger;
 //    CREATION TESTS
 //    if (test != nullptr) {
@@ -31,15 +29,15 @@ Board::Board(std::shared_ptr<IPlayer> pPlayerOne, std::shared_ptr<IPlayer> pPlay
 }
 
 Board::~Board() {
-    for (auto p : _boardData) {
-        delete p;
-    }
+//    for (auto p : _boardData) {
+//        delete p;
+//    }
     _boardData.clear();
 //    std::vector<IBaseUnit *>().swap(_boardData);
 }
 
-vector<IBaseUnit *> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool isEnemyBaseDirection) {
-    vector<IBaseUnit *> result = {};
+vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool isEnemyBaseDirection) {
+    vector<std::shared_ptr<IBaseUnit>> result = {};
     if ((owner->getNumber() == 1 && isEnemyBaseDirection) || (owner->getNumber() == 2 && !isEnemyBaseDirection)) {
         for (auto &i : _boardData) {
             if (i != nullptr && i->isOwnedBy(owner)) {
@@ -58,7 +56,7 @@ vector<IBaseUnit *> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool i
     return result;
 }
 
-void Board::addUnit(IBaseUnit *unit, std::shared_ptr<IPlayer> player) {
+void Board::addUnit(std::shared_ptr<IBaseUnit> unit, std::shared_ptr<IPlayer> player) {
     if (player->getNumber() == 1 && _boardData[0] == nullptr) {
         _boardData[0] = unit;
     }
@@ -67,7 +65,7 @@ void Board::addUnit(IBaseUnit *unit, std::shared_ptr<IPlayer> player) {
     }
 }
 
-void Board::moveUnitForward(IBaseUnit *unit, int count) {
+void Board::moveUnitForward(std::shared_ptr<IBaseUnit> unit, int count) {
     int unitPosition = findUnitPosition(unit);
     int direction = unit->getOwner()->getNumber() == 1 ? 1 : -1;
     int newIndex = unitPosition + count * direction;
@@ -85,7 +83,7 @@ void Board::moveUnitForward(IBaseUnit *unit, int count) {
     }
 }
 
-int Board::findUnitPosition(IBaseUnit *unit) {
+int Board::findUnitPosition(std::shared_ptr<IBaseUnit> unit) {
     if (unit == nullptr) return -1;
     for (int i = 0; i < _boardData.size(); ++i) {
         if (_boardData[i] == unit) {
@@ -95,7 +93,7 @@ int Board::findUnitPosition(IBaseUnit *unit) {
     return -1;
 }
 
-vector<int> Board::getDistancesToEnemies(IBaseUnit *pUnit) {
+vector<int> Board::getDistancesToEnemies(std::shared_ptr<IBaseUnit> pUnit) {
     vector<int> result;
     int unitPosition = findUnitPosition(pUnit);
     std::shared_ptr<IPlayer> unitOwner = pUnit->getOwner();
@@ -129,17 +127,14 @@ int Board::getDistanceValueFromIndexes(int index1, int index2) {
     return abs(index1 - index2);
 }
 
-void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedPositions) {
-    //Variables for upgrading fantassin to super soldier
-    Fantassin *pThisFantassin;
-
+void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vector<int> attackedPositions) {
     //General variables
     int unitPosition = findUnitPosition(pUnit);
     int direction = pUnit->getOwner()->getNumber() == 1 ? 1 : -1;
 
     for (int i = 0; i < attackedPositions.size(); ++i) {
         int targetUnitPosition = unitPosition + direction * attackedPositions[i];
-        IBaseUnit *pTargetUnit = _boardData[targetUnitPosition];
+        std::shared_ptr<IBaseUnit>pTargetUnit = _boardData[targetUnitPosition];
         if (pTargetUnit != nullptr) {
             pTargetUnit->ReceiveDamage(pUnit->GetAttackPower());
             p_gameLogger->log(
@@ -165,8 +160,8 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
                     pUnit->getOwner()->addCurrency(pTargetUnit->GetKillReward());
 
                     //Deal with special case for Fantassin
-                    if ((pThisFantassin = dynamic_cast<Fantassin *>(pUnit))) {
-                        if (auto pEnemyFantassin = dynamic_cast<Fantassin *>(pTargetUnit)) {
+                    if (auto pThisFantassin = std::dynamic_pointer_cast<Fantassin>(pUnit)) {
+                        if (auto pEnemyFantassin = std::dynamic_pointer_cast<Fantassin>(pTargetUnit)) {
                             p_gameLogger->log(
                                     "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " is upgraded to " +
                                     Helper::getColorString(YELLOW) + "SuperSoldier!");
@@ -174,7 +169,7 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
                         }
                     }
                     //Remove enemy unit from the board
-                    delete pTargetUnit;
+                    //delete pTargetUnit;
                     pTargetUnit = nullptr;
                     _boardData[targetUnitPosition] = nullptr;
                 }
@@ -182,11 +177,11 @@ void Board::attackRelativePositions(IBaseUnit *pUnit, std::vector<int> attackedP
             p_gameLogger->draw();
         } else {
             if (targetUnitPosition == 0) {
-                p_PlayerOne->getBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_playerOne->getBase()->ReceiveDamage(pUnit->GetAttackPower());
                 p_gameLogger->logAndDraw("Base got attacked");
             }
             if (targetUnitPosition == _size - 1) {
-                p_PlayerTwo->getBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_playerTwo->getBase()->ReceiveDamage(pUnit->GetAttackPower());
                 p_gameLogger->logAndDraw("Base got attacked");
             }
         }
@@ -244,7 +239,7 @@ void Board::clear() {
     }
 }
 
-std::string Board::getUnitStringWithPosition(IBaseUnit *unit, int position) {
+std::string Board::getUnitStringWithPosition(std::shared_ptr<IBaseUnit>unit, int position) {
     return Helper::getColorString(unit->getOwner()->getColorCode()) + unit->print() +
            std::to_string(position) + Helper::getColorString(RESET);
 

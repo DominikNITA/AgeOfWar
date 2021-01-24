@@ -11,7 +11,7 @@
 class ComputerPlayer : public IPlayer {
 
 public:
-    ComputerPlayer(int number, GameLogger* pGameLogger);
+    ComputerPlayer(int number, std::shared_ptr<GameLogger> pGameLogger);
     ComputerPlayer(int number, std::string name,int colorCode, int currency, std::shared_ptr<Base> base);
 
     int chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) override;
