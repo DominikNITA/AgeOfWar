@@ -14,7 +14,8 @@
 #include "../units/IBaseUnit.hpp"
 #include "GameLogger.hpp"
 
-
+#define UNIT_POINTER IBaseUnit*
+typedef std::shared_ptr<IBaseUnit> TPtrUnit;
 using std::vector;
 
 class Board : public IDrawable {
@@ -31,7 +32,7 @@ public:
     int findUnitPosition(std::shared_ptr<IBaseUnit> pUnit);
     vector<int> getDistancesToEnemies(std::shared_ptr<IBaseUnit> pUnit);
     void attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vector<int> attackedPositions);
-    bool canPlayerAddUnit(std::shared_ptr<IPlayer>player);
+    bool canPlayerAddUnit(const IPlayer& player);
     void draw() override;
     void clear();
     std::string test() {return p_playerOne->getName();}

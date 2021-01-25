@@ -76,7 +76,7 @@ void GameManager::startGame() {
 }
 
 void GameManager::gameLoop() {
-    //TOCHECK priority of oeprators
+    //TODO : check priority of oeprators
     while((_currentRound < _roundLimit) && !_isFinished){
         _currentRound++;
         nextRound();
@@ -138,7 +138,7 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
 
     if(_isFinished) return;
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Buying Phase");
-    if(p_board->canPlayerAddUnit(pPlayer)){
+    if(p_board->canPlayerAddUnit(*pPlayer)){
         if(p_buyingManager->getMinimalPrice() <= pPlayer->getCurrency()){
 
             int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
@@ -160,7 +160,10 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
 
 
 void GameManager::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) {
-    if(actionNumber == 3) p_gameLogger->logAndDraw("a");
+    if(actionNumber == 2)
+    {
+        p_gameLogger->logAndDraw("a");
+    }
     auto units = p_board->getPlayerUnits(pPlayer, actionNumber == 1);
     if(actionNumber == 3) p_gameLogger->logAndDraw("b");
     if(units.empty()){

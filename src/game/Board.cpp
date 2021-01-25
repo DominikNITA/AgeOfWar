@@ -26,6 +26,7 @@ Board::~Board() {
 vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool isEnemyBaseDirection) {
     vector<std::shared_ptr<IBaseUnit>> result = {};
     if ((owner->getNumber() == 1 && isEnemyBaseDirection) || (owner->getNumber() == 2 && !isEnemyBaseDirection)) {
+        //TODO: auto problem with downcasting
         for (auto &i : _boardData) {
             if (i != nullptr && i->isOwnedBy(owner)) {
                 result.push_back(i);
@@ -39,7 +40,7 @@ vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer
             }
         }
     }
-
+    //TODO : check vector
     return result;
 }
 
@@ -176,8 +177,8 @@ void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vecto
     }
 }
 
-bool Board::canPlayerAddUnit(std::shared_ptr<IPlayer> player) {
-    if (player->getNumber() == 1) {
+bool Board::canPlayerAddUnit(const IPlayer& player) {
+    if (player.getNumber() == 1) {
         return _boardData[0] == nullptr;
     } else {
         return _boardData[_size - 1] == nullptr;
@@ -222,7 +223,7 @@ void Board::draw() {
 }
 
 void Board::clear() {
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
         Helper::moveCursorUp();
         Helper::eraseLine();
     }
@@ -231,5 +232,4 @@ void Board::clear() {
 std::string Board::getUnitStringWithPosition(std::shared_ptr<IBaseUnit>unit, int position) {
     return Helper::getColorString(unit->getOwner()->getColorCode()) + unit->print() +
            std::to_string(position) + Helper::getColorString(RESET);
-
 }

@@ -7,12 +7,13 @@
 
 
 #include <vector>
+#include <memory>
 #include "IAttackable.hpp"
 #include "IAttacking.hpp"
 #include "../utility/IDrawable.hpp"
 #include "../players/IPlayer.hpp"
 #include "../game/actions/IAction.hpp"
-#include <memory>
+
 
 class IBaseUnit : public IAttackable,
                   public virtual IAttacking,
