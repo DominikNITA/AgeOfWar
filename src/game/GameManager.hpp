@@ -24,7 +24,7 @@ public:
     GameManager() {
         initializeBuyingManager();
     };
-//    GameManager(int roundLimit,int roundCounter, int mode,std::shared_ptr<IPlayer> playerOne, std::shared_ptr<IPlayer> playerTwo, std::unique_ptr<Board> pboard) : _currentRound(roundCounter),_roundLimit(roundLimit),_mode(mode)
+//    GameManager(int roundLimit,int roundCounter, int mode,std::shared_ptr<IPlayer> playerOne, std::shared_ptr<IPlayer> playerTwo, std::unique_ptr<Board> pboard) : m_currentRound(roundCounter),m_roundLimit(roundLimit),m_mode(mode)
 //        {
 //            p_playerOne = playerOne;
 //            p_playerTwo = playerTwo;
@@ -37,17 +37,17 @@ public:
     friend class cereal::access;
 
     template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_roundLimit), CEREAL_NVP(_currentRound), CEREAL_NVP(_mode), CEREAL_NVP(_name), CEREAL_NVP(p_playerOne), CEREAL_NVP(p_playerTwo), CEREAL_NVP(p_board), CEREAL_NVP(p_gameLogger));
+        archive(CEREAL_NVP(m_roundLimit), CEREAL_NVP(m_currentRound), CEREAL_NVP(m_mode), CEREAL_NVP(m_name), CEREAL_NVP(p_playerOne), CEREAL_NVP(p_playerTwo), CEREAL_NVP(p_board), CEREAL_NVP(p_gameLogger));
     }
 private:
     //Variables
-    int _roundLimit = 15;
-    int _currentRound = 0;
-    int _sleepBetweenActions = 750;
-    int _boardSize = 12;
-    int _mode = -1;
-    std::string _name;
-    bool _isFinished = false;
+    int m_roundLimit = 15;
+    int m_currentRound = 0;
+    int m_sleepBetweenActions = 750;
+    int m_boardSize = 12;
+    int m_mode = -1;
+    std::string m_name;
+    bool m_isFinished = false;
     std::shared_ptr<IPlayer> p_playerOne;
     std::shared_ptr<IPlayer> p_playerTwo;
     std::shared_ptr<GameLogger> p_gameLogger;
@@ -57,12 +57,10 @@ private:
     //Methods
     void gameLoop();
     void nextRound();
-    void doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer);
-    void doAction(IAction* pAction);
     void playTurn(std::shared_ptr<IPlayer> pPlayer);
     void redrawAll();
     void initializeBuyingManager();
-    bool isOneBaseDestroyed();
+
     void saveState();
 };
 

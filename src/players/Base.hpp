@@ -15,14 +15,14 @@ class Base : public IAttackable , public IDrawable{
 public:
     Base();
     Base(int hp) {
-        _hp = hp;
+        m_hp = hp;
     };
     virtual ~Base() = default;
     virtual void draw();
 
 
     template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_hp));
+        archive(CEREAL_NVP(m_hp));
     }
 };
 

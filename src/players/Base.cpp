@@ -6,9 +6,9 @@
 #include <iostream>
 
 Base::Base() {
-    _hp = 100;
+    m_hp = 100;
 }
 
 void Base::draw() {
-    std::cout << _hp << std::endl;
+    std::cout << m_hp << std::endl;
 }

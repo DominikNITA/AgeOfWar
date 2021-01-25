@@ -16,17 +16,18 @@ public:
     std::vector<int> getAttackedPositions(int closestEnemy) override;
     void draw() override;
 
-    IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
+    IAction *
+    getAction(int actionNumber, std::vector<int> enemyDistances, std::shared_ptr<IBaseUnit> selfReference) override;
 
     std::string print() override {
-        if(_isSuperSoldier) return "S";
+        if(m_isSuperSoldier) return "S";
         else return "F";
     }
-    void upgradeToSuperSoldier() {_isSuperSoldier = true;}
+    void upgradeToSuperSoldier() { m_isSuperSoldier = true;}
 
 private:
-    bool _hasFirstActionSucceeded = false;
-    bool _isSuperSoldier = false;
+    bool m_hasFirstActionSucceeded = false;
+    bool m_isSuperSoldier = false;
 };
 
 

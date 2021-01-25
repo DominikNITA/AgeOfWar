@@ -16,7 +16,8 @@ public:
 
     void draw() override;
 
-    IAction* getAction(int actionNumber, std::vector<int> enemyDistances) override;
+    IAction *
+    getAction(int actionNumber, std::vector<int> enemyDistances, std::shared_ptr<IBaseUnit> selfReference) override;
 
     std::string print() override {
         return "C";
@@ -24,7 +25,7 @@ public:
 
     ~Catapult() override;
 private:
-    bool _hasFirstActionSucceeded = false;
+    bool m_hasFirstActionSucceeded = false;
 };
 
 

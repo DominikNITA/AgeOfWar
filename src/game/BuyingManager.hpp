@@ -14,14 +14,14 @@ public:
     BuyingManager() {}
     std::vector<std::pair<std::string,int>> getPurchasableUnits();
     void addUnit(std::string, int price, IUnitFactory* unitFactory);
-    std::shared_ptr<IBaseUnit> returnUnit(int index) { return _unitFactories[index]->create(nullptr);}
-    int getMinimalPrice() {return _minimalPrice;}
+    std::shared_ptr<IBaseUnit> returnUnit(int index) { return m_unitFactories[index]->create(nullptr);}
+    int getMinimalPrice() {return m_minimalPrice;}
     std::string getUnitNameByIndex(int index);
 
 private:
-    std::vector<std::pair<std::string,int>> _purchasableUnits;
-    std::vector<IUnitFactory*> _unitFactories;
-    int _minimalPrice = INT8_MAX;
+    std::vector<std::pair<std::string,int>> m_purchasableUnits;
+    std::vector<IUnitFactory*> m_unitFactories;
+    int m_minimalPrice = INT8_MAX;
 };
 
 

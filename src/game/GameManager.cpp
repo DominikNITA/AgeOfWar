@@ -18,8 +18,8 @@
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/memory.hpp>
 
-GameManager::GameManager(int mode, std::string name) : _mode(mode), _name(name) {
-    _currentRound = 0;
+GameManager::GameManager(int mode, std::string name) : m_mode(mode), m_name(name) {
+    m_currentRound = 0;
     p_gameLogger.reset(new GameLogger());
 
     std::string playerName;
@@ -27,27 +27,26 @@ GameManager::GameManager(int mode, std::string name) : _mode(mode), _name(name) 
     std::cout << "First player nick: ";
     std::cin >> playerName;
     Helper::erasePreviousLine();
-    p_playerOne.reset(new HumanPlayer(1,playerName,p_gameLogger));
-    if(_mode == 2){
+    p_playerOne.reset(new HumanPlayer(1, playerName, p_gameLogger));
+    if (m_mode == 2) {
         std::cout << "Second player nick: ";
         std::cin >> playerName;
         Helper::erasePreviousLine();
-        p_playerTwo.reset(new HumanPlayer(2,playerName,p_gameLogger));
-    }
-    else{
-        p_playerTwo.reset(new ComputerPlayer(2,p_gameLogger));
+        p_playerTwo.reset(new HumanPlayer(2, playerName, p_gameLogger));
+    } else {
+        p_playerTwo.reset(new ComputerPlayer(2, p_gameLogger));
     }
 
-    p_board.reset(new Board(p_playerOne, p_playerTwo, p_gameLogger,_boardSize));
+    p_board.reset(new Board(p_playerOne, p_playerTwo, p_gameLogger, m_boardSize));
 
     initializeBuyingManager();
 }
 
 void GameManager::initializeBuyingManager() {
     p_buyingManager.reset(new BuyingManager());
-    p_buyingManager->addUnit("fantassin",10,new UnitFactory<Fantassin>);
-    p_buyingManager->addUnit("archer",12,new UnitFactory<Archer>);
-    p_buyingManager->addUnit("catapult",20,new UnitFactory<Catapult>);
+    p_buyingManager->addUnit("fantassin", 10, new UnitFactory<Fantassin>);
+    p_buyingManager->addUnit("archer", 12, new UnitFactory<Archer>);
+    p_buyingManager->addUnit("catapult", 20, new UnitFactory<Catapult>);
 }
 
 
@@ -68,7 +67,8 @@ GameManager::~GameManager() {
 }
 
 void GameManager::startGame() {
-    std::cout<< "Age of War - 2020/21 - Polytech Paris-Saclay - Youssef MCHAREK, Dominik NITA" << std::endl << std::endl;
+    std::cout << "Age of War - 2020/21 - Polytech Paris-Saclay - Youssef MCHAREK, Dominik NITA" << std::endl
+              << std::endl;
 
     p_board->draw();
 
@@ -77,27 +77,34 @@ void GameManager::startGame() {
 
 void GameManager::gameLoop() {
     //TODO : check priority of oeprators
-    while((_currentRound < _roundLimit) && !_isFinished){
-        _currentRound++;
+    while ((m_currentRound < m_roundLimit) && !m_isFinished) {
+        m_currentRound++;
         nextRound();
     }
     p_gameLogger->logAndDraw(Helper::getColorString(YELLOW) + "Game has finished!");
-    if(_currentRound == _roundLimit){
+    int temp;
+    if (m_currentRound == m_roundLimit) {
         p_gameLogger->logAndDraw(Helper::getColorString(BLUE) + "It's a draw: maximum amount of rounds passed!");
+        std::cin >> temp;
         return;
     }
-    if(p_playerOne->getBase()->GetHp() <= 0){
-        p_gameLogger->logAndDraw( Helper::getColorString(p_playerTwo->getColorCode()) + p_playerTwo->getName() + " won the game!");
+    if (p_playerOne->getBase()->GetHp() <= 0) {
+        p_gameLogger->logAndDraw(
+                Helper::getColorString(p_playerTwo->getColorCode()) + p_playerTwo->getName() + " won the game!");
+        std::cin >> temp;
         return;
-    }
-    else{
-        p_gameLogger->logAndDraw( Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName() + " won the game!");
+    } else {
+        p_gameLogger->logAndDraw(
+                Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName() + " won the game!");
+        std::cin >> temp;
         return;
     }
 }
 
 void GameManager::nextRound() {
-    p_gameLogger->log(Helper::getColorString(BLUE) + Helper::getColorString(BOLD) + "Round " + std::to_string(_currentRound) + ":");
+    p_gameLogger->log(
+            Helper::getColorString(BLUE) + Helper::getColorString(BOLD) + "Round " + std::to_string(m_currentRound) +
+            ":");
 
     //1.Give currency to both players
     p_playerOne->addCurrency(8);
@@ -115,7 +122,7 @@ void GameManager::nextRound() {
     p_gameLogger->draw();
     playTurn(p_playerTwo);
 
-    //4.Sauvgarder l'etat
+    //4.Save state
     saveState();
 }
 
@@ -123,90 +130,36 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
 
     //Make Action 1
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 1 Phase");
-    doActions(1, pPlayer);
-    if(_isFinished) return;
+    p_board->doActions(1, pPlayer);
+    if (m_isFinished) return;
 
     //Make Action 2
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 2 Phase");
-    doActions(2, pPlayer);
-    if(_isFinished) return;
+    p_board->doActions(2, pPlayer);
+    if (m_isFinished) return;
 
     //Make Action 3
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 3 Phase");
-    doActions(3, pPlayer);
+    p_board->doActions(3, pPlayer);
     p_gameLogger->draw();
 
-    if(_isFinished) return;
+    if (m_isFinished) return;
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Buying Phase");
-    if(p_board->canPlayerAddUnit(*pPlayer)){
-        if(p_buyingManager->getMinimalPrice() <= pPlayer->getCurrency()){
+    if (p_board->canPlayerAddUnit(*pPlayer)) {
+        if (p_buyingManager->getMinimalPrice() <= pPlayer->getCurrency()) {
 
             int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
             auto unitToBuy = p_buyingManager->returnUnit(choice);
             unitToBuy->setOwner(pPlayer);
             p_board->addUnit(unitToBuy, pPlayer);
-        }
-        else{
+        } else {
             p_gameLogger->logAndDraw("Not enough coins to buy unit for player " + std::to_string(pPlayer->getNumber()));
         }
-    }
-    else{
+    } else {
         p_gameLogger->logAndDraw("Base position is occupied for player " + std::to_string(pPlayer->getNumber()));
     }
     redrawAll();
     Helper::Sleep(1500);
-}
-
-
-
-void GameManager::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) {
-    if(actionNumber == 2)
-    {
-        p_gameLogger->logAndDraw("a");
-    }
-    auto units = p_board->getPlayerUnits(pPlayer, actionNumber == 1);
-    if(actionNumber == 3) p_gameLogger->logAndDraw("b");
-    if(units.empty()){
-        p_gameLogger->logAndDraw("Player has no units!");
-    }
-    if(actionNumber == 3) p_gameLogger->logAndDraw("c");
-    for (int i = 0; i < units.size(); ++i) {
-        //Catapult could kill it's own unit before it's turn -> Segmentation fault
-//        if(units[i] == nullptr) continue;
-        if(actionNumber == 3) p_gameLogger->logAndDraw("c1");
-        if(actionNumber == 3) p_gameLogger->logAndDraw(units[i]->GetHp() + "");
-        auto action = units[i]->getAction(actionNumber, p_board->getDistancesToEnemies(units[i]));
-        if(actionNumber == 3) p_gameLogger->logAndDraw("c2");
-        doAction(action);
-        if(actionNumber == 3) p_gameLogger->logAndDraw("c3");
-        if(isOneBaseDestroyed()){
-            _isFinished = true;
-        }
-        Helper::Sleep(150);
-        redrawAll();
-        if(actionNumber == 3) p_gameLogger->logAndDraw("c4");
-    }
-    if(actionNumber == 3) p_gameLogger->logAndDraw("d");
-    Helper::Sleep(_sleepBetweenActions);
-}
-
-void GameManager::doAction(IAction *pAction) {
-    if(pAction == nullptr){
-        std::cout << "Null action pointer\n";
-        return;
-    }
-    if(auto pMoveAction = dynamic_cast<ActionMove*>(pAction)){
-        p_board->moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
-    }
-    else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
-        p_board->attackRelativePositions(std::dynamic_pointer_cast<IBaseUnit>(pAttackAction->GetAttacker()), pAttackAction->GetAttackedPositions());
-    }
-    else if (auto pNoneAction = dynamic_cast<ActionNone*>(pAction)) {
-        /*std::cout << "Nothing todo!\n";*/
-    }
-    else{
-        std::cout << "ERROR: unknown action type: " << pAction->GetActionLog() << std::endl;
-    }
 }
 
 void GameManager::redrawAll() {
@@ -216,13 +169,8 @@ void GameManager::redrawAll() {
     p_gameLogger->draw();
 }
 
-bool GameManager::isOneBaseDestroyed() {
-    return p_playerOne->getBase()->GetHp() <= 0 || p_playerTwo->getBase()->GetHp() <= 0;
-}
-
 void GameManager::saveState() {
-    std::ofstream os("saves/"+_name+".xml");
+    std::ofstream os("saves/" + m_name + ".xml");
     cereal::XMLOutputArchive archive(os);
     archive(*this);
 }
-

@@ -9,9 +9,9 @@
 #include "../game/actions/ActionMove.hpp"
 
 Catapult::Catapult(std::shared_ptr<IPlayer>ownedBy) : IBaseUnit(ownedBy) {
-    _hp = 12;
-    _attackPower = 6;
-    _killReward = 10;
+    m_hp = 12;
+    m_attackPower = 6;
+    m_killReward = 10;
 }
 
 std::vector<int> Catapult::getAttackedPositions(int closestEnemy) {
@@ -28,7 +28,8 @@ void Catapult::draw() {
     std::cout << "C";
 }
 
-IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) {
+IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances,
+                             std::shared_ptr<IBaseUnit> selfReference) {
     IAction *pResult = nullptr;
 
     switch (actionNumber) {
@@ -36,11 +37,11 @@ IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) 
             //TODO: merde
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
             if (!attackedPositions.empty()) {
-                pResult = new ActionAttack(std::shared_ptr<IAttacking>(this), attackedPositions);
-                _hasFirstActionSucceeded = true;
+                pResult = new ActionAttack(selfReference, attackedPositions);
+                m_hasFirstActionSucceeded = true;
             } else {
                 pResult = new ActionNone();
-                _hasFirstActionSucceeded = false;
+                m_hasFirstActionSucceeded = false;
             }
             break;
         }
@@ -49,8 +50,8 @@ IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances) 
             break;
         }
         case 3: {
-            if(!_hasFirstActionSucceeded){
-                pResult = new ActionMove(std::shared_ptr<IBaseUnit>(this), 1);
+            if(!m_hasFirstActionSucceeded){
+                pResult = new ActionMove(selfReference, 1);
             }
             else{
                 pResult = new ActionNone();

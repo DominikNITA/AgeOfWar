@@ -27,7 +27,8 @@ public:
     std::shared_ptr<IPlayer> getOwner() const { return p_owner; }
     void setOwner(std::shared_ptr<IPlayer> owner) { p_owner = owner; }
 
-    virtual IAction *getAction(int actionNumber, std::vector<int> enemyDistances) = 0;
+    virtual IAction *
+    getAction(int actionNumber, std::vector<int> enemyDistances, std::shared_ptr<IBaseUnit> selfReference) = 0;
     virtual std::string print() = 0;
 
 protected:

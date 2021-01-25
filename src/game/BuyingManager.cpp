@@ -5,16 +5,16 @@
 #include "BuyingManager.hpp"
 
 std::vector<std::pair<std::string, int>> BuyingManager::getPurchasableUnits() {
-    return _purchasableUnits;
+    return m_purchasableUnits;
 }
 
 void BuyingManager::addUnit(std::string name, int price, IUnitFactory *unitFactory) {
     //https://stackoverflow.com/questions/4303513/push-back-vs-emplace-back => no temporary object created
-    _minimalPrice = std::min(_minimalPrice,price);
-    _purchasableUnits.emplace_back(name,price);
-    _unitFactories.push_back(unitFactory);
+    m_minimalPrice = std::min(m_minimalPrice, price);
+    m_purchasableUnits.emplace_back(name, price);
+    m_unitFactories.push_back(unitFactory);
 }
 
 std::string BuyingManager::getUnitNameByIndex(int index) {
-    return _purchasableUnits[index].first;
+    return m_purchasableUnits[index].first;
 }

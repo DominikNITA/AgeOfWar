@@ -13,8 +13,8 @@ using std::cout;using std::endl; using std::cin;
 HumanPlayer::HumanPlayer(int i,std::string n,std::shared_ptr<GameLogger> p) : IPlayer(i,n,p) {}
 
 HumanPlayer::HumanPlayer(int number, std::string name, int colorCode, int currency, std::shared_ptr<Base> base) : IPlayer(number,name,nullptr) {
-    _colorCode = colorCode;
-    _currency = currency;
+    m_colorCode = colorCode;
+    m_currency = currency;
     p_base = base;
 }
 
@@ -23,10 +23,10 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
     int choice = -1;
     while (choice < 0) {
         cout << endl << Helper::getColorString(CYAN) << "Unit Shop:" << endl;
-        cout << "Coins: " << Helper::getColorString(YELLOW) << _currency << endl;
+        cout << "Coins: " << Helper::getColorString(YELLOW) << m_currency << endl;
 
         for (int i = 0; i < unitsInfo.size(); ++i) {
-            if(unitsInfo[i].second <= _currency){
+            if(unitsInfo[i].second <= m_currency){
                 Helper::setColor(GREEN);
             }
             else{
@@ -55,7 +55,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             Helper::moveCursorUp();
             Helper::eraseLine();
         }
-        else if(unitsInfo[choice].second > _currency){
+        else if(unitsInfo[choice].second > m_currency){
             Helper::setColor(RED);
             Helper::setColor(BLINK);
             cout << "Not enough coins. Try with other unit!" << endl;
@@ -68,7 +68,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
         }
     }
 
-    p_gameLogger->logAndDraw(Helper::getColorString(_colorCode) + "Player " + std::to_string(_number) + Helper::getColorString(RESET) + " bought " + unitsInfo[choice].first + " for " + Helper::getColorString(YELLOW) + std::to_string(unitsInfo[choice].second) + " coins");
+    p_gameLogger->logAndDraw(Helper::getColorString(m_colorCode) + "Player " + std::to_string(m_number) + Helper::getColorString(RESET) + " bought " + unitsInfo[choice].first + " for " + Helper::getColorString(YELLOW) + std::to_string(unitsInfo[choice].second) + " coins");
 
     addCurrency(-unitsInfo[choice].second);
 

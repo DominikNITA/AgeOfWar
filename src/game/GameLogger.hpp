@@ -23,14 +23,14 @@ public:
     void draw() override;
 
 private:
-    int _maxBufferSize = 20;
-    int _lastDisplayedMessagesCount = 0;
-    std::vector<std::string> _messages;
+    int m_maxBufferSize = 20;
+    int m_lastDisplayedMessagesCount = 0;
+    std::vector<std::string> m_messages;
 
     friend class cereal::access;
 
     template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_maxBufferSize),CEREAL_NVP(_messages));
+        archive(CEREAL_NVP(m_maxBufferSize), CEREAL_NVP(m_messages));
     }
 };
 

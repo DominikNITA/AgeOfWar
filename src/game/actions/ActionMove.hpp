@@ -11,14 +11,14 @@
 
 class ActionMove : public IAction{
 public:
-    ActionMove(std::shared_ptr<IBaseUnit> unit, int count) : _unit(unit), _count(count) {}
+    ActionMove(std::shared_ptr<IBaseUnit> unit, int count) : m_unit(unit), m_count(count) {}
     std::string GetActionLog() override;
     std::shared_ptr<IBaseUnit>getUnit() const;
     int getCount() const;
 
 private:
-    std::shared_ptr<IBaseUnit> _unit;
-    int _count;
+    std::shared_ptr<IBaseUnit> m_unit;
+    int m_count;
 };
 
 

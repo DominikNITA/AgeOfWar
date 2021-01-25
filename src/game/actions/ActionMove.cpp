@@ -9,9 +9,9 @@ std::string ActionMove::GetActionLog() {
 }
 
 std::shared_ptr<IBaseUnit> ActionMove::getUnit() const {
-    return _unit;
+    return m_unit;
 }
 
 int ActionMove::getCount() const {
-    return _count;
+    return m_count;
 }

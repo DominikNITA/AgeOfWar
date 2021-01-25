@@ -9,9 +9,9 @@
 #include "../game/actions/ActionMove.hpp"
 
 Fantassin::Fantassin(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(ownedBy) {
-    _hp = 10;
-    _attackPower = 4;
-    _killReward = 5;
+    m_hp = 10;
+    m_attackPower = 4;
+    m_killReward = 5;
 }
 
 Fantassin::~Fantassin() {
@@ -28,34 +28,34 @@ std::vector<int> Fantassin::getAttackedPositions(int closestEnemy) {
 }
 
 void Fantassin::draw() {
-    if(_isSuperSoldier) std::cout << "S";
+    if(m_isSuperSoldier) std::cout << "S";
     else std::cout << "F";
 }
 
-IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances) {
+IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances,std::shared_ptr<IBaseUnit> selfReference) {
     IAction *pResult = nullptr;
 
     switch (actionNumber) {
         case 1: {
             auto attackedPositions = getAttackedPositions(enemyDistances.front());
             if (!attackedPositions.empty()) {
-                pResult = new ActionAttack(std::shared_ptr<IAttacking>(this), attackedPositions);
-                _hasFirstActionSucceeded = true;
+                pResult = new ActionAttack(selfReference, attackedPositions);
+                m_hasFirstActionSucceeded = true;
             } else {
                 pResult = new ActionNone();
-                _hasFirstActionSucceeded = false;
+                m_hasFirstActionSucceeded = false;
             }
             break;
         }
         case 2: {
-            pResult = new ActionMove(std::shared_ptr<IBaseUnit>(this), 1);
+            pResult = new ActionMove(selfReference, 1);
             break;
         }
         case 3: {
-            if (!_hasFirstActionSucceeded || _isSuperSoldier) {
+            if (!m_hasFirstActionSucceeded || m_isSuperSoldier) {
                 auto attackedPositions = getAttackedPositions(enemyDistances.front());
                 if (!attackedPositions.empty()) {
-                    pResult = new ActionAttack(std::shared_ptr<IAttacking>(this), attackedPositions);
+                    pResult = new ActionAttack(selfReference, attackedPositions);
                 } else {
                     pResult = new ActionNone();
                 }

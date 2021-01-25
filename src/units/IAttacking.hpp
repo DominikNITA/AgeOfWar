@@ -10,10 +10,10 @@
 
 class IAttacking {
 public:
-    int GetAttackPower() const { return _attackPower; }
+    int GetAttackPower() const { return m_attackPower; }
     virtual std::vector<int> getAttackedPositions(int closestEnemy) = 0;
 protected:
-    int _attackPower;
+    int m_attackPower;
 };
 
 

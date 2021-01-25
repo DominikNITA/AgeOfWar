@@ -21,7 +21,7 @@ public:
     friend class cereal::access;
 
     template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(_number),CEREAL_NVP(_name),CEREAL_NVP(_colorCode),CEREAL_NVP(_currency),CEREAL_NVP(p_base),CEREAL_NVP(p_gameLogger));
+        archive(CEREAL_NVP(m_number), CEREAL_NVP(m_name), CEREAL_NVP(m_colorCode), CEREAL_NVP(m_currency), CEREAL_NVP(p_base), CEREAL_NVP(p_gameLogger));
     }
 
 //    template <class Archive>

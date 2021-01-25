@@ -6,37 +6,78 @@
 #include "Board.hpp"
 #include "../utility/Helper.hpp"
 #include "../units/Fantassin.hpp"
+#include "actions/ActionMove.hpp"
+#include "actions/ActionAttack.hpp"
+#include "actions/ActionNone.hpp"
 
 Board::Board(std::shared_ptr<IPlayer> pPlayerOne, std::shared_ptr<IPlayer> pPlayerTwo, std::shared_ptr<GameLogger> pGameLogger, int size) {
-    _size = size;
-    _boardData.insert(_boardData.begin(), size, nullptr);
+    m_size = size;
+    m_boardData.insert(m_boardData.begin(), size, nullptr);
     p_playerOne = pPlayerOne;
     p_playerTwo = pPlayerTwo;
     p_gameLogger = pGameLogger;
 }
 
 Board::~Board() {
-//    for (auto p : _boardData) {
+//    for (auto p : m_boardData) {
 //        delete p;
 //    }
-    _boardData.clear();
-//    std::vector<IBaseUnit *>().swap(_boardData);
+    m_boardData.clear();
+//    std::vector<IBaseUnit *>().swap(m_boardData);
+}
+
+void Board::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) {
+    auto units = getPlayerUnits(pPlayer, actionNumber == 1);
+    if(units.empty()){
+        p_gameLogger->logAndDraw("Player has no units!");
+    }
+    for (int i = 0; i < units.size(); ++i) {
+        //Catapult could kill it's own unit before it's turn -> Segmentation fault
+//        if(units[i] == nullptr) continue;
+        auto action = units[i]->getAction(actionNumber, getDistancesToEnemies(units[i]), units[i]);
+        doAction(action);
+        if(isOneBaseDestroyed()){
+            break;
+        }
+        Helper::Sleep(150);
+        updateView();
+    }
+    Helper::Sleep(300);
+}
+
+void Board::doAction(IAction *pAction) {
+    if(pAction == nullptr){
+        std::cout << "Null action pointer\n";
+        return;
+    }
+    if(auto pMoveAction = dynamic_cast<ActionMove*>(pAction)){
+        moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
+    }
+    else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
+        attackRelativePositions(std::dynamic_pointer_cast<IBaseUnit>(pAttackAction->GetAttacker()), pAttackAction->GetAttackedPositions());
+    }
+    else if (auto pNoneAction = dynamic_cast<ActionNone*>(pAction)) {
+        /*std::cout << "Nothing todo!\n";*/
+    }
+    else{
+        std::cout << "ERROR: unknown action type: " << pAction->GetActionLog() << std::endl;
+    }
 }
 
 vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool isEnemyBaseDirection) {
     vector<std::shared_ptr<IBaseUnit>> result = {};
     if ((owner->getNumber() == 1 && isEnemyBaseDirection) || (owner->getNumber() == 2 && !isEnemyBaseDirection)) {
         //TODO: auto problem with downcasting
-        for (auto &i : _boardData) {
-            if (i != nullptr && i->isOwnedBy(owner)) {
-                result.push_back(i);
+        for (int i = 0; i < m_boardData.size(); i++) {
+            if (m_boardData[i] != nullptr && m_boardData[i]->isOwnedBy(owner)) {
+                result.push_back(m_boardData[i]);
             }
         }
     } else if ((owner->getNumber() == 1 && !isEnemyBaseDirection) ||
                (owner->getNumber() == 2 && isEnemyBaseDirection)) {
-        for (int i = _boardData.size() - 1; i >= 0; i--) {
-            if (_boardData[i] != nullptr && _boardData[i]->isOwnedBy(owner)) {
-                result.push_back(_boardData[i]);
+        for (int i = m_boardData.size() - 1; i >= 0; i--) {
+            if (m_boardData[i] != nullptr && m_boardData[i]->isOwnedBy(owner)) {
+                result.push_back(m_boardData[i]);
             }
         }
     }
@@ -45,11 +86,11 @@ vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer
 }
 
 void Board::addUnit(std::shared_ptr<IBaseUnit> unit, std::shared_ptr<IPlayer> player) {
-    if (player->getNumber() == 1 && _boardData[0] == nullptr) {
-        _boardData[0] = unit;
+    if (player->getNumber() == 1 && m_boardData[0] == nullptr) {
+        m_boardData[0] = unit;
     }
-    if (player->getNumber() == 2 && _boardData[_size - 1] == nullptr) {
-        _boardData[_size - 1] = unit;
+    if (player->getNumber() == 2 && m_boardData[m_size - 1] == nullptr) {
+        m_boardData[m_size - 1] = unit;
     }
 }
 
@@ -59,11 +100,11 @@ void Board::moveUnitForward(std::shared_ptr<IBaseUnit> unit, int count) {
     int newIndex = unitPosition + count * direction;
 
     //bloque acces au cases contenant les bases
-    if (newIndex <= 0 || newIndex >= _size - 1) return;
+    if (newIndex <= 0 || newIndex >= m_size - 1) return;
 
-    if (_boardData[newIndex] == nullptr) {
-        _boardData[newIndex] = unit;
-        _boardData[unitPosition] = nullptr;
+    if (m_boardData[newIndex] == nullptr) {
+        m_boardData[newIndex] = unit;
+        m_boardData[unitPosition] = nullptr;
         p_gameLogger->logAndDraw(
                 "Moving unit " + Helper::getColorString(unit->getOwner()->getColorCode()) + unit->print() +
                 Helper::getColorString(RESET) + " from " + Helper::getColorString(BLUE) + std::to_string(unitPosition) +
@@ -73,8 +114,8 @@ void Board::moveUnitForward(std::shared_ptr<IBaseUnit> unit, int count) {
 
 int Board::findUnitPosition(std::shared_ptr<IBaseUnit> unit) {
     if (unit == nullptr) return -1;
-    for (int i = 0; i < _boardData.size(); ++i) {
-        if (_boardData[i] == unit) {
+    for (int i = 0; i < m_boardData.size(); ++i) {
+        if (m_boardData[i] == unit) {
             return i;
         }
     }
@@ -82,32 +123,30 @@ int Board::findUnitPosition(std::shared_ptr<IBaseUnit> unit) {
 }
 
 vector<int> Board::getDistancesToEnemies(std::shared_ptr<IBaseUnit> pUnit) {
-    p_gameLogger->logAndDraw("In get distance to enemies");
     vector<int> result;
     int unitPosition = findUnitPosition(pUnit);
     std::shared_ptr<IPlayer> unitOwner = pUnit->getOwner();
 
     //For Player One
     if (pUnit->getOwner()->getNumber() == 1) {
-        for (int i = 0; i < _boardData.size(); ++i) {
+        for (int i = 0; i < m_boardData.size(); ++i) {
             //Add the base to the vector
-            if (i == _boardData.size() - 1) {
-                result.push_back(getDistanceValueFromIndexes(_boardData.size() - 1, unitPosition));
-            } else if (_boardData[i] != nullptr && !_boardData[i]->isOwnedBy(unitOwner)) {
+            if (i == m_boardData.size() - 1) {
+                result.push_back(getDistanceValueFromIndexes(m_boardData.size() - 1, unitPosition));
+            } else if (m_boardData[i] != nullptr && !m_boardData[i]->isOwnedBy(unitOwner)) {
                 result.push_back(getDistanceValueFromIndexes(i, unitPosition));
             }
         }
     } else { //Player Two
-        for (int i = _boardData.size() - 1; i >= 0; --i) {
+        for (int i = m_boardData.size() - 1; i >= 0; --i) {
             //Add the base to the vector
             if (i == 0) {
                 result.push_back(getDistanceValueFromIndexes(0, unitPosition));
-            } else if (_boardData[i] != nullptr && !_boardData[i]->isOwnedBy(unitOwner)) {
+            } else if (m_boardData[i] != nullptr && !m_boardData[i]->isOwnedBy(unitOwner)) {
                 result.push_back(getDistanceValueFromIndexes(i, unitPosition));
             }
         }
     }
-
 
     return result;
 }
@@ -123,7 +162,7 @@ void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vecto
 
     for (int i = 0; i < attackedPositions.size(); ++i) {
         int targetUnitPosition = unitPosition + direction * attackedPositions[i];
-        std::shared_ptr<IBaseUnit>pTargetUnit = _boardData[targetUnitPosition];
+        std::shared_ptr<IBaseUnit>pTargetUnit = m_boardData[targetUnitPosition];
         if (pTargetUnit != nullptr) {
             pTargetUnit->ReceiveDamage(pUnit->GetAttackPower());
             p_gameLogger->log(
@@ -160,7 +199,7 @@ void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vecto
                     //Remove enemy unit from the board
                     //delete pTargetUnit;
                     pTargetUnit = nullptr;
-                    _boardData[targetUnitPosition] = nullptr;
+                    m_boardData[targetUnitPosition] = nullptr;
                 }
             }
             p_gameLogger->draw();
@@ -169,7 +208,7 @@ void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vecto
                 p_playerOne->getBase()->ReceiveDamage(pUnit->GetAttackPower());
                 p_gameLogger->logAndDraw("Base got attacked");
             }
-            if (targetUnitPosition == _size - 1) {
+            if (targetUnitPosition == m_size - 1) {
                 p_playerTwo->getBase()->ReceiveDamage(pUnit->GetAttackPower());
                 p_gameLogger->logAndDraw("Base got attacked");
             }
@@ -177,20 +216,35 @@ void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vecto
     }
 }
 
+// STATE CHECKING
+
 bool Board::canPlayerAddUnit(const IPlayer& player) {
     if (player.getNumber() == 1) {
-        return _boardData[0] == nullptr;
+        return m_boardData[0] == nullptr;
     } else {
-        return _boardData[_size - 1] == nullptr;
+        return m_boardData[m_size - 1] == nullptr;
     }
 }
 
+bool Board::isOneBaseDestroyed() {
+    return p_playerOne->getBase()->GetHp() <= 0 || p_playerTwo->getBase()->GetHp() <= 0;
+}
+
+// DRAWING TO THE CONSOLE
+
+void Board::updateView(){
+    p_gameLogger->clear();
+    clear();
+    draw();
+    p_gameLogger->draw();
+}
+
 void Board::draw() {
-    for (int i = 0; i < _boardData.size(); ++i) {
-        if (_boardData[i] != nullptr) {
+    for (int i = 0; i < m_boardData.size(); ++i) {
+        if (m_boardData[i] != nullptr) {
             std::cout << " ";
-            Helper::setColor(_boardData[i]->getOwner()->getColorCode());
-            _boardData[i]->draw();
+            Helper::setColor(m_boardData[i]->getOwner()->getColorCode());
+            m_boardData[i]->draw();
             std::cout << "  ";
         } else {
             std::cout << "    ";
@@ -198,21 +252,21 @@ void Board::draw() {
     }
     std::cout << std::endl;
 
-//    Helper::setColor(RESET);
-//    for (int i = 0; i < _boardData.size(); ++i) {
-//        std::cout << "――― ";
-//    }
+    Helper::setColor(RESET);
+    for (int i = 0; i < m_boardData.size(); ++i) {
+        std::cout << "――― ";
+    }
     std::cout << std::endl;
-    for (int i = 0; i < _boardData.size(); ++i) {
-        if (_boardData[i] != nullptr) {
-            if (_boardData[i]->GetHp() < 5) {
+    for (int i = 0; i < m_boardData.size(); ++i) {
+        if (m_boardData[i] != nullptr) {
+            if (m_boardData[i]->GetHp() < 5) {
                 Helper::setColor(RED);
             } else {
                 Helper::setColor(RESET);
             }
-            std::cout << " " << _boardData[i]->GetHp();
+            std::cout << " " << m_boardData[i]->GetHp();
 
-            if (_boardData[i]->GetHp() < 10) std::cout << " ";
+            if (m_boardData[i]->GetHp() < 10) std::cout << " ";
 
             std::cout << " ";
         } else {
