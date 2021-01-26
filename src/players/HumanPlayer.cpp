@@ -24,7 +24,6 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
     while (choice < 0) {
         cout << endl << Helper::getColorString(CYAN) << "Unit Shop:" << endl;
         cout << "Coins: " << Helper::getColorString(YELLOW) << m_currency << endl;
-
         for (int i = 0; i < unitsInfo.size(); ++i) {
             if(unitsInfo[i].second <= m_currency){
                 Helper::setColor(GREEN);
@@ -32,12 +31,12 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             else{
                 Helper::setColor(RED);
             }
-            cout << i << ". Buy " << unitsInfo[i].first << " for " << unitsInfo[i].second << " coins" << endl;
+            cout << " " << i << ". Buy " << unitsInfo[i].first << " for " << unitsInfo[i].second << " coins" << endl;
             Helper::setColor(RESET);
         }
 
-        Helper::setColor(RESET);
-        cout << "Choose unit to buy:";
+        Helper::setColor(BRIGHTWHITE);
+        cout << "Choose number of the unit you want to buy: ";
         //TODO: parse int
         cin >> choice;
         for (int i = 0; i < unitsInfo.size()+4; ++i) {
@@ -51,7 +50,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             cout << "Invalid unit number. Try again!" << endl;
             Helper::setColor(RESET);
             //Sleep from https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
-            Helper::Sleep(1000);
+            Helper::Sleep(2500);
             Helper::moveCursorUp();
             Helper::eraseLine();
         }
@@ -60,8 +59,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
             Helper::setColor(BLINK);
             cout << "Not enough coins. Try with other unit!" << endl;
             Helper::setColor(RESET);
-            //Sleep from https://stackoverflow.com/questions/4184468/sleep-for-milliseconds
-            Helper::Sleep(1000);
+            Helper::Sleep(2500);
             Helper::moveCursorUp();
             Helper::eraseLine();
             choice = -1;

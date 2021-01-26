@@ -24,7 +24,8 @@ void GameLogger::draw() {
     //Print new logs
     for (int i = 0; i < m_messages.size(); ++i) {
         Helper::setColor(RESET);
-        std::cout << i << ":" << m_messages[i] << std::endl;
+        //adding one space for left margin
+        std::cout << " " << m_messages[i] << std::endl;
         Helper::setColor(RESET);
     }
 

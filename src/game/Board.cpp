@@ -29,7 +29,8 @@ Board::~Board() {
 void Board::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) {
     auto units = getPlayerUnits(pPlayer, actionNumber == 1);
     if(units.empty()){
-        p_gameLogger->logAndDraw("Player has no units!");
+        p_gameLogger->logAndDraw(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
+        + Helper::getColorString(RESET) + " has no units!");
     }
     for (int i = 0; i < units.size(); ++i) {
         //Catapult could kill it's own unit before it's turn -> Segmentation fault
@@ -67,7 +68,6 @@ void Board::doAction(IAction *pAction) {
 vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool isEnemyBaseDirection) {
     vector<std::shared_ptr<IBaseUnit>> result = {};
     if ((owner->getNumber() == 1 && isEnemyBaseDirection) || (owner->getNumber() == 2 && !isEnemyBaseDirection)) {
-        //TODO: auto problem with downcasting
         for (int i = 0; i < m_boardData.size(); i++) {
             if (m_boardData[i] != nullptr && m_boardData[i]->isOwnedBy(owner)) {
                 result.push_back(m_boardData[i]);
@@ -81,7 +81,6 @@ vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer
             }
         }
     }
-    //TODO : check vector
     return result;
 }
 
@@ -206,11 +205,11 @@ void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vecto
         } else {
             if (targetUnitPosition == 0) {
                 p_playerOne->getBase()->ReceiveDamage(pUnit->GetAttackPower());
-                p_gameLogger->logAndDraw("Base got attacked");
+                p_gameLogger->logAndDraw(Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName() + Helper::getColorString(RED) +" base got attacked!");
             }
             if (targetUnitPosition == m_size - 1) {
                 p_playerTwo->getBase()->ReceiveDamage(pUnit->GetAttackPower());
-                p_gameLogger->logAndDraw("Base got attacked");
+                p_gameLogger->logAndDraw(Helper::getColorString(p_playerTwo->getColorCode())+ p_playerTwo->getName()+ Helper::getColorString(RED) + " base got attacked!");
             }
         }
     }
@@ -240,8 +239,30 @@ void Board::updateView(){
 }
 
 void Board::draw() {
+    for (int i = 0; i < m_size; ++i) {
+        if( i == 0 || i == m_size -1) {
+            std::cout << "___ ";
+        }
+        else{
+            std::cout << "    ";
+        }
+    }
+    std::cout << std::endl;
+
     for (int i = 0; i < m_boardData.size(); ++i) {
-        if (m_boardData[i] != nullptr) {
+        if( i == 0 || i == m_size -1){
+            std::cout << "|";
+            if(m_boardData[i] != nullptr){
+                Helper::setColor(m_boardData[i]->getOwner()->getColorCode());
+                m_boardData[i]->draw();
+            }
+            else{
+                std::cout << " ";
+            }
+
+            std::cout << "| ";
+        }
+        else if (m_boardData[i] != nullptr) {
             std::cout << " ";
             Helper::setColor(m_boardData[i]->getOwner()->getColorCode());
             m_boardData[i]->draw();
@@ -277,7 +298,7 @@ void Board::draw() {
 }
 
 void Board::clear() {
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
         Helper::moveCursorUp();
         Helper::eraseLine();
     }

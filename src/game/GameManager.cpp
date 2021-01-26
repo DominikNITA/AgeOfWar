@@ -24,12 +24,12 @@ GameManager::GameManager(int mode, std::string name) : m_mode(mode), m_name(name
 
     std::string playerName;
 
-    std::cout << "First player nick: ";
+    std::cout << " First player nick: ";
     std::cin >> playerName;
     Helper::erasePreviousLine();
     p_playerOne.reset(new HumanPlayer(1, playerName, p_gameLogger));
     if (m_mode == 2) {
-        std::cout << "Second player nick: ";
+        std::cout << " Second player nick: ";
         std::cin >> playerName;
         Helper::erasePreviousLine();
         p_playerTwo.reset(new HumanPlayer(2, playerName, p_gameLogger));
@@ -67,8 +67,6 @@ GameManager::~GameManager() {
 }
 
 void GameManager::startGame() {
-    std::cout << "Age of War - 2020/21 - Polytech Paris-Saclay - Youssef MCHAREK, Dominik NITA" << std::endl
-              << std::endl;
 
     p_board->draw();
 
@@ -76,7 +74,6 @@ void GameManager::startGame() {
 }
 
 void GameManager::gameLoop() {
-    //TODO : check priority of oeprators
     while ((m_currentRound < m_roundLimit) && !m_isFinished) {
         m_currentRound++;
         nextRound();
@@ -113,12 +110,14 @@ void GameManager::nextRound() {
                       + Helper::getColorString(YELLOW) + std::to_string(8) + " coins.");
 
     //2. Player One turn
-    p_gameLogger->logAndDraw(Helper::getColorString(p_playerOne->getColorCode()) + "Player one turn:");
+    p_gameLogger->logAndDraw(Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName()
+                                                    + Helper::getColorString(RESET)  + " turn:");
     playTurn(p_playerOne);
     p_gameLogger->draw();
 
     //3. Player Two turn
-    p_gameLogger->logAndDraw(Helper::getColorString(p_playerTwo->getColorCode()) + "Player two turn:");
+    p_gameLogger->logAndDraw(Helper::getColorString(p_playerTwo->getColorCode())+ p_playerTwo->getName()
+                                                    + Helper::getColorString(RESET)  + " turn:");
     p_gameLogger->draw();
     playTurn(p_playerTwo);
 
@@ -153,10 +152,12 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
             unitToBuy->setOwner(pPlayer);
             p_board->addUnit(unitToBuy, pPlayer);
         } else {
-            p_gameLogger->logAndDraw("Not enough coins to buy unit for player " + std::to_string(pPlayer->getNumber()));
+            p_gameLogger->logAndDraw(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
+                                     + Helper::getColorString(RESET) + " has not enough "+ Helper::getColorString(YELLOW)+"coins"+ Helper::getColorString(RESET)+" to buy any unit. Skipping buying phase...");
         }
     } else {
-        p_gameLogger->logAndDraw("Base position is occupied for player " + std::to_string(pPlayer->getNumber()));
+        p_gameLogger->logAndDraw(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
+                                 + Helper::getColorString(RESET) + " cannot buy units because his base is occupied");
     }
     redrawAll();
     Helper::Sleep(1500);
