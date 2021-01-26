@@ -239,8 +239,32 @@ void Board::updateView(){
 }
 
 void Board::draw() {
+    //print Players names with remaining coins
+    std::cout << Helper::getColorString(p_playerOne->getColorCode())+ p_playerOne->getName() + Helper::getColorString(RESET) + " (" + Helper::getColorString(YELLOW) << p_playerOne->getCurrency() << Helper::getColorString(RESET) + ")" << std::endl;
+    std::cout << Helper::getColorString(p_playerTwo->getColorCode())+ p_playerTwo->getName() + Helper::getColorString(RESET) + " (" + Helper::getColorString(YELLOW) << p_playerTwo->getCurrency() << Helper::getColorString(RESET) + ")" << std::endl;
+
+    //print bases' health
     for (int i = 0; i < m_size; ++i) {
-        if( i == 0 || i == m_size -1) {
+        if (i == 0) {
+            std::cout << p_playerOne->getBase()->GetHp() << " ";
+        }
+        else if ( i == m_size -1) {
+            std::cout << p_playerTwo->getBase()->GetHp() << " ";
+        }
+        else{
+            std::cout << "    ";
+        }
+    }
+    std::cout << std::endl;
+
+    //print bases' roofs
+    for (int i = 0; i < m_size; ++i) {
+        if( i == 0 ) {
+            Helper::setColor(p_playerOne->getColorCode());
+            std::cout << "___ ";
+        }
+        else if(i == m_size -1){
+            Helper::setColor(p_playerTwo->getColorCode());
             std::cout << "___ ";
         }
         else{
@@ -249,23 +273,31 @@ void Board::draw() {
     }
     std::cout << std::endl;
 
-    for (int i = 0; i < m_boardData.size(); ++i) {
+    //print units and bases' walls
+    for (int i = 0; i < m_size; ++i) {
         if( i == 0 || i == m_size -1){
+            if( i== 0){
+                Helper::setColor(p_playerOne->getColorCode());
+            }
+            else{
+                Helper::setColor(p_playerTwo->getColorCode());
+            }
             std::cout << "|";
             if(m_boardData[i] != nullptr){
                 Helper::setColor(m_boardData[i]->getOwner()->getColorCode());
-                m_boardData[i]->draw();
+                std::cout << m_boardData[i]->print();
             }
             else{
                 std::cout << " ";
             }
-
+            if( i== 0){Helper::setColor(p_playerOne->getColorCode());}
+            else{Helper::setColor(p_playerTwo->getColorCode());}
             std::cout << "| ";
         }
         else if (m_boardData[i] != nullptr) {
             std::cout << " ";
             Helper::setColor(m_boardData[i]->getOwner()->getColorCode());
-            m_boardData[i]->draw();
+            std::cout << m_boardData[i]->print();
             std::cout << "  ";
         } else {
             std::cout << "    ";
@@ -273,12 +305,15 @@ void Board::draw() {
     }
     std::cout << std::endl;
 
+    // print cases
     Helper::setColor(RESET);
-    for (int i = 0; i < m_boardData.size(); ++i) {
+    for (int i = 0; i < m_size; ++i) {
         std::cout << "――― ";
     }
     std::cout << std::endl;
-    for (int i = 0; i < m_boardData.size(); ++i) {
+
+
+    for (int i = 0; i < m_size; ++i) {
         if (m_boardData[i] != nullptr) {
             if (m_boardData[i]->GetHp() < 5) {
                 Helper::setColor(RED);
@@ -298,7 +333,7 @@ void Board::draw() {
 }
 
 void Board::clear() {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 6; ++i) {
         Helper::moveCursorUp();
         Helper::eraseLine();
     }

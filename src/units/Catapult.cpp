@@ -14,6 +14,11 @@ Catapult::Catapult(std::shared_ptr<IPlayer>ownedBy) : IBaseUnit(ownedBy) {
     m_killReward = 10;
 }
 
+Catapult::~Catapult() {
+    delete p_lastAction;
+    p_lastAction = nullptr;
+}
+
 std::vector<int> Catapult::getAttackedPositions(int closestEnemy) {
     if (closestEnemy == 2) {
         return std::vector<int>{2, 3};
@@ -24,12 +29,7 @@ std::vector<int> Catapult::getAttackedPositions(int closestEnemy) {
     }
 }
 
-void Catapult::draw() {
-    std::cout << "C";
-}
-
-IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances,
-                             std::shared_ptr<IBaseUnit> selfReference) {
+IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances, std::shared_ptr<IBaseUnit> selfReference) {
     IAction *pResult = nullptr;
 
     switch (actionNumber) {
@@ -64,9 +64,4 @@ IAction *Catapult::getAction(int actionNumber, std::vector<int> enemyDistances,
     delete p_lastAction;
     p_lastAction = pResult;
     return pResult;
-}
-
-Catapult::~Catapult() {
-    delete p_lastAction;
-    p_lastAction = nullptr;
 }

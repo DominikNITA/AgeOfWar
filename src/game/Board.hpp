@@ -14,11 +14,9 @@
 #include "../units/IBaseUnit.hpp"
 #include "GameLogger.hpp"
 
-#define UNIT_POINTER IBaseUnit*
-typedef std::shared_ptr<IBaseUnit> TPtrUnit;
 using std::vector;
 
-class Board : public IDrawable {
+class Board {
 public:
     //General
     Board(std::shared_ptr<IPlayer> pPlayerOne,std::shared_ptr<IPlayer> pPlayerTwo, std::shared_ptr<GameLogger> pGameLogger,int size = 12);
@@ -40,7 +38,7 @@ public:
 
     //DRAWING TO THE CONSOLE
     void updateView();
-    void draw() override;
+    void draw();
     void clear();
     std::string test() {return p_playerOne->getName();}
 

@@ -16,5 +16,4 @@ public:
     virtual std::string GetActionLog() = 0;
 };
 
-
 #endif //AGEOFWAR_IACTION_HPP

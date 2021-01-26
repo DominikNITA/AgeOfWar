@@ -36,7 +36,7 @@ int main(int argc, char * argv[]) {
         Helper::setColor(RESET);
         std::string name = argv[2];
         std::cout << " Game name : " << Helper::getColorString(BRIGHTBLUE) << name<< Helper::getColorString(RESET) << std::endl;
-        std::cout << std::endl << Helper::getColorString(GREEN) << Helper::getColorString(BLINK) <<" Press any button to start..." << Helper::getColorString(RESET);
+        std::cout << std::endl << Helper::getColorString(GREEN) << Helper::getColorString(BLINK) <<" Press enter to start the game..." << Helper::getColorString(RESET);
         getchar();
         //Erasing game information info except the header-title
         Helper::erasePreviousLine();

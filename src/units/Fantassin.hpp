@@ -14,7 +14,6 @@ public:
     ~Fantassin() override;
 
     std::vector<int> getAttackedPositions(int closestEnemy) override;
-    void draw() override;
 
     IAction *
     getAction(int actionNumber, std::vector<int> enemyDistances, std::shared_ptr<IBaseUnit> selfReference) override;

@@ -11,8 +11,9 @@
 class Archer : public IBaseUnit{
 public:
     Archer(std::shared_ptr<IPlayer> ownedBy);
+    ~Archer() override;
+
     std::vector<int> getAttackedPositions(int closestEnemy) override;
-    void draw() override;
 
     IAction *
     getAction(int actionNumber, std::vector<int> enemyDistances, std::shared_ptr<IBaseUnit> selfReference) override;
@@ -20,8 +21,6 @@ public:
     std::string print() override {
         return std::string("A");
     }
-
-    ~Archer() override;
 };
 
 

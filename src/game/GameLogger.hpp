@@ -8,11 +8,11 @@
 
 #include <vector>
 #include <string>
-#include "../utility/IDrawable.hpp"
+
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/vector.hpp>
 
-class GameLogger : public IDrawable {
+class GameLogger{
 public:
     GameLogger() = default;
     void log(const std::string& message);
@@ -20,7 +20,7 @@ public:
     void clear();
     virtual ~GameLogger();
 
-    void draw() override;
+    void draw();
 
 private:
     int m_maxBufferSize = 20;

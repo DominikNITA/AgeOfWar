@@ -27,11 +27,6 @@ std::vector<int> Fantassin::getAttackedPositions(int closestEnemy) {
     }
 }
 
-void Fantassin::draw() {
-    if(m_isSuperSoldier) std::cout << "S";
-    else std::cout << "F";
-}
-
 IAction *Fantassin::getAction(int actionNumber, std::vector<int> enemyDistances,std::shared_ptr<IBaseUnit> selfReference) {
     IAction *pResult = nullptr;
 

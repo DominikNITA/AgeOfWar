@@ -21,6 +21,7 @@ void GameLogger::draw() {
     //Remove old logs
     clear();
 
+    std::cout << "Game logs: " << std::endl;
     //Print new logs
     for (int i = 0; i < m_messages.size(); ++i) {
         Helper::setColor(RESET);
@@ -38,7 +39,7 @@ GameLogger::~GameLogger() {
 }
 
 void GameLogger::clear() {
-    for (int i = 0; i < m_lastDisplayedMessagesCount; ++i) {
+    for (int i = 0; i < m_lastDisplayedMessagesCount + 1; ++i) {
         Helper::moveCursorUp();
         Helper::eraseLine();
     }

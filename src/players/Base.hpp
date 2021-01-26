@@ -5,21 +5,20 @@
 #ifndef AGEOFWAR_BASE_HPP
 #define AGEOFWAR_BASE_HPP
 
-
-#include "../units/IAttackable.hpp"
-#include "../utility/IDrawable.hpp"
-
 #include <cereal/archives/xml.hpp>
+#include "../units/IAttackable.hpp"
 
-class Base : public IAttackable , public IDrawable{
+
+
+class Base : public IAttackable{
 public:
-    Base();
+    Base(){
+        m_hp = 100;
+    }
     Base(int hp) {
         m_hp = hp;
     };
     virtual ~Base() = default;
-    virtual void draw();
-
 
     template<class Archive> void serialize(Archive & archive){
         archive(CEREAL_NVP(m_hp));

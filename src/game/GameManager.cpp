@@ -110,8 +110,9 @@ void GameManager::nextRound() {
                       + Helper::getColorString(YELLOW) + std::to_string(8) + " coins.");
 
     //2. Player One turn
-    p_gameLogger->logAndDraw(Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName()
+    p_gameLogger->log(Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName()
                                                     + Helper::getColorString(RESET)  + " turn:");
+    redrawAll();
     playTurn(p_playerOne);
     p_gameLogger->draw();
 
@@ -152,11 +153,11 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
             unitToBuy->setOwner(pPlayer);
             p_board->addUnit(unitToBuy, pPlayer);
         } else {
-            p_gameLogger->logAndDraw(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
+            p_gameLogger->log(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
                                      + Helper::getColorString(RESET) + " has not enough "+ Helper::getColorString(YELLOW)+"coins"+ Helper::getColorString(RESET)+" to buy any unit. Skipping buying phase...");
         }
     } else {
-        p_gameLogger->logAndDraw(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
+        p_gameLogger->log(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
                                  + Helper::getColorString(RESET) + " cannot buy units because his base is occupied");
     }
     redrawAll();

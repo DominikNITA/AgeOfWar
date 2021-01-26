@@ -14,10 +14,6 @@ Archer::Archer(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(ownedBy) {
     m_killReward = 6;
 }
 
-void Archer::draw() {
-    std::cout << "A";
-}
-
 std::vector<int> Archer::getAttackedPositions(int closestEnemy) {
     if (closestEnemy >= 1 && closestEnemy <= 3) {
         return std::vector<int>{closestEnemy};
