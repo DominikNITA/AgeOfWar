@@ -40,7 +40,6 @@ public:
     void updateView();
     void draw();
     void clear();
-    std::string test() {return p_playerOne->getName();}
 
 private:
     //Variables
