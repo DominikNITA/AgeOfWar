@@ -10,7 +10,8 @@
 
 class Archer : public IBaseUnit{
 public:
-    Archer(std::shared_ptr<IPlayer> ownedBy);
+    explicit Archer(std::shared_ptr<IPlayer> ownedBy);
+    Archer();
     ~Archer() override;
 
     std::vector<int> getAttackedPositions(int closestEnemy) override;
@@ -21,7 +22,12 @@ public:
     std::string print() override {
         return std::string("A");
     }
-};
+    friend class cereal::access;
 
+    template <class Archive>
+    void serialize( Archive & archive )
+    { archive( cereal::base_class<IBaseUnit>(this)); }
+};
+CEREAL_REGISTER_TYPE(Archer)
 
 #endif //AGEOFWAR_ARCHER_HPP

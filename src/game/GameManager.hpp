@@ -30,7 +30,7 @@ public:
 //            p_playerTwo = playerTwo;
 //            std::cout << pboard->test() << std::endl;
 //        }
-    ~GameManager();
+    ~GameManager() = default;
 
     void startGame();
 

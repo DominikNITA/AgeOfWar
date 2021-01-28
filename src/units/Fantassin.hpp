@@ -10,7 +10,8 @@
 
 class Fantassin : public IBaseUnit {
 public:
-    Fantassin(std::shared_ptr<IPlayer> ownedBy);
+    explicit Fantassin(std::shared_ptr<IPlayer> ownedBy);
+    Fantassin();
     ~Fantassin() override;
 
     std::vector<int> getAttackedPositions(int closestEnemy) override;
@@ -27,7 +28,15 @@ public:
 private:
     bool m_hasFirstActionSucceeded = false;
     bool m_isSuperSoldier = false;
+
+    friend class cereal::access;
+
+    template <class Archive>
+    void serialize( Archive & archive )
+    { archive( cereal::base_class<IBaseUnit>(this),m_isSuperSoldier); }
 };
+
+CEREAL_REGISTER_TYPE(Fantassin)
 
 
 #endif //AGEOFWAR_FANTASSIN_HPP

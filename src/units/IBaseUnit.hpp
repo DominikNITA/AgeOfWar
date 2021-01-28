@@ -12,6 +12,7 @@
 #include "IAttacking.hpp"
 #include "../players/IPlayer.hpp"
 #include "../game/actions/IAction.hpp"
+#include <cereal/types/memory.hpp>
 
 
 class IBaseUnit : public IAttackable,
@@ -32,6 +33,12 @@ public:
 protected:
     IAction* p_lastAction = nullptr;
     std::shared_ptr<IPlayer> p_owner = nullptr;
+
+    friend class cereal::access;
+
+    template <class Archive>
+    void serialize( Archive & archive )
+    { archive( p_owner,m_hp); }
 };
 
 #endif //AGEOFWAR_IBASEUNIT_HPP

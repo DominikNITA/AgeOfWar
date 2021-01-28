@@ -15,10 +15,11 @@
 //#include "../libs/cereal/archives/xml.hpp"
 //#include "../libs/cereal/cereal.hpp"
 #include <cereal/cereal.hpp>
+#include <utility>
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/memory.hpp>
 
-GameManager::GameManager(int mode, std::string name) : m_mode(mode), m_name(name) {
+GameManager::GameManager(int mode, std::string name) : m_mode(mode), m_name(std::move(name)) {
     m_currentRound = 0;
     p_gameLogger.reset(new GameLogger());
 
@@ -47,23 +48,6 @@ void GameManager::initializeBuyingManager() {
     p_buyingManager->addUnit("fantassin", 10, new UnitFactory<Fantassin>);
     p_buyingManager->addUnit("archer", 12, new UnitFactory<Archer>);
     p_buyingManager->addUnit("catapult", 20, new UnitFactory<Catapult>);
-}
-
-
-GameManager::~GameManager() {
-//    if(p_playerOne != nullptr){
-//        delete p_playerOne;
-//        p_playerOne = nullptr;
-//    }
-//    if(p_playerTwo != nullptr){
-//        delete p_playerTwo;
-//        p_playerTwo = nullptr;
-//    }
-//    if(p_board != nullptr){
-//        delete p_board;
-//        p_board = nullptr;
-//    }
-//    delete p_buyingManager;
 }
 
 void GameManager::startGame() {
@@ -131,16 +115,19 @@ void GameManager::playTurn(std::shared_ptr<IPlayer> pPlayer) {
     //Make Action 1
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 1 Phase");
     p_board->doActions(1, pPlayer);
+    Helper::Sleep(m_sleepBetweenActions);
     if (m_isFinished) return;
 
     //Make Action 2
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 2 Phase");
     p_board->doActions(2, pPlayer);
+    Helper::Sleep(m_sleepBetweenActions);
     if (m_isFinished) return;
 
     //Make Action 3
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Action 3 Phase");
     p_board->doActions(3, pPlayer);
+    Helper::Sleep(m_sleepBetweenActions);
     p_gameLogger->draw();
 
     if (m_isFinished) return;

@@ -20,17 +20,18 @@ class Board {
 public:
     //General
     Board(std::shared_ptr<IPlayer> pPlayerOne,std::shared_ptr<IPlayer> pPlayerTwo, std::shared_ptr<GameLogger> pGameLogger,int size = 12);
-    Board() { m_boardData.insert(m_boardData.begin(), 12, nullptr); };
+    Board() { m_boardData.insert(m_boardData.begin(), 12, nullptr);
+    m_size = 12;};
     ~Board();
 
     //Methods
-    void doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer);
-    vector<std::shared_ptr<IBaseUnit>> getPlayerUnits(std::shared_ptr<IPlayer> pOwner, bool isEnemyBaseDirection);
-    void addUnit(std::shared_ptr<IBaseUnit> pUnit, std::shared_ptr<IPlayer> player);
-    void moveUnitForward(std::shared_ptr<IBaseUnit> pUnit, int count);
-    int findUnitPosition(std::shared_ptr<IBaseUnit> pUnit);
-    vector<int> getDistancesToEnemies(std::shared_ptr<IBaseUnit> pUnit);
-    void attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vector<int> attackedPositions);
+    void doActions(int actionNumber, const std::shared_ptr<IPlayer>& pPlayer);
+    vector<std::shared_ptr<IBaseUnit>> getPlayerUnits(const std::shared_ptr<IPlayer>& pOwner, bool isEnemyBaseDirection);
+    void addUnit(const std::shared_ptr<IBaseUnit>& pUnit, const std::shared_ptr<IPlayer>& player);
+    void moveUnitForward(const std::shared_ptr<IBaseUnit>& pUnit, int count);
+    int findUnitPosition(const std::shared_ptr<IBaseUnit>& pUnit);
+    vector<int> getDistancesToEnemies(const std::shared_ptr<IBaseUnit>& pUnit);
+    void attackRelativePositions(const std::shared_ptr<IBaseUnit>& pUnit, const std::vector<int>& attackedPositions);
 
     //CHECKING STATE
     bool canPlayerAddUnit(const IPlayer& player);
@@ -39,7 +40,7 @@ public:
     //DRAWING TO THE CONSOLE
     void updateView();
     void draw();
-    void clear();
+    static void clear();
 
 private:
     //Variables
@@ -50,13 +51,13 @@ private:
     std::shared_ptr<GameLogger> p_gameLogger;
     //Methods
     void doAction(IAction* pAction);
-    int getDistanceValueFromIndexes(int index1, int index2);
-    std::string getUnitStringWithPosition(std::shared_ptr<IBaseUnit> unit, int position);
+    static int getDistanceValueFromIndexes(int index1, int index2);
+    static std::string getUnitStringWithPosition(const std::shared_ptr<IBaseUnit>& unit, int position);
 
     friend class cereal::access;
 
     template<class Archive> void serialize(Archive & archive){
-        archive(CEREAL_NVP(m_size), CEREAL_NVP(p_playerOne), CEREAL_NVP(p_playerTwo), CEREAL_NVP(p_gameLogger));
+        archive(CEREAL_NVP(m_size), CEREAL_NVP(p_playerOne), CEREAL_NVP(p_playerTwo), CEREAL_NVP(p_gameLogger), CEREAL_NVP(m_boardData));
     }
 };
 

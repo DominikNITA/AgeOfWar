@@ -3,12 +3,19 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "Archer.hpp"
 #include "../game/actions/ActionNone.hpp"
 #include "../game/actions/ActionAttack.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-Archer::Archer(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(ownedBy) {
+Archer::Archer(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(std::move(ownedBy)) {
+    m_hp = 8;
+    m_attackPower = 3;
+    m_killReward = 6;
+}
+
+Archer::Archer() :IBaseUnit(nullptr){
     m_hp = 8;
     m_attackPower = 3;
     m_killReward = 6;

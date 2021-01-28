@@ -3,8 +3,8 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "Board.hpp"
-#include "../utility/Helper.hpp"
 #include "../units/Fantassin.hpp"
 #include "actions/ActionMove.hpp"
 #include "actions/ActionAttack.hpp"
@@ -13,9 +13,9 @@
 Board::Board(std::shared_ptr<IPlayer> pPlayerOne, std::shared_ptr<IPlayer> pPlayerTwo, std::shared_ptr<GameLogger> pGameLogger, int size) {
     m_size = size;
     m_boardData.insert(m_boardData.begin(), size, nullptr);
-    p_playerOne = pPlayerOne;
-    p_playerTwo = pPlayerTwo;
-    p_gameLogger = pGameLogger;
+    p_playerOne = std::move(pPlayerOne);
+    p_playerTwo = std::move(pPlayerTwo);
+    p_gameLogger = std::move(pGameLogger);
 }
 
 Board::~Board() {
@@ -26,16 +26,16 @@ Board::~Board() {
 //    std::vector<IBaseUnit *>().swap(m_boardData);
 }
 
-void Board::doActions(int actionNumber, std::shared_ptr<IPlayer> pPlayer) {
+void Board::doActions(int actionNumber, const std::shared_ptr<IPlayer>& pPlayer) {
     auto units = getPlayerUnits(pPlayer, actionNumber == 1);
     if(units.empty()){
         p_gameLogger->logAndDraw(Helper::getColorString(pPlayer->getColorCode())+ pPlayer->getName()
         + Helper::getColorString(RESET) + " has no units!");
     }
-    for (int i = 0; i < units.size(); ++i) {
+    for (auto & unit : units) {
         //Catapult could kill it's own unit before it's turn -> Segmentation fault
 //        if(units[i] == nullptr) continue;
-        auto action = units[i]->getAction(actionNumber, getDistancesToEnemies(units[i]), units[i]);
+        auto action = unit->getAction(actionNumber, getDistancesToEnemies(unit), unit);
         doAction(action);
         if(isOneBaseDestroyed()){
             break;
@@ -57,7 +57,7 @@ void Board::doAction(IAction *pAction) {
     else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
         attackRelativePositions(std::dynamic_pointer_cast<IBaseUnit>(pAttackAction->GetAttacker()), pAttackAction->GetAttackedPositions());
     }
-    else if (auto pNoneAction = dynamic_cast<ActionNone*>(pAction)) {
+    else if (dynamic_cast<ActionNone*>(pAction) != nullptr) {
         /*std::cout << "Nothing todo!\n";*/
     }
     else{
@@ -65,17 +65,17 @@ void Board::doAction(IAction *pAction) {
     }
 }
 
-vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer> owner, bool isEnemyBaseDirection) {
+vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(const std::shared_ptr<IPlayer>& owner, bool isEnemyBaseDirection) {
     vector<std::shared_ptr<IBaseUnit>> result = {};
     if ((owner->getNumber() == 1 && isEnemyBaseDirection) || (owner->getNumber() == 2 && !isEnemyBaseDirection)) {
-        for (int i = 0; i < m_boardData.size(); i++) {
-            if (m_boardData[i] != nullptr && m_boardData[i]->isOwnedBy(owner)) {
-                result.push_back(m_boardData[i]);
+        for (auto & i : m_boardData) {
+            if (i != nullptr && i->isOwnedBy(owner)) {
+                result.push_back(i);
             }
         }
     } else if ((owner->getNumber() == 1 && !isEnemyBaseDirection) ||
                (owner->getNumber() == 2 && isEnemyBaseDirection)) {
-        for (int i = m_boardData.size() - 1; i >= 0; i--) {
+        for (int i = m_size - 1; i >= 0; i--) {
             if (m_boardData[i] != nullptr && m_boardData[i]->isOwnedBy(owner)) {
                 result.push_back(m_boardData[i]);
             }
@@ -84,7 +84,7 @@ vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(std::shared_ptr<IPlayer
     return result;
 }
 
-void Board::addUnit(std::shared_ptr<IBaseUnit> unit, std::shared_ptr<IPlayer> player) {
+void Board::addUnit(const std::shared_ptr<IBaseUnit>& unit, const std::shared_ptr<IPlayer>& player) {
     if (player->getNumber() == 1 && m_boardData[0] == nullptr) {
         m_boardData[0] = unit;
     }
@@ -93,7 +93,7 @@ void Board::addUnit(std::shared_ptr<IBaseUnit> unit, std::shared_ptr<IPlayer> pl
     }
 }
 
-void Board::moveUnitForward(std::shared_ptr<IBaseUnit> unit, int count) {
+void Board::moveUnitForward(const std::shared_ptr<IBaseUnit>& unit, int count) {
     int unitPosition = findUnitPosition(unit);
     int direction = unit->getOwner()->getNumber() == 1 ? 1 : -1;
     int newIndex = unitPosition + count * direction;
@@ -111,7 +111,7 @@ void Board::moveUnitForward(std::shared_ptr<IBaseUnit> unit, int count) {
     }
 }
 
-int Board::findUnitPosition(std::shared_ptr<IBaseUnit> unit) {
+int Board::findUnitPosition(const std::shared_ptr<IBaseUnit>& unit) {
     if (unit == nullptr) return -1;
     for (int i = 0; i < m_boardData.size(); ++i) {
         if (m_boardData[i] == unit) {
@@ -121,7 +121,7 @@ int Board::findUnitPosition(std::shared_ptr<IBaseUnit> unit) {
     return -1;
 }
 
-vector<int> Board::getDistancesToEnemies(std::shared_ptr<IBaseUnit> pUnit) {
+vector<int> Board::getDistancesToEnemies(const std::shared_ptr<IBaseUnit>& pUnit) {
     vector<int> result;
     int unitPosition = findUnitPosition(pUnit);
     std::shared_ptr<IPlayer> unitOwner = pUnit->getOwner();
@@ -131,13 +131,13 @@ vector<int> Board::getDistancesToEnemies(std::shared_ptr<IBaseUnit> pUnit) {
         for (int i = 0; i < m_boardData.size(); ++i) {
             //Add the base to the vector
             if (i == m_boardData.size() - 1) {
-                result.push_back(getDistanceValueFromIndexes(m_boardData.size() - 1, unitPosition));
+                result.push_back(getDistanceValueFromIndexes(m_size - 1, unitPosition));
             } else if (m_boardData[i] != nullptr && !m_boardData[i]->isOwnedBy(unitOwner)) {
                 result.push_back(getDistanceValueFromIndexes(i, unitPosition));
             }
         }
     } else { //Player Two
-        for (int i = m_boardData.size() - 1; i >= 0; --i) {
+        for (int i = m_size - 1; i >= 0; --i) {
             //Add the base to the vector
             if (i == 0) {
                 result.push_back(getDistanceValueFromIndexes(0, unitPosition));
@@ -154,13 +154,13 @@ int Board::getDistanceValueFromIndexes(int index1, int index2) {
     return abs(index1 - index2);
 }
 
-void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vector<int> attackedPositions) {
+void Board::attackRelativePositions(const std::shared_ptr<IBaseUnit>& pUnit, const std::vector<int>& attackedPositions) {
     //General variables
     int unitPosition = findUnitPosition(pUnit);
     int direction = pUnit->getOwner()->getNumber() == 1 ? 1 : -1;
 
-    for (int i = 0; i < attackedPositions.size(); ++i) {
-        int targetUnitPosition = unitPosition + direction * attackedPositions[i];
+    for (int attackedPosition : attackedPositions) {
+        int targetUnitPosition = unitPosition + direction * attackedPosition;
         std::shared_ptr<IBaseUnit>pTargetUnit = m_boardData[targetUnitPosition];
         if (pTargetUnit != nullptr) {
             pTargetUnit->ReceiveDamage(pUnit->GetAttackPower());
@@ -188,7 +188,7 @@ void Board::attackRelativePositions(std::shared_ptr<IBaseUnit> pUnit, std::vecto
 
                     //Deal with special case for Fantassin
                     if (auto pThisFantassin = std::dynamic_pointer_cast<Fantassin>(pUnit)) {
-                        if (auto pEnemyFantassin = std::dynamic_pointer_cast<Fantassin>(pTargetUnit)) {
+                        if (std::dynamic_pointer_cast<Fantassin>(pTargetUnit) != nullptr) {
                             p_gameLogger->log(
                                     "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " is upgraded to " +
                                     Helper::getColorString(YELLOW) + "SuperSoldier!");
@@ -333,13 +333,13 @@ void Board::draw() {
 }
 
 void Board::clear() {
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 7; ++i) {
         Helper::moveCursorUp();
         Helper::eraseLine();
     }
 }
 
-std::string Board::getUnitStringWithPosition(std::shared_ptr<IBaseUnit>unit, int position) {
+std::string Board::getUnitStringWithPosition(const std::shared_ptr<IBaseUnit>&unit, int position) {
     return Helper::getColorString(unit->getOwner()->getColorCode()) + unit->print() +
            std::to_string(position) + Helper::getColorString(RESET);
 }

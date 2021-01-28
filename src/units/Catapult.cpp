@@ -3,12 +3,19 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "Catapult.hpp"
 #include "../game/actions/ActionAttack.hpp"
 #include "../game/actions/ActionNone.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-Catapult::Catapult(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(ownedBy) {
+Catapult::Catapult(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(std::move(ownedBy)) {
+    m_hp = 12;
+    m_attackPower = 6;
+    m_killReward = 10;
+}
+
+Catapult::Catapult() : IBaseUnit(nullptr) {
     m_hp = 12;
     m_attackPower = 6;
     m_killReward = 10;

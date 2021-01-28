@@ -13,7 +13,7 @@
 struct IUnitFactory { virtual std::shared_ptr<IBaseUnit> create(std::shared_ptr<IPlayer> pOwner) = 0;};
 
 template <typename Type> struct UnitFactory : public IUnitFactory {
-    virtual std::shared_ptr<IBaseUnit> create(std::shared_ptr<IPlayer> pOwner){
+    std::shared_ptr<IBaseUnit> create(std::shared_ptr<IPlayer> pOwner) override{
         return std::shared_ptr<IBaseUnit>(new Type(pOwner));
     }
 };

@@ -1,3 +1,4 @@
+#include <algorithm>
 //
 // Created by Dominik on 1/16/2021.
 //
@@ -11,12 +12,13 @@
 
 class BuyingManager {
 public:
-    BuyingManager() {}
+    BuyingManager() = default;
     std::vector<std::pair<std::string,int>> getPurchasableUnits();
-    void addUnit(std::string, int price, IUnitFactory* unitFactory);
+    void addUnit(const std::string&, int price, IUnitFactory* unitFactory);
     std::shared_ptr<IBaseUnit> returnUnit(int index) { return m_unitFactories[index]->create(nullptr);}
-    int getMinimalPrice() {return m_minimalPrice;}
-    std::string getUnitNameByIndex(int index);
+    int getMinimalPrice() const {return m_minimalPrice;}
+
+    __unused std::string getUnitNameByIndex(int index);
 
 private:
     std::vector<std::pair<std::string,int>> m_purchasableUnits;

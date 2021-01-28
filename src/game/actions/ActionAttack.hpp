@@ -9,10 +9,11 @@
 #include "IAction.hpp"
 #include "../../units/IAttacking.hpp"
 #include <memory>
+#include <utility>
 
 class ActionAttack : public IAction{
 public:
-    ActionAttack(std::shared_ptr<IAttacking> attacker, std::vector<int> attackedPositions) : _attacker(attacker), _attackedPositions(attackedPositions) {}
+    ActionAttack(std::shared_ptr<IAttacking> attacker, std::vector<int> attackedPositions) : _attacker(std::move(attacker)), _attackedPositions(std::move(attackedPositions)) {}
     std::shared_ptr<IAttacking> GetAttacker() {return _attacker;}
     std::vector<int> GetAttackedPositions() {return _attackedPositions;}
 

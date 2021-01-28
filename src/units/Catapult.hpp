@@ -10,7 +10,8 @@
 
 class Catapult : public IBaseUnit {
 public:
-    Catapult(std::shared_ptr<IPlayer> ownedBy);
+    explicit Catapult(std::shared_ptr<IPlayer> ownedBy);
+    Catapult();
     ~Catapult() override;
 
     std::vector<int> getAttackedPositions(int closestEnemy) override;
@@ -23,7 +24,12 @@ public:
 
 private:
     bool m_hasFirstActionSucceeded = false;
-};
+    friend class cereal::access;
 
+    template <class Archive>
+    void serialize( Archive & archive )
+    { archive( cereal::base_class<IBaseUnit>(this)); }
+};
+CEREAL_REGISTER_TYPE(Catapult)
 
 #endif //AGEOFWAR_CATAPULT_HPP

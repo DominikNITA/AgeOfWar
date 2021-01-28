@@ -1,3 +1,4 @@
+#include <algorithm>
 //
 // Created by dominik on 12/27/20.
 //
@@ -5,17 +6,17 @@
 #include <iostream>
 #include "HumanPlayer.hpp"
 #include "../utility/Helper.hpp"
-#include <chrono>
 #include <thread>
+#include <utility>
 
 using std::cout;using std::endl; using std::cin;
 
-HumanPlayer::HumanPlayer(int i,std::string n,std::shared_ptr<GameLogger> p) : IPlayer(i,n,p) {}
+HumanPlayer::HumanPlayer(int i,std::string n,std::shared_ptr<GameLogger> p) : IPlayer(i,std::move(n),std::move(p)) {}
 
-HumanPlayer::HumanPlayer(int number, std::string name, int colorCode, int currency, std::shared_ptr<Base> base) : IPlayer(number,name,nullptr) {
+__unused HumanPlayer::HumanPlayer(int number, std::string name, int colorCode, int currency, std::shared_ptr<Base> base) : IPlayer(number,std::move(name),nullptr) {
     m_colorCode = colorCode;
     m_currency = currency;
-    p_base = base;
+    p_base = std::move(base);
 }
 
 int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsInfo) {

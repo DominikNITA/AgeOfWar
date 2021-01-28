@@ -3,7 +3,7 @@
 //
 
 #include "ActionNone.hpp"
-
+///Not used
 std::string ActionNone::GetActionLog() {
     return "skipped his turn";
 }

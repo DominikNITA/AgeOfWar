@@ -3,12 +3,19 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "Fantassin.hpp"
 #include "../game/actions/ActionAttack.hpp"
 #include "../game/actions/ActionNone.hpp"
 #include "../game/actions/ActionMove.hpp"
 
-Fantassin::Fantassin(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(ownedBy) {
+Fantassin::Fantassin(std::shared_ptr<IPlayer> ownedBy) : IBaseUnit(std::move(ownedBy)) {
+    m_hp = 10;
+    m_attackPower = 4;
+    m_killReward = 5;
+}
+
+Fantassin::Fantassin() : IBaseUnit(nullptr) {
     m_hp = 10;
     m_attackPower = 4;
     m_killReward = 5;
