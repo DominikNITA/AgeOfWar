@@ -14,12 +14,22 @@
 
 class GameLogger{
 public:
+    /// Default constructor
     GameLogger() = default;
-    void log(const std::string& message);
-    void logAndDraw(const std::string& message);
-    void clear();
-    virtual ~GameLogger();
 
+    /// Destructor clearing messages
+    ~GameLogger();
+
+    /// Add message to the buffor and delete oldest message when needed
+    void log(const std::string& message);
+
+    /// Add message and draw it
+    void logAndDraw(const std::string& message);
+
+    /// Clear console view output
+    void clear();
+
+    /// Update messages view in the console
     void draw();
 
 private:
@@ -27,6 +37,7 @@ private:
     int m_lastDisplayedMessagesCount = 0;
     std::vector<std::string> m_messages;
 
+    // Serialization
     friend class cereal::access;
 
     template<class Archive> void serialize(Archive & archive){

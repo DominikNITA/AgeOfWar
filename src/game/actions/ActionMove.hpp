@@ -20,15 +20,15 @@ public:
     ActionMove(std::shared_ptr<IBaseUnit> unit, int count) : m_unit(std::move(unit)), m_count(count) {}
 
     /// Not used
-    std::string GetActionLog() override;
+    std::string getActionLog() override {return "Move action";};
 
     /// Getter for source unit
     /// \return Source unit wanting to move forward
-    std::shared_ptr<IBaseUnit>getUnit() const;
+    std::shared_ptr<IBaseUnit>getUnit() const {return m_unit;};
 
     /// Getter for amount of blocks to move
-    /// \return
-    int getCount() const;
+    /// \return Amount of blocks to move
+    int getCount() const {return m_count;};
 
 private:
     std::shared_ptr<IBaseUnit> m_unit;

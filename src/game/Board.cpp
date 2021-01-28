@@ -55,13 +55,14 @@ void Board::doAction(IAction *pAction) {
         moveUnitForward(pMoveAction->getUnit(), pMoveAction->getCount());
     }
     else if(auto pAttackAction = dynamic_cast<ActionAttack*>(pAction)){
-        attackRelativePositions(std::dynamic_pointer_cast<IBaseUnit>(pAttackAction->GetAttacker()), pAttackAction->GetAttackedPositions());
+        attackRelativePositions(std::dynamic_pointer_cast<IBaseUnit>(pAttackAction->getAttacker()),
+                                pAttackAction->getAttackedPositions());
     }
     else if (dynamic_cast<ActionNone*>(pAction) != nullptr) {
         /*std::cout << "Nothing todo!\n";*/
     }
     else{
-        std::cout << "ERROR: unknown action type: " << pAction->GetActionLog() << std::endl;
+        std::cout << "ERROR: unknown action type: " << pAction->getActionLog() << std::endl;
     }
 }
 
@@ -163,7 +164,7 @@ void Board::attackRelativePositions(const std::shared_ptr<IBaseUnit>& pUnit, con
         int targetUnitPosition = unitPosition + direction * attackedPosition;
         std::shared_ptr<IBaseUnit>pTargetUnit = m_boardData[targetUnitPosition];
         if (pTargetUnit != nullptr) {
-            pTargetUnit->ReceiveDamage(pUnit->GetAttackPower());
+            pTargetUnit->receiveDamage(pUnit->getAttackPower());
             p_gameLogger->log(
                     "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " attacked enemy unit " +
                     getUnitStringWithPosition(pTargetUnit, targetUnitPosition));
@@ -171,7 +172,7 @@ void Board::attackRelativePositions(const std::shared_ptr<IBaseUnit>& pUnit, con
             if (pTargetUnit->GetHp() <= 0) {
                 if (pTargetUnit->getOwner() == pUnit->getOwner()) {
                     //Heal unit back to 1 hp
-                    pTargetUnit->ReceiveDamage(-(pTargetUnit->GetHp() - 1));
+                    pTargetUnit->receiveDamage(-(pTargetUnit->GetHp() - 1));
                     p_gameLogger->log(Helper::getColorString(BRIGHTCYAN) + "Unit " +
                                       getUnitStringWithPosition(pTargetUnit, targetUnitPosition) +
                                       Helper::getColorString(BRIGHTCYAN) +
@@ -204,11 +205,11 @@ void Board::attackRelativePositions(const std::shared_ptr<IBaseUnit>& pUnit, con
             p_gameLogger->draw();
         } else {
             if (targetUnitPosition == 0) {
-                p_playerOne->getBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_playerOne->getBase()->receiveDamage(pUnit->getAttackPower());
                 p_gameLogger->logAndDraw(Helper::getColorString(p_playerOne->getColorCode()) + p_playerOne->getName() + Helper::getColorString(RED) +" base got attacked!");
             }
             if (targetUnitPosition == m_size - 1) {
-                p_playerTwo->getBase()->ReceiveDamage(pUnit->GetAttackPower());
+                p_playerTwo->getBase()->receiveDamage(pUnit->getAttackPower());
                 p_gameLogger->logAndDraw(Helper::getColorString(p_playerTwo->getColorCode())+ p_playerTwo->getName()+ Helper::getColorString(RED) + " base got attacked!");
             }
         }

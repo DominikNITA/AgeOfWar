@@ -14,7 +14,7 @@ public:
     virtual ~IAction() = default;
 
     //Not used -> by having a virtual method we make this class purely virtual and block the possibility of initializing it
-    virtual std::string GetActionLog() = 0;
+    virtual std::string getActionLog() = 0;
 };
 
 #endif //AGEOFWAR_IACTION_HPP

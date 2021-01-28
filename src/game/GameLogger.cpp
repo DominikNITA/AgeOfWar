@@ -5,7 +5,12 @@
 #include "GameLogger.hpp"
 #include "../utility/Helper.hpp"
 
+GameLogger::~GameLogger() {
+    m_messages.clear();
+}
+
 void GameLogger::log(const std::string &message) {
+    // If we achieved max capacity we have to delete the oldest messages (it's positioned at the beginning of the vector)
     if(m_messages.size() >= m_maxBufferSize){
         m_messages.erase(m_messages.begin());
     }
@@ -21,21 +26,16 @@ void GameLogger::draw() {
     //Remove old logs
     clear();
 
-    //std::cout << "Game logs: " << std::endl;
     //Print new logs
     for (auto & m_message : m_messages) {
         Helper::setColor(RESET);
-        //adding one space for left margin
+        //adding left margin for better visibility
         std::cout << " " << m_message << std::endl;
         Helper::setColor(RESET);
     }
 
-    //Update the last size of buffer
+    //Update the last count of displayed messages
     m_lastDisplayedMessagesCount = m_messages.size();
-}
-
-GameLogger::~GameLogger() {
-    m_messages.clear();
 }
 
 void GameLogger::clear() {
@@ -45,5 +45,3 @@ void GameLogger::clear() {
     }
     m_lastDisplayedMessagesCount = 0;
 }
-
-

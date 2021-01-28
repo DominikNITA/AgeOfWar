@@ -8,10 +8,11 @@
 
 #include "IAction.hpp"
 
-class ActionNone : public IAction{
+class ActionNone : public IAction {
 public:
-    ActionNone();
-    std::string GetActionLog() override;
+    ActionNone() = default;
+
+    std::string getActionLog() override { return "skipped his turn"; };
 };
 
 
