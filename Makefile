@@ -258,114 +258,6 @@ src/game/GameManager.cpp.s:
 	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/GameManager.cpp.s
 .PHONY : src/game/GameManager.cpp.s
 
-src/game/actions/ActionAttack.o: src/game/actions/ActionAttack.cpp.o
-
-.PHONY : src/game/actions/ActionAttack.o
-
-# target to build an object file
-src/game/actions/ActionAttack.cpp.o:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionAttack.cpp.o
-.PHONY : src/game/actions/ActionAttack.cpp.o
-
-src/game/actions/ActionAttack.i: src/game/actions/ActionAttack.cpp.i
-
-.PHONY : src/game/actions/ActionAttack.i
-
-# target to preprocess a source file
-src/game/actions/ActionAttack.cpp.i:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionAttack.cpp.i
-.PHONY : src/game/actions/ActionAttack.cpp.i
-
-src/game/actions/ActionAttack.s: src/game/actions/ActionAttack.cpp.s
-
-.PHONY : src/game/actions/ActionAttack.s
-
-# target to generate assembly for a file
-src/game/actions/ActionAttack.cpp.s:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionAttack.cpp.s
-.PHONY : src/game/actions/ActionAttack.cpp.s
-
-src/game/actions/ActionMove.o: src/game/actions/ActionMove.cpp.o
-
-.PHONY : src/game/actions/ActionMove.o
-
-# target to build an object file
-src/game/actions/ActionMove.cpp.o:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionMove.cpp.o
-.PHONY : src/game/actions/ActionMove.cpp.o
-
-src/game/actions/ActionMove.i: src/game/actions/ActionMove.cpp.i
-
-.PHONY : src/game/actions/ActionMove.i
-
-# target to preprocess a source file
-src/game/actions/ActionMove.cpp.i:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionMove.cpp.i
-.PHONY : src/game/actions/ActionMove.cpp.i
-
-src/game/actions/ActionMove.s: src/game/actions/ActionMove.cpp.s
-
-.PHONY : src/game/actions/ActionMove.s
-
-# target to generate assembly for a file
-src/game/actions/ActionMove.cpp.s:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionMove.cpp.s
-.PHONY : src/game/actions/ActionMove.cpp.s
-
-src/game/actions/ActionNone.o: src/game/actions/ActionNone.cpp.o
-
-.PHONY : src/game/actions/ActionNone.o
-
-# target to build an object file
-src/game/actions/ActionNone.cpp.o:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionNone.cpp.o
-.PHONY : src/game/actions/ActionNone.cpp.o
-
-src/game/actions/ActionNone.i: src/game/actions/ActionNone.cpp.i
-
-.PHONY : src/game/actions/ActionNone.i
-
-# target to preprocess a source file
-src/game/actions/ActionNone.cpp.i:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionNone.cpp.i
-.PHONY : src/game/actions/ActionNone.cpp.i
-
-src/game/actions/ActionNone.s: src/game/actions/ActionNone.cpp.s
-
-.PHONY : src/game/actions/ActionNone.s
-
-# target to generate assembly for a file
-src/game/actions/ActionNone.cpp.s:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/game/actions/ActionNone.cpp.s
-.PHONY : src/game/actions/ActionNone.cpp.s
-
-src/players/Base.o: src/players/Base.cpp.o
-
-.PHONY : src/players/Base.o
-
-# target to build an object file
-src/players/Base.cpp.o:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/players/Base.cpp.o
-.PHONY : src/players/Base.cpp.o
-
-src/players/Base.i: src/players/Base.cpp.i
-
-.PHONY : src/players/Base.i
-
-# target to preprocess a source file
-src/players/Base.cpp.i:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/players/Base.cpp.i
-.PHONY : src/players/Base.cpp.i
-
-src/players/Base.s: src/players/Base.cpp.s
-
-.PHONY : src/players/Base.s
-
-# target to generate assembly for a file
-src/players/Base.cpp.s:
-	$(MAKE) -f CMakeFiles/AgeOfWar.dir/build.make CMakeFiles/AgeOfWar.dir/src/players/Base.cpp.s
-.PHONY : src/players/Base.cpp.s
-
 src/players/ComputerPlayer.o: src/players/ComputerPlayer.cpp.o
 
 .PHONY : src/players/ComputerPlayer.o
@@ -552,18 +444,6 @@ help:
 	@echo "... src/game/GameManager.o"
 	@echo "... src/game/GameManager.i"
 	@echo "... src/game/GameManager.s"
-	@echo "... src/game/actions/ActionAttack.o"
-	@echo "... src/game/actions/ActionAttack.i"
-	@echo "... src/game/actions/ActionAttack.s"
-	@echo "... src/game/actions/ActionMove.o"
-	@echo "... src/game/actions/ActionMove.i"
-	@echo "... src/game/actions/ActionMove.s"
-	@echo "... src/game/actions/ActionNone.o"
-	@echo "... src/game/actions/ActionNone.i"
-	@echo "... src/game/actions/ActionNone.s"
-	@echo "... src/players/Base.o"
-	@echo "... src/players/Base.i"
-	@echo "... src/players/Base.s"
 	@echo "... src/players/ComputerPlayer.o"
 	@echo "... src/players/ComputerPlayer.i"
 	@echo "... src/players/ComputerPlayer.s"

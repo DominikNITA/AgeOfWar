@@ -15,7 +15,7 @@ class HumanPlayer : public IPlayer{
 public:
     HumanPlayer(int number, std::string name, std::shared_ptr<GameLogger> pGameLogger);
 
-    __unused HumanPlayer(int number, std::string name,int colorCode, int currency, std::shared_ptr<Base> base);
+    HumanPlayer(int number, std::string name,int colorCode, int currency, std::shared_ptr<Base> base);
 
     HumanPlayer() = default;
 

@@ -172,7 +172,7 @@ void Board::attackRelativePositions(const std::shared_ptr<IBaseUnit>& pUnit, con
             if (pTargetUnit->GetHp() <= 0) {
                 if (pTargetUnit->getOwner() == pUnit->getOwner()) {
                     //Heal unit back to 1 hp
-                    pTargetUnit->receiveDamage(-(pTargetUnit->GetHp() - 1));
+                    pTargetUnit->setHp(1);
                     p_gameLogger->log(Helper::getColorString(BRIGHTCYAN) + "Unit " +
                                       getUnitStringWithPosition(pTargetUnit, targetUnitPosition) +
                                       Helper::getColorString(BRIGHTCYAN) +
