@@ -1,7 +1,3 @@
-//
-// Created by Dominik on 12/29/2020.
-//
-
 #ifndef AGEOFWAR_ACTIONATTACK_HPP
 #define AGEOFWAR_ACTIONATTACK_HPP
 

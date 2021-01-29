@@ -1,7 +1,3 @@
-//
-// Created by dominik on 12/27/20.
-//
-
 #ifndef AGEOFWAR_CATAPULT_HPP
 #define AGEOFWAR_CATAPULT_HPP
 

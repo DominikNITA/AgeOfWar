@@ -1,7 +1,3 @@
-//
-// Created by Dominik on 12/28/2020.
-//
-
 #include "GameLogger.hpp"
 #include "../utility/Helper.hpp"
 

@@ -1,7 +1,3 @@
-//
-// Created by Dominik on 1/3/2021.
-//
-
 #ifndef AGEOFWAR_UNITFACTORY_HPP
 #define AGEOFWAR_UNITFACTORY_HPP
 

@@ -1,8 +1,4 @@
 #include <algorithm>
-//
-// Created by dominik on 12/27/20.
-//
-
 #include <iostream>
 #include "HumanPlayer.hpp"
 #include "../utility/Helper.hpp"
@@ -38,7 +34,7 @@ int HumanPlayer::chooseUnitToBuy(std::vector<std::pair<std::string, int>> unitsI
 
         Helper::setColor(BRIGHTWHITE);
         cout << "Choose number of the unit you want to buy: ";
-        //TODO: parse int
+        //TODO: parse int and check for invalid input
         cin >> choice;
         for (int i = 0; i < unitsInfo.size()+4; ++i) {
             Helper::moveCursorUp();

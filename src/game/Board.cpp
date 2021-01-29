@@ -1,7 +1,3 @@
-//
-// Created by Dominik on 12/28/2020.
-//
-
 #include <iostream>
 #include <utility>
 #include "Board.hpp"
@@ -33,8 +29,6 @@ void Board::doActions(int actionNumber, const std::shared_ptr<IPlayer>& pPlayer)
         + Helper::getColorString(RESET) + " has no units!");
     }
     for (auto & unit : units) {
-        //Catapult could kill it's own unit before it's turn -> Segmentation fault
-//        if(units[i] == nullptr) continue;
         auto action = unit->getAction(actionNumber, getDistancesToEnemies(unit), unit);
         doAction(action);
         if(isOneBaseDestroyed()){
@@ -48,7 +42,7 @@ void Board::doActions(int actionNumber, const std::shared_ptr<IPlayer>& pPlayer)
 
 void Board::doAction(IAction *pAction) {
     if(pAction == nullptr){
-        std::cout << "Null action pointer\n";
+        p_gameLogger->log("ERROR: Null action pointer");
         return;
     }
     if(auto pMoveAction = dynamic_cast<ActionMove*>(pAction)){
@@ -59,23 +53,24 @@ void Board::doAction(IAction *pAction) {
                                 pAttackAction->getAttackedPositions());
     }
     else if (dynamic_cast<ActionNone*>(pAction) != nullptr) {
-        /*std::cout << "Nothing todo!\n";*/
+        /*std::cout << "Nothing to do!\n";*/
     }
     else{
-        std::cout << "ERROR: unknown action type: " << pAction->getActionLog() << std::endl;
+        p_gameLogger->log("ERROR: unknown action type: " + pAction->getActionLog());
     }
 }
 
-vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(const std::shared_ptr<IPlayer>& owner, bool isEnemyBaseDirection) {
+vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(const std::shared_ptr<IPlayer>& owner, bool isTowardsEnemyBaseDirection) {
     vector<std::shared_ptr<IBaseUnit>> result = {};
-    if ((owner->getNumber() == 1 && isEnemyBaseDirection) || (owner->getNumber() == 2 && !isEnemyBaseDirection)) {
+    // Get given player's units from specified direction
+    if ((owner->getNumber() == 1 && isTowardsEnemyBaseDirection) || (owner->getNumber() == 2 && !isTowardsEnemyBaseDirection)) {
         for (auto & i : m_boardData) {
             if (i != nullptr && i->isOwnedBy(owner)) {
                 result.push_back(i);
             }
         }
-    } else if ((owner->getNumber() == 1 && !isEnemyBaseDirection) ||
-               (owner->getNumber() == 2 && isEnemyBaseDirection)) {
+    } else if ((owner->getNumber() == 1 && !isTowardsEnemyBaseDirection) ||
+               (owner->getNumber() == 2 && isTowardsEnemyBaseDirection)) {
         for (int i = m_size - 1; i >= 0; i--) {
             if (m_boardData[i] != nullptr && m_boardData[i]->isOwnedBy(owner)) {
                 result.push_back(m_boardData[i]);
@@ -86,6 +81,7 @@ vector<std::shared_ptr<IBaseUnit>> Board::getPlayerUnits(const std::shared_ptr<I
 }
 
 void Board::addUnit(const std::shared_ptr<IBaseUnit>& unit, const std::shared_ptr<IPlayer>& player) {
+    // Check for empty base then place unit
     if (player->getNumber() == 1 && m_boardData[0] == nullptr) {
         m_boardData[0] = unit;
     }
@@ -164,6 +160,7 @@ void Board::attackRelativePositions(const std::shared_ptr<IBaseUnit>& pUnit, con
         int targetUnitPosition = unitPosition + direction * attackedPosition;
         std::shared_ptr<IBaseUnit>pTargetUnit = m_boardData[targetUnitPosition];
         if (pTargetUnit != nullptr) {
+            //Perform attack
             pTargetUnit->receiveDamage(pUnit->getAttackPower());
             p_gameLogger->log(
                     "Unit " + getUnitStringWithPosition(pUnit, unitPosition) + " attacked enemy unit " +

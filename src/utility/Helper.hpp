@@ -1,7 +1,3 @@
-//
-// Created by Dominik on 1/16/2021.
-//
-
 #ifndef AGEOFWAR_HELPER_HPP
 #define AGEOFWAR_HELPER_HPP
 

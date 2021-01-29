@@ -1,8 +1,4 @@
 #include <algorithm>
-//
-// Created by Dominik on 1/16/2021.
-//
-
 #include "BuyingManager.hpp"
 
 std::vector<std::pair<std::string, int>> BuyingManager::getPurchasableUnits() {

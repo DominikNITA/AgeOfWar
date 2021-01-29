@@ -1,7 +1,3 @@
-//
-// Created by Dominik on 12/28/2020.
-//
-
 #include <iostream>
 #include <memory>
 #include <fstream>
@@ -125,6 +121,8 @@ void GameManager::playTurn(const std::shared_ptr<IPlayer> &pPlayer) {
     p_gameLogger->logAndDraw(Helper::getColorString(GREEN) + "Buying Phase");
     if (p_board->canPlayerAddUnit(*pPlayer)) {
         if (p_buyingManager->getMinimalPrice() <= pPlayer->getCurrency()) {
+            // Call specialized version that will return a unit choice
+            // TODO following presentation: add possibility to skip buying phase
             int choice = pPlayer->chooseUnitToBuy(p_buyingManager->getPurchasableUnits());
             auto unitToBuy = p_buyingManager->createUnit(choice);
             // createUnit returns unit with empty owner player so we have to set it explicitly

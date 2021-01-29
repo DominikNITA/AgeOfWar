@@ -1,7 +1,3 @@
-//
-// Created by dominik on 12/27/20.
-//
-
 #ifndef AGEOFWAR_COMPUTERPLAYER_HPP
 #define AGEOFWAR_COMPUTERPLAYER_HPP
 

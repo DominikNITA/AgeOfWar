@@ -1,7 +1,3 @@
-//
-// Created by dominik on 12/27/20.
-//
-
 #ifndef AGEOFWAR_IPLAYER_HPP
 #define AGEOFWAR_IPLAYER_HPP
 

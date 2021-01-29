@@ -1,12 +1,8 @@
-#include <algorithm>
-//
-// Created by Dominik on 1/16/2021.
-//
-
 #ifndef AGEOFWAR_BUYINGMANAGER_HPP
 #define AGEOFWAR_BUYINGMANAGER_HPP
 
 #include <vector>
+#include <algorithm>
 #include "UnitFactory.hpp"
 
 
@@ -24,7 +20,7 @@ public:
     /// \return
     std::vector<std::pair<std::string,int>> getPurchasableUnits();
 
-    ///
+    /// Create unit from index
     /// \param index
     /// \return unit from selected index
     std::shared_ptr<IBaseUnit> createUnit(int index) { return m_unitFactories[index]->create(nullptr);}

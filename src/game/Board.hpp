@@ -1,7 +1,3 @@
-//
-// Created by Dominik on 12/28/2020.
-//
-
 #ifndef AGEOFWAR_BOARD_HPP
 #define AGEOFWAR_BOARD_HPP
 
@@ -41,11 +37,11 @@ public:
 
     /// Get players units in specified order
     /// \param pOwner
-    /// \param isEnemyBaseDirection
+    /// \param isTowardsEnemyBaseDirection
     /// \return playes units in specified order
-    vector<std::shared_ptr<IBaseUnit>> getPlayerUnits(const std::shared_ptr<IPlayer>& pOwner, bool isEnemyBaseDirection);
+    vector<std::shared_ptr<IBaseUnit>> getPlayerUnits(const std::shared_ptr<IPlayer>& pOwner, bool isTowardsEnemyBaseDirection);
 
-    ///
+    /// Add given unit at player's base
     /// \param pUnit
     /// \param player
     void addUnit(const std::shared_ptr<IBaseUnit>& pUnit, const std::shared_ptr<IPlayer>& player);
